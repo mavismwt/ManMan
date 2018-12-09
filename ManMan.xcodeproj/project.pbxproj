@@ -7,6 +7,11 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		18F9395021B7FF3C00306EB0 /* CustomizeUITableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18F9394F21B7FF3C00306EB0 /* CustomizeUITableViewCell.swift */; };
+		18F9395221B8381C00306EB0 /* HomeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18F9395121B8381C00306EB0 /* HomeViewController.swift */; };
+		18F9395421B8383200306EB0 /* MineViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18F9395321B8383200306EB0 /* MineViewController.swift */; };
+		18F9396821BC378800306EB0 /* AddView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18F9396721BC378800306EB0 /* AddView.swift */; };
+		18F9396A21BC47C900306EB0 /* CheckCardCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18F9396921BC47C900306EB0 /* CheckCardCell.swift */; };
 		18F972E921B7F8AF00FFAB90 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18F972E821B7F8AF00FFAB90 /* AppDelegate.swift */; };
 		18F972EB21B7F8AF00FFAB90 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18F972EA21B7F8AF00FFAB90 /* ViewController.swift */; };
 		18F972EE21B7F8AF00FFAB90 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 18F972EC21B7F8AF00FFAB90 /* Main.storyboard */; };
@@ -14,9 +19,24 @@
 		18F972F321B7F8B000FFAB90 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 18F972F121B7F8B000FFAB90 /* LaunchScreen.storyboard */; };
 		18F972FE21B7F8B100FFAB90 /* ManManTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18F972FD21B7F8B100FFAB90 /* ManManTests.swift */; };
 		18F9730921B7F8B100FFAB90 /* ManManUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18F9730821B7F8B100FFAB90 /* ManManUITests.swift */; };
+		18F9731721B7FDC900FFAB90 /* FlagViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18F9731621B7FDC900FFAB90 /* FlagViewController.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
+		18F9397421BC484400306EB0 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 18F9396F21BC484400306EB0 /* SnapKit.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = EEBCC9D819CC627D0083B827;
+			remoteInfo = SnapKit;
+		};
+		18F9397621BC484400306EB0 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 18F9396F21BC484400306EB0 /* SnapKit.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = EEBCC9E219CC627E0083B827;
+			remoteInfo = "SnapKit Tests";
+		};
 		18F972FA21B7F8B000FFAB90 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 18F972DD21B7F8AE00FFAB90 /* Project object */;
@@ -33,7 +53,26 @@
 		};
 /* End PBXContainerItemProxy section */
 
+/* Begin PBXCopyFilesBuildPhase section */
+		18F9396221B8B38B00306EB0 /* Embed Frameworks */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 10;
+			files = (
+			);
+			name = "Embed Frameworks";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
+
 /* Begin PBXFileReference section */
+		18F9394F21B7FF3C00306EB0 /* CustomizeUITableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomizeUITableViewCell.swift; sourceTree = "<group>"; };
+		18F9395121B8381C00306EB0 /* HomeViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeViewController.swift; sourceTree = "<group>"; };
+		18F9395321B8383200306EB0 /* MineViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MineViewController.swift; sourceTree = "<group>"; };
+		18F9396721BC378800306EB0 /* AddView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddView.swift; sourceTree = "<group>"; };
+		18F9396921BC47C900306EB0 /* CheckCardCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CheckCardCell.swift; sourceTree = "<group>"; };
+		18F9396F21BC484400306EB0 /* SnapKit.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = SnapKit.xcodeproj; path = "../../../../Downloads/SnapKit-develop/SnapKit.xcodeproj"; sourceTree = "<group>"; };
 		18F972E521B7F8AE00FFAB90 /* ManMan.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ManMan.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		18F972E821B7F8AF00FFAB90 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		18F972EA21B7F8AF00FFAB90 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
@@ -47,6 +86,7 @@
 		18F9730421B7F8B100FFAB90 /* ManManUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = ManManUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		18F9730821B7F8B100FFAB90 /* ManManUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ManManUITests.swift; sourceTree = "<group>"; };
 		18F9730A21B7F8B100FFAB90 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		18F9731621B7FDC900FFAB90 /* FlagViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FlagViewController.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -74,6 +114,50 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		18F9396B21BC47CE00306EB0 /* Controller */ = {
+			isa = PBXGroup;
+			children = (
+				18F9731621B7FDC900FFAB90 /* FlagViewController.swift */,
+				18F9395121B8381C00306EB0 /* HomeViewController.swift */,
+				18F9395321B8383200306EB0 /* MineViewController.swift */,
+			);
+			path = Controller;
+			sourceTree = "<group>";
+		};
+		18F9396C21BC47D400306EB0 /* View */ = {
+			isa = PBXGroup;
+			children = (
+				18F9396721BC378800306EB0 /* AddView.swift */,
+			);
+			path = View;
+			sourceTree = "<group>";
+		};
+		18F9396D21BC47D700306EB0 /* Model */ = {
+			isa = PBXGroup;
+			children = (
+				18F9394F21B7FF3C00306EB0 /* CustomizeUITableViewCell.swift */,
+				18F9396921BC47C900306EB0 /* CheckCardCell.swift */,
+			);
+			path = Model;
+			sourceTree = "<group>";
+		};
+		18F9396E21BC483800306EB0 /* framework */ = {
+			isa = PBXGroup;
+			children = (
+				18F9396F21BC484400306EB0 /* SnapKit.xcodeproj */,
+			);
+			path = framework;
+			sourceTree = "<group>";
+		};
+		18F9397021BC484400306EB0 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				18F9397521BC484400306EB0 /* SnapKit.framework */,
+				18F9397721BC484400306EB0 /* SnapKit Tests.xctest */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
 		18F972DC21B7F8AE00FFAB90 = {
 			isa = PBXGroup;
 			children = (
@@ -97,6 +181,10 @@
 		18F972E721B7F8AE00FFAB90 /* ManMan */ = {
 			isa = PBXGroup;
 			children = (
+				18F9396D21BC47D700306EB0 /* Model */,
+				18F9396C21BC47D400306EB0 /* View */,
+				18F9396B21BC47CE00306EB0 /* Controller */,
+				18F9396E21BC483800306EB0 /* framework */,
 				18F972E821B7F8AF00FFAB90 /* AppDelegate.swift */,
 				18F972EA21B7F8AF00FFAB90 /* ViewController.swift */,
 				18F972EC21B7F8AF00FFAB90 /* Main.storyboard */,
@@ -135,6 +223,7 @@
 				18F972E121B7F8AE00FFAB90 /* Sources */,
 				18F972E221B7F8AE00FFAB90 /* Frameworks */,
 				18F972E321B7F8AE00FFAB90 /* Resources */,
+				18F9396221B8B38B00306EB0 /* Embed Frameworks */,
 			);
 			buildRules = (
 			);
@@ -215,6 +304,12 @@
 			mainGroup = 18F972DC21B7F8AE00FFAB90;
 			productRefGroup = 18F972E621B7F8AE00FFAB90 /* Products */;
 			projectDirPath = "";
+			projectReferences = (
+				{
+					ProductGroup = 18F9397021BC484400306EB0 /* Products */;
+					ProjectRef = 18F9396F21BC484400306EB0 /* SnapKit.xcodeproj */;
+				},
+			);
 			projectRoot = "";
 			targets = (
 				18F972E421B7F8AE00FFAB90 /* ManMan */,
@@ -223,6 +318,23 @@
 			);
 		};
 /* End PBXProject section */
+
+/* Begin PBXReferenceProxy section */
+		18F9397521BC484400306EB0 /* SnapKit.framework */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.framework;
+			path = SnapKit.framework;
+			remoteRef = 18F9397421BC484400306EB0 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		18F9397721BC484400306EB0 /* SnapKit Tests.xctest */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.cfbundle;
+			path = "SnapKit Tests.xctest";
+			remoteRef = 18F9397621BC484400306EB0 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+/* End PBXReferenceProxy section */
 
 /* Begin PBXResourcesBuildPhase section */
 		18F972E321B7F8AE00FFAB90 /* Resources */ = {
@@ -256,8 +368,14 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				18F9396821BC378800306EB0 /* AddView.swift in Sources */,
+				18F9395221B8381C00306EB0 /* HomeViewController.swift in Sources */,
 				18F972EB21B7F8AF00FFAB90 /* ViewController.swift in Sources */,
+				18F9395021B7FF3C00306EB0 /* CustomizeUITableViewCell.swift in Sources */,
+				18F9731721B7FDC900FFAB90 /* FlagViewController.swift in Sources */,
 				18F972E921B7F8AF00FFAB90 /* AppDelegate.swift in Sources */,
+				18F9396A21BC47C900306EB0 /* CheckCardCell.swift in Sources */,
+				18F9395421B8383200306EB0 /* MineViewController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -431,6 +549,7 @@
 		18F9730E21B7F8B100FFAB90 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
 				INFOPLIST_FILE = ManMan/Info.plist;
@@ -448,6 +567,7 @@
 		18F9730F21B7F8B100FFAB90 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
 				INFOPLIST_FILE = ManMan/Info.plist;

@@ -13,9 +13,16 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
     var window: UIWindow?
 
-
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
         // Override point for customization after application launch.
+        let homeViewController = HomeViewController()
+        let mineViewController = MineViewController()
+        let flagViewController = FlagViewController()
+        let firstNavigationController = UINavigationController(rootViewController: homeViewController)
+        let tabbarController = UITabBarController()
+        //firstNavigationController.viewControllers = [flagViewController,homeViewController]
+        tabbarController.viewControllers = [firstNavigationController,mineViewController]
+        window?.rootViewController = tabbarController
         return true
     }
 
