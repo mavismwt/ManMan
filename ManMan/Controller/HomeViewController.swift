@@ -32,22 +32,17 @@ extension UIImage {
 
 extension UITabBar
 {
-    
     //关联对象的ID,注意，在私有嵌套 struct 中使用 static var，这样会生成我们所需的关联对象键，但不会污染整个命名空间。
-    
     private struct AssociatedKeys {
         static var TabKey = "tabView"
     }
     
     //定义一个新的tabbar属性,并设置set,get方法
     var btnTab:UIButton?{
-        
         get{
             //通过Key获取已存在的对象
             return objc_getAssociatedObject(self, &AssociatedKeys.TabKey) as? UIButton
-            
         }
-        
         set{
             //对象不存在则创建
             objc_setAssociatedObject(self, &AssociatedKeys.TabKey, newValue, .OBJC_ASSOCIATION_RETAIN_NONATOMIC)
@@ -61,20 +56,13 @@ extension UITabBar
     {
         if self.btnTab == nil
         {
-            
             self.shadowImage = UIImage()//(49 - 42) / 2
-            let btn = UIButton(frame: CGRect.init(x: (WIDTH - 50) / 2, y: -14, width: 50, height: 50))
-            
-            btn.autoresizingMask = [.FlexibleHeight,.FlexibleWidth]
-            btn.setImage(UIImage.init(named: "工具"), forState: UIControlState.Normal)
+            let btn = UIButton(frame: CGRect.init(x: (UIScreen.main.bounds.size.width - 50) / 2, y: -14, width: 50, height: 50))
+            btn.autoresizingMask = [.flexibleHeight,.flexibleWidth]
+            btn.setImage(UIImage.init(named: "add"), for: UIControl.State.normal)
             self.addSubview(btn)
             self.btnTab = btn
-            
-            
-            
         }
-        
-        
         return self.btnTab!
     }
     
@@ -84,8 +72,6 @@ extension UITabBar
 
 class HomeViewController: UIViewController,UITableViewDelegate,UITableViewDataSource {
     
-   
-    
     var topLineView = UIView()
     var calenderDetailButton = UIButton()
     var dateLabel = UILabel()
@@ -93,10 +79,14 @@ class HomeViewController: UIViewController,UITableViewDelegate,UITableViewDataSo
     var editTextButton = UIImageView()
     var addButton = UIButton()
     
+    let addView = AddView()
     let tableView = UITableView()
     let identifier = "reusedCell"
     
     let SCREENSIZE = UIScreen.main.bounds.size
+    var itemNameArray:[String] = ["homeUnselected","mineUnselected"]
+    var itemNameSelectArray:[String] = ["homeSelected","mineSelected"]
+    var itemTitle:[String] = ["日常","我的"]
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -110,7 +100,6 @@ class HomeViewController: UIViewController,UITableViewDelegate,UITableViewDataSo
         self.view.addSubview(topLineView)
         self.view.addSubview(oneSentance)
         self.view.addSubview(tableView)
-        self.view.addSubview(addButton)
         
         topLineView.snp.makeConstraints { (make) in
             make.top.equalTo(0)
@@ -126,7 +115,6 @@ class HomeViewController: UIViewController,UITableViewDelegate,UITableViewDataSo
         }
         calenderDetailButton.setImage(UIImage(named: "calenderIcon"), for: .normal)
         calenderDetailButton.addTarget(self, action: #selector(goTo), for: .touchUpInside)
-        
         
         dateLabel.snp.makeConstraints { (make) in
             make.right.equalTo(topLineView.snp.right).offset(40)
@@ -156,32 +144,22 @@ class HomeViewController: UIViewController,UITableViewDelegate,UITableViewDataSo
         }
         editTextButton.image = UIImage(named: "edit")
         
-        tableView.frame = CGRect(x: 0, y: 136, width: SCREENSIZE.width, height: SCREENSIZE.height-136)
+        tableView.frame = CGRect(x: 0, y: 140, width: SCREENSIZE.width, height: SCREENSIZE.height-186)
         tableView.backgroundColor = UIColor.init(red: 238/255, green: 238/255, blue: 238/255, alpha: 1)
         tableView.separatorStyle = .none
         tableView.delegate = self
         tableView.dataSource = self
         
-        addButton.snp.makeConstraints { (make) in
-            make.bottom.equalTo(self.view.snp.bottom).offset(-7)
-            make.centerX.equalTo(self.view.snp.centerX)
-            make.width.height.equalTo(34)
-        }
-        addButton.addTarget(self, action: #selector(goTo), for: .touchUpInside)
-        addButton.backgroundColor = UIColor.orange
-        
         self.navigationController?.isNavigationBarHidden = true
-        self.navigationController?.navigationBar.backgroundColor = UIColor.init(red: 1, green: 1, blue: 1, alpha: 0)
+        self.navigationController?.navigationBar.backgroundColor = UIColor.init(red: 255/255, green: 193/255, blue: 7/255, alpha: 1)
         self.view.backgroundColor = UIColor.init(red: 238/255, green: 238/255, blue: 238/255, alpha: 1)
         
-
-        let reSize = CGSize(width: 20, height: 20)
-        var homeSelected = UIImage(named: "homeSelected")
-        homeSelected = homeSelected?.reSizeImage(reSize: reSize)
-        var homeUnselected = UIImage(named: "homeUnselected")
-        homeUnselected = homeUnselected?.reSizeImage(reSize: reSize)
-        self.tabBarItem = UITabBarItem(title: "日常", image: homeUnselected?.withRenderingMode(.alwaysOriginal) , selectedImage: homeSelected?.withRenderingMode(.alwaysOriginal))
+        self.configTabBar()
+        let addButton = self.tabBarController?.tabBar.AddMyCenterTab()
+        addButton?.addTarget(self, action: #selector(add), for: .touchUpInside)
         self.tabBarController?.tabBar.tintColor = UIColor.init(red: 255/255, green: 193/255, blue: 7/255, alpha: 1)
+        self.tabBarController?.tabBar.shadowImage?.draw(in: CGRect(x: 0, y: 0, width: 0, height: 0))
+        self.tabBarController?.tabBar.backgroundColor = UIColor.white
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
@@ -199,7 +177,7 @@ class HomeViewController: UIViewController,UITableViewDelegate,UITableViewDataSo
     }
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        return 93
+        return 95
     }
     
     func getNowTime() -> String {
@@ -209,9 +187,51 @@ class HomeViewController: UIViewController,UITableViewDelegate,UITableViewDataSo
         let strNowTime = timeFormatter.string(from: date) as String
         return strNowTime
     }
-    
-    @objc func goTo() {
-        let flagViewController = FlagViewController()
-        self.navigationController?.pushViewController(flagViewController, animated: true)
+
+    func configTabBar() {
+        var count:Int = 0;
+        let items = self.tabBarController?.tabBar.items
+        for item in items as! [UITabBarItem] {
+            let reSize = CGSize(width: 24, height: 24)
+            var image:UIImage = UIImage(named: itemNameArray[count])!
+            var selectedimage:UIImage = UIImage(named: itemNameSelectArray[count])!
+            image = image.reSizeImage(reSize: reSize)
+            image = image.withRenderingMode(UIImage.RenderingMode.alwaysOriginal)
+            selectedimage = selectedimage.reSizeImage(reSize: reSize)
+            selectedimage = selectedimage.withRenderingMode(UIImage.RenderingMode.alwaysOriginal)
+            item.selectedImage = selectedimage
+            item.image = image
+            item.title = itemTitle[count]
+            count = count + 1
+        }
+        
     }
+    @objc func add() {
+        self.tabBarController?.view.addSubview(addView)
+        addView.addGestureRecognizer(UITapGestureRecognizer.init(target: self, action: #selector(backToHome)))
+        addView.isUserInteractionEnabled = true
+        addView.addCheckButton.addTarget(self, action: #selector(addCheckTask), for: .touchUpInside)
+        addView.addLogButton.addTarget(self, action: #selector(addLog), for: .touchUpInside)
+    }
+    @objc func backToHome() {
+        self.addView.removeFromSuperview()
+    }
+    @objc func addCheckTask() {
+        let addCheckViewController = AddCheckViewController()
+        self.navigationController?.pushViewController(addCheckViewController, animated: true)
+        self.tabBarController?.tabBar.isHidden = true
+        self.addView.removeFromSuperview()
+    }
+    @objc func addLog() {
+        let addLogViewController = AddLogViewController()
+        self.navigationController?.pushViewController(addLogViewController, animated: true)
+        self.tabBarController?.tabBar.isHidden = true
+        self.addView.removeFromSuperview()
+    }
+    @objc func goTo() {
+        let logViewController = LogViewController()
+        self.navigationController?.pushViewController(logViewController, animated: true)
+        self.tabBarController?.tabBar.isHidden = true
+    }
+    
 }

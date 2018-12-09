@@ -12,6 +12,13 @@
 		18F9395421B8383200306EB0 /* MineViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18F9395321B8383200306EB0 /* MineViewController.swift */; };
 		18F9396821BC378800306EB0 /* AddView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18F9396721BC378800306EB0 /* AddView.swift */; };
 		18F9396A21BC47C900306EB0 /* CheckCardCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18F9396921BC47C900306EB0 /* CheckCardCell.swift */; };
+		18F9398421BCD4D200306EB0 /* ListTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18F9398321BCD4D200306EB0 /* ListTableViewCell.swift */; };
+		18F9398621BCE36D00306EB0 /* LetterViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18F9398521BCE36D00306EB0 /* LetterViewController.swift */; };
+		18F9398821BCE3D200306EB0 /* ExampleViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18F9398721BCE3D100306EB0 /* ExampleViewController.swift */; };
+		18F9398A21BCE46600306EB0 /* TopLineView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18F9398921BCE46600306EB0 /* TopLineView.swift */; };
+		18F9398C21BCFB3100306EB0 /* LogViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18F9398B21BCFB3100306EB0 /* LogViewController.swift */; };
+		18F9398E21BD279A00306EB0 /* AddCheckViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18F9398D21BD279A00306EB0 /* AddCheckViewController.swift */; };
+		18F9399021BD27AC00306EB0 /* AddLogViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18F9398F21BD27AC00306EB0 /* AddLogViewController.swift */; };
 		18F972E921B7F8AF00FFAB90 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18F972E821B7F8AF00FFAB90 /* AppDelegate.swift */; };
 		18F972EB21B7F8AF00FFAB90 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18F972EA21B7F8AF00FFAB90 /* ViewController.swift */; };
 		18F972EE21B7F8AF00FFAB90 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 18F972EC21B7F8AF00FFAB90 /* Main.storyboard */; };
@@ -73,6 +80,13 @@
 		18F9396721BC378800306EB0 /* AddView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddView.swift; sourceTree = "<group>"; };
 		18F9396921BC47C900306EB0 /* CheckCardCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CheckCardCell.swift; sourceTree = "<group>"; };
 		18F9396F21BC484400306EB0 /* SnapKit.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = SnapKit.xcodeproj; path = "../../../../Downloads/SnapKit-develop/SnapKit.xcodeproj"; sourceTree = "<group>"; };
+		18F9398321BCD4D200306EB0 /* ListTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ListTableViewCell.swift; sourceTree = "<group>"; };
+		18F9398521BCE36D00306EB0 /* LetterViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LetterViewController.swift; sourceTree = "<group>"; };
+		18F9398721BCE3D100306EB0 /* ExampleViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExampleViewController.swift; sourceTree = "<group>"; };
+		18F9398921BCE46600306EB0 /* TopLineView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TopLineView.swift; sourceTree = "<group>"; };
+		18F9398B21BCFB3100306EB0 /* LogViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LogViewController.swift; sourceTree = "<group>"; };
+		18F9398D21BD279A00306EB0 /* AddCheckViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddCheckViewController.swift; sourceTree = "<group>"; };
+		18F9398F21BD27AC00306EB0 /* AddLogViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddLogViewController.swift; sourceTree = "<group>"; };
 		18F972E521B7F8AE00FFAB90 /* ManMan.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ManMan.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		18F972E821B7F8AF00FFAB90 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		18F972EA21B7F8AF00FFAB90 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
@@ -117,9 +131,14 @@
 		18F9396B21BC47CE00306EB0 /* Controller */ = {
 			isa = PBXGroup;
 			children = (
-				18F9731621B7FDC900FFAB90 /* FlagViewController.swift */,
 				18F9395121B8381C00306EB0 /* HomeViewController.swift */,
 				18F9395321B8383200306EB0 /* MineViewController.swift */,
+				18F9398B21BCFB3100306EB0 /* LogViewController.swift */,
+				18F9731621B7FDC900FFAB90 /* FlagViewController.swift */,
+				18F9398521BCE36D00306EB0 /* LetterViewController.swift */,
+				18F9398721BCE3D100306EB0 /* ExampleViewController.swift */,
+				18F9398D21BD279A00306EB0 /* AddCheckViewController.swift */,
+				18F9398F21BD27AC00306EB0 /* AddLogViewController.swift */,
 			);
 			path = Controller;
 			sourceTree = "<group>";
@@ -128,6 +147,7 @@
 			isa = PBXGroup;
 			children = (
 				18F9396721BC378800306EB0 /* AddView.swift */,
+				18F9398921BCE46600306EB0 /* TopLineView.swift */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -137,6 +157,7 @@
 			children = (
 				18F9394F21B7FF3C00306EB0 /* CustomizeUITableViewCell.swift */,
 				18F9396921BC47C900306EB0 /* CheckCardCell.swift */,
+				18F9398321BCD4D200306EB0 /* ListTableViewCell.swift */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -368,12 +389,19 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				18F9398821BCE3D200306EB0 /* ExampleViewController.swift in Sources */,
+				18F9399021BD27AC00306EB0 /* AddLogViewController.swift in Sources */,
+				18F9398E21BD279A00306EB0 /* AddCheckViewController.swift in Sources */,
 				18F9396821BC378800306EB0 /* AddView.swift in Sources */,
+				18F9398A21BCE46600306EB0 /* TopLineView.swift in Sources */,
+				18F9398C21BCFB3100306EB0 /* LogViewController.swift in Sources */,
 				18F9395221B8381C00306EB0 /* HomeViewController.swift in Sources */,
 				18F972EB21B7F8AF00FFAB90 /* ViewController.swift in Sources */,
 				18F9395021B7FF3C00306EB0 /* CustomizeUITableViewCell.swift in Sources */,
 				18F9731721B7FDC900FFAB90 /* FlagViewController.swift in Sources */,
 				18F972E921B7F8AF00FFAB90 /* AppDelegate.swift in Sources */,
+				18F9398621BCE36D00306EB0 /* LetterViewController.swift in Sources */,
+				18F9398421BCD4D200306EB0 /* ListTableViewCell.swift in Sources */,
 				18F9396A21BC47C900306EB0 /* CheckCardCell.swift in Sources */,
 				18F9395421B8383200306EB0 /* MineViewController.swift in Sources */,
 			);

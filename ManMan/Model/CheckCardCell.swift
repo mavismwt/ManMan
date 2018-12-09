@@ -30,7 +30,7 @@ class CheckCardCell: UITableViewCell {
         cell.snp.makeConstraints { (make) in
             make.left.equalTo(16)
             make.right.equalTo(-16)
-            make.top.equalTo(8)
+            make.top.equalTo(4)
             make.height.equalTo(87)
         }
         cell.backgroundColor = UIColor.white

@@ -22,28 +22,63 @@ class FlagViewController: UIViewController,UITableViewDelegate,UITableViewDataSo
         var likeNumText = "UILabel()"
     }
     
-    var flagDatas = [flagData]()
-    
-    let SCREENRECT = UIScreen.main.nativeBounds
+    var topLineView = UIView()
+    var backButton = UIButton()
+    var titleView = UILabel()
+    var letterButton = UIButton()
     
     let tableView = UITableView()
+    
+    let SCREENSIZE = UIScreen.main.bounds.size
     let identifier = "reusedCell"
+    var flagDatas = [flagData]()
     
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view, typically from a nib.
         
-        //self.navigationController?.isNavigationBarHidden = false
-        self.navigationController?.navigationItem.title = "Flag"
-        self.navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem:UIBarButtonItem.SystemItem.add, target: self, action: #selector(check))
-        self.navigationController?.navigationBar.barTintColor = UIColor.init(red: 255/255, green: 193/255, blue: 7/255, alpha: 1)
-        self.navigationController?.navigationBar.tintColor = UIColor.init(red: 255/255, green: 255/255, blue: 255/255, alpha: 1)
         self.view.backgroundColor = UIColor.init(red: 238/255, green: 238/255, blue: 238/255, alpha: 1)
         
-
+        topLineView.addSubview(backButton)
+        topLineView.addSubview(titleView)
+        topLineView.addSubview(letterButton)
+        
+        self.view.addSubview(topLineView)
         self.view.addSubview(tableView)
         
-
+        topLineView.snp.makeConstraints { (make) in
+            make.top.equalTo(0)
+            make.width.equalTo(SCREENSIZE.width)
+            make.height.equalTo(70)
+        }
+        topLineView.backgroundColor = UIColor.init(red: 255/255, green: 193/255, blue: 7/255, alpha: 1)
+        
+        titleView.snp.makeConstraints { (make) in
+            make.centerY.equalToSuperview().offset(10)
+            make.centerX.equalToSuperview()
+            make.height.equalTo(18)
+        }
+        titleView.text = "FLAG"
+        titleView.textColor = UIColor.init(red: 1, green: 1, blue: 1, alpha: 1)
+        titleView.font = UIFont.boldSystemFont(ofSize: 18)
+        
+        backButton.snp.makeConstraints { (make) in
+            make.centerY.equalToSuperview().offset(10)
+            make.left.equalTo(16)
+            make.width.height.equalTo(20)
+        }
+        backButton.setImage(UIImage(named: "back"), for: .normal)
+        backButton.addTarget(self, action: #selector(back), for: .touchUpInside)
+        
+        letterButton.snp.makeConstraints { (make) in
+            make.centerY.equalToSuperview().offset(10)
+            make.right.equalTo(-16)
+            make.width.equalTo(20)
+            make.height.equalTo(15)
+        }
+        letterButton.setImage(UIImage(named: "letter"), for: .normal)
+        letterButton.addTarget(self, action: #selector(goToLetter), for: .touchUpInside)
+        
         tableView.snp.makeConstraints { (make) in
             make.top.equalTo(70)
             make.bottom.equalTo(0)
@@ -59,9 +94,15 @@ class FlagViewController: UIViewController,UITableViewDelegate,UITableViewDataSo
         
         
     }
+    @objc func back() {
+        self.navigationController?.popViewController(animated: true)
+        self.navigationController?.isNavigationBarHidden = true
+        self.tabBarController?.tabBar.isHidden = false
+    }
     
-    @objc func check(){
-        print("checked")
+    @objc func goToLetter() {
+        let letterViewController = LetterViewController()
+        self.navigationController?.pushViewController(letterViewController, animated: true)
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
@@ -77,7 +118,7 @@ class FlagViewController: UIViewController,UITableViewDelegate,UITableViewDataSo
         return cell!
     }
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        return 183
+        return 161
     }
     
 }

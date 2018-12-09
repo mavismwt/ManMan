@@ -60,8 +60,8 @@ class CustomizeUITableViewCell: UITableViewCell {
         cell.snp.makeConstraints { (make) in
             make.left.equalTo(16)
             make.right.equalTo(-16)
-            make.top.equalTo(16)
-            make.height.equalTo(167)
+            make.top.equalTo(8)
+            make.height.equalTo(151)
         }
         cell.backgroundColor = UIColor.white
         cell.layer.cornerRadius = 12
@@ -123,14 +123,14 @@ class CustomizeUITableViewCell: UITableViewCell {
         
         commentImg.snp.makeConstraints { (make) in
             make.right.equalTo(commentView.snp.right).offset(-104)
-            make.bottom.equalTo(commentView.snp.bottom).offset(-10)
-            make.width.height.equalTo(20)
+            make.bottom.equalTo(commentView.snp.bottom).offset(-13)
+            make.width.height.equalTo(15)
         }
-        commentImg.image = UIImage(named: "MyProfile")
+        commentImg.image = UIImage(named: "comment")
         
         commentNum.snp.makeConstraints { (make) in
-            make.right.equalTo(commentView.snp.right).offset(-84)
-            make.bottom.equalTo(commentView.snp.bottom).offset(-16)
+            make.left.equalTo(commentImg.snp.right).offset(5)
+            make.centerY.equalTo(commentImg.snp.centerY)
             make.width.equalTo(20)
             make.height.equalTo(12)
         }
@@ -140,14 +140,14 @@ class CustomizeUITableViewCell: UITableViewCell {
         
         likeImg.snp.makeConstraints { (make) in
             make.right.equalTo(commentView.snp.right).offset(-52)
-            make.bottom.equalTo(commentView.snp.bottom).offset(-10)
-            make.width.height.equalTo(20)
+            make.bottom.equalTo(commentView.snp.bottom).offset(-13)
+            make.width.height.equalTo(15)
         }
-        likeImg.image = UIImage(named: "MyProfile")
+        likeImg.image = UIImage(named: "like")
         
         likeNum.snp.makeConstraints { (make) in
-            make.right.equalTo(commentView.snp.right).offset(-32)
-            make.bottom.equalTo(commentView.snp.bottom).offset(-16)
+            make.left.equalTo(likeImg.snp.right).offset(5)
+            make.centerY.equalTo(likeImg.snp.centerY)
             make.width.equalTo(20)
             make.height.equalTo(12)
         }

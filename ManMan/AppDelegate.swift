@@ -17,11 +17,11 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         // Override point for customization after application launch.
         let homeViewController = HomeViewController()
         let mineViewController = MineViewController()
-        let flagViewController = FlagViewController()
+        //let flagViewController = FlagViewController()
         let firstNavigationController = UINavigationController(rootViewController: homeViewController)
+        let secondNavigationController = UINavigationController(rootViewController: mineViewController)
         let tabbarController = UITabBarController()
-        //firstNavigationController.viewControllers = [flagViewController,homeViewController]
-        tabbarController.viewControllers = [firstNavigationController,mineViewController]
+        tabbarController.viewControllers = [firstNavigationController,secondNavigationController]
         window?.rootViewController = tabbarController
         return true
     }
