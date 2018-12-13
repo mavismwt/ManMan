@@ -93,6 +93,7 @@ class AddLogViewController: UIViewController {
         textLabel.textColor = UIColor.init(red: 0, green: 0, blue: 0, alpha: 0.4)
         textLabel.font = UIFont.systemFont(ofSize: 14)
         
+        
     }
     
     @objc func back() {

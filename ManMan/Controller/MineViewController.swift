@@ -36,12 +36,12 @@ class MineViewController: UIViewController,UITableViewDelegate,UITableViewDataSo
         topLineView.snp.makeConstraints { (make) in
             make.top.equalTo(0)
             make.width.equalTo(SCREENSIZE.width)
-            make.height.equalTo(183)
+            make.height.equalTo(178)
         }
         topLineView.backgroundColor = UIColor.init(red: 255/255, green: 193/255, blue: 7/255, alpha: 1)
         
         profileView.snp.makeConstraints { (make) in
-            make.top.equalTo(43)
+            make.bottom.equalTo(-55)
             make.centerX.equalToSuperview()
             make.width.height.equalTo(72)
         }

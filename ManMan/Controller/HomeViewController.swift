@@ -155,8 +155,8 @@ class HomeViewController: UIViewController,UITableViewDelegate,UITableViewDataSo
         self.view.backgroundColor = UIColor.init(red: 238/255, green: 238/255, blue: 238/255, alpha: 1)
         
         self.configTabBar()
-        let addButton = self.tabBarController?.tabBar.AddMyCenterTab()
-        addButton?.addTarget(self, action: #selector(add), for: .touchUpInside)
+        addButton = (self.tabBarController?.tabBar.AddMyCenterTab())!
+        addButton.addTarget(self, action: #selector(add), for: .touchUpInside)
         self.tabBarController?.tabBar.tintColor = UIColor.init(red: 255/255, green: 193/255, blue: 7/255, alpha: 1)
         self.tabBarController?.tabBar.shadowImage?.draw(in: CGRect(x: 0, y: 0, width: 0, height: 0))
         self.tabBarController?.tabBar.backgroundColor = UIColor.white
@@ -212,6 +212,9 @@ class HomeViewController: UIViewController,UITableViewDelegate,UITableViewDataSo
         addView.isUserInteractionEnabled = true
         addView.addCheckButton.addTarget(self, action: #selector(addCheckTask), for: .touchUpInside)
         addView.addLogButton.addTarget(self, action: #selector(addLog), for: .touchUpInside)
+        addView.addButton.snp.makeConstraints { (make) in
+            make.bottom.equalTo(addButton.snp.bottom)
+        }
     }
     @objc func backToHome() {
         self.addView.removeFromSuperview()
