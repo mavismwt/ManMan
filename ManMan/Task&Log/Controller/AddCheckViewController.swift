@@ -14,6 +14,7 @@ class AddCheckViewController: UIViewController,UICollectionViewDelegate,UICollec
     var topLineView = UIView()
     var leftButton = UIButton()
     var titleView = UILabel()
+    var subTitleView = UILabel()
     
     var confirmButton = UIButton()
     let layout = UICollectionViewFlowLayout()
@@ -27,6 +28,7 @@ class AddCheckViewController: UIViewController,UICollectionViewDelegate,UICollec
         topLineView.addSubview(titleView)
         
         self.view.addSubview(topLineView)
+        self.view.addSubview(subTitleView)
         self.view.addSubview(confirmButton)
         
         topLineView.snp.makeConstraints { (make) in
@@ -59,7 +61,16 @@ class AddCheckViewController: UIViewController,UICollectionViewDelegate,UICollec
         layout.minimumLineSpacing = 0
         layout.sectionInset = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0)
         
-        collectionView = UICollectionView(frame: CGRect(x: 12, y: 99, width: SCREENSIZE.width-24, height: SCREENSIZE.width+36), collectionViewLayout: layout)
+        subTitleView.snp.makeConstraints { (make) in
+            make.top.equalTo(topLineView.snp.bottom).offset(16)
+            make.left.equalTo(16)
+            make.height.equalTo(17)
+        }
+        subTitleView.text = "推荐日常"
+        subTitleView.textColor = UIColor.init(red: 0, green: 0, blue: 0, alpha: 0.54)
+        subTitleView.font = UIFont.systemFont(ofSize: 17)
+        
+        collectionView = UICollectionView(frame: CGRect(x: 12, y: 110, width: SCREENSIZE.width-24, height: SCREENSIZE.width+36), collectionViewLayout: layout)
         collectionView?.delegate = self
         collectionView?.dataSource = self
         collectionView?.register(CustomizeUICollectionViewCell.self, forCellWithReuseIdentifier: "cell")
@@ -81,6 +92,7 @@ class AddCheckViewController: UIViewController,UICollectionViewDelegate,UICollec
         confirmButton.titleLabel?.font = UIFont.boldSystemFont(ofSize: 18)
         confirmButton.layer.shadowColor = UIColor.lightGray.cgColor
         confirmButton.layer.shadowOffset = CGSize(width: 3, height: 6)
+        confirmButton.addTarget(self, action: #selector(UserDefined), for: .touchUpInside)
         
     }
     
@@ -94,10 +106,13 @@ class AddCheckViewController: UIViewController,UICollectionViewDelegate,UICollec
         return cell
     }
     
-    
-    
     @objc func back() {
         self.navigationController?.popViewController(animated: true)
         self.tabBarController?.tabBar.isHidden = false
+    }
+    
+    @objc func UserDefined() {
+        let addUserDefinedCheckViewController = AddUserDefinedCheckViewController()
+        self.navigationController?.pushViewController(addUserDefinedCheckViewController, animated: true)
     }
 }
