@@ -45,7 +45,8 @@ class ExampleViewController: UIViewController {
         leftButton.snp.makeConstraints { (make) in
             make.centerY.equalToSuperview().offset(10)
             make.left.equalTo(16)
-            make.width.height.equalTo(20)
+            make.width.equalTo(15)
+            make.height.equalTo(20)
         }
         leftButton.setImage(UIImage(named: "back"), for: .normal)
         leftButton.addTarget(self, action: #selector(back), for: .touchUpInside)
@@ -55,7 +56,7 @@ class ExampleViewController: UIViewController {
             make.right.equalTo(-16)
             make.width.height.equalTo(20)
         }
-        rightButton.setImage(UIImage(named: "back"), for: .normal)
+        rightButton.setTitle("Done", for: .normal)
         rightButton.addTarget(self, action: #selector(back), for: .touchUpInside)
     }
     

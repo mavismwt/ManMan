@@ -65,7 +65,8 @@ class FlagViewController: UIViewController,UITableViewDelegate,UITableViewDataSo
         backButton.snp.makeConstraints { (make) in
             make.centerY.equalToSuperview().offset(10)
             make.left.equalTo(16)
-            make.width.height.equalTo(20)
+            make.width.equalTo(15)
+            make.height.equalTo(20)
         }
         backButton.setImage(UIImage(named: "back"), for: .normal)
         backButton.addTarget(self, action: #selector(back), for: .touchUpInside)
@@ -73,11 +74,11 @@ class FlagViewController: UIViewController,UITableViewDelegate,UITableViewDataSo
         letterButton.snp.makeConstraints { (make) in
             make.centerY.equalToSuperview().offset(10)
             make.right.equalTo(-16)
-            make.width.equalTo(20)
-            make.height.equalTo(15)
+            make.width.equalTo(28)
+            make.height.equalTo(24)
         }
-        letterButton.setImage(UIImage(named: "letter"), for: .normal)
-        letterButton.addTarget(self, action: #selector(goToLetter), for: .touchUpInside)
+        letterButton.setImage(UIImage(named: "flag"), for: .normal)
+        letterButton.addTarget(self, action: #selector(setMyFlag), for: .touchUpInside)
         
         tableView.snp.makeConstraints { (make) in
             make.top.equalTo(70)
@@ -100,9 +101,9 @@ class FlagViewController: UIViewController,UITableViewDelegate,UITableViewDataSo
         self.tabBarController?.tabBar.isHidden = false
     }
     
-    @objc func goToLetter() {
-        let letterViewController = LetterViewController()
-        self.navigationController?.pushViewController(letterViewController, animated: true)
+    @objc func setMyFlag() {
+        let addFlagViewController = AddFlagViewController()
+        self.navigationController?.pushViewController(addFlagViewController, animated: true)
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {

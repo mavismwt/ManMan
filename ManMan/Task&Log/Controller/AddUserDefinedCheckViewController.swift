@@ -16,6 +16,8 @@ class AddUserDefinedCheckViewController: UIViewController,UICollectionViewDelega
     var titleView = UILabel()
     var cardTitleView = UILabel()
     var cardView = UIView()
+    var backgroudImage = UIImageView()
+    var editButton = UIButton()
     var taskIcon = UIImageView()
     var taskName = UILabel()
     var taskProcess = UILabel()
@@ -32,8 +34,10 @@ class AddUserDefinedCheckViewController: UIViewController,UICollectionViewDelega
         topLineView.addSubview(leftButton)
         topLineView.addSubview(titleView)
         
+        cardView.addSubview(backgroudImage)
         cardView.addSubview(taskIcon)
         cardView.addSubview(taskName)
+        cardView.addSubview(editButton)
         cardView.addSubview(taskProcess)
         
         self.view.addSubview(cardTitleView)
@@ -62,19 +66,20 @@ class AddUserDefinedCheckViewController: UIViewController,UICollectionViewDelega
         leftButton.snp.makeConstraints { (make) in
             make.centerY.equalToSuperview().offset(10)
             make.left.equalTo(16)
-            make.width.height.equalTo(20)
+            make.width.equalTo(15)
+            make.height.equalTo(20)
         }
         leftButton.setImage(UIImage(named: "back"), for: .normal)
         leftButton.addTarget(self, action: #selector(back), for: .touchUpInside)
         
-        layout.itemSize = CGSize(width:(SCREENSIZE.width-24)/3, height: (SCREENSIZE.width-24)/3)
+        layout.itemSize = CGSize(width:(SCREENSIZE.width-12)/3, height: (SCREENSIZE.width-12)/3)
         //设置列间距,行间距,偏移 CGRect(x: 0, y: 0, width:(SCREENSIZE.width-24)/3, height: (SCREENSIZE.width-24)/3+20)
         layout.minimumInteritemSpacing = 0
         layout.minimumLineSpacing = 0
         layout.sectionInset = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0)
         
         cardTitleView.snp.makeConstraints { (make) in
-            make.top.equalTo(topLineView.snp.bottom).offset(16)
+            make.top.equalTo(topLineView.snp.bottom).offset(20)
             make.left.equalTo(16)
             make.height.equalTo(17)
         }
@@ -85,14 +90,20 @@ class AddUserDefinedCheckViewController: UIViewController,UICollectionViewDelega
         cardView.snp.makeConstraints { (make) in
             make.left.equalTo(16)
             make.right.equalTo(-16)
-            make.top.equalTo(cardTitleView.snp.bottom).offset(4)
+            make.top.equalTo(cardTitleView.snp.bottom).offset(10)
             make.height.equalTo(87)
         }
-        cardView.backgroundColor = UIColor.white
         cardView.layer.cornerRadius = 12
         cardView.clipsToBounds = true
-        cardView.layer.shadowColor = UIColor.lightGray.cgColor
+        cardView.layer.shadowColor = UIColor.black.cgColor
         cardView.layer.shadowOffset = CGSize(width: 3, height: 6)
+        
+        backgroudImage.snp.makeConstraints { (make) in
+            make.top.left.width.height.equalToSuperview()
+        }
+        backgroudImage.image = UIImage(named: "checked")
+        backgroudImage.layer.cornerRadius = 12
+        backgroudImage.clipsToBounds = true
         
         taskIcon.snp.makeConstraints { (make) in
             make.centerY.equalTo(cardView.snp.centerY)
@@ -110,6 +121,14 @@ class AddUserDefinedCheckViewController: UIViewController,UICollectionViewDelega
         taskName.textColor = UIColor.init(red: 0, green: 0, blue: 0, alpha: 0.87)
         taskName.font = UIFont.boldSystemFont(ofSize: 17)
         
+        editButton.snp.makeConstraints { (make) in
+            make.left.equalTo(taskName.snp.right).offset(8)
+            make.centerY.equalTo(taskName.snp.centerY)
+            make.width.height.equalTo(15)
+        }
+        editButton.setImage(UIImage(named: "edit"), for: .normal)
+        editButton.addTarget(self, action: #selector(edit), for: .touchUpInside)
+        
         taskProcess.snp.makeConstraints { (make) in
             make.top.equalTo(50)
             make.left.equalTo(88)
@@ -121,7 +140,7 @@ class AddUserDefinedCheckViewController: UIViewController,UICollectionViewDelega
         
         
         subTitleView.snp.makeConstraints { (make) in
-            make.top.equalTo(cardTitleView.snp.bottom).offset(106)
+            make.top.equalTo(cardTitleView.snp.bottom).offset(116)
             make.left.equalTo(16)
             make.height.equalTo(17)
         }
@@ -129,7 +148,7 @@ class AddUserDefinedCheckViewController: UIViewController,UICollectionViewDelega
         subTitleView.textColor = UIColor.init(red: 0, green: 0, blue: 0, alpha: 0.54)
         subTitleView.font = UIFont.systemFont(ofSize: 17)
         
-        collectionView = UICollectionView(frame: CGRect(x: 12, y: 225, width: SCREENSIZE.width-24, height: SCREENSIZE.width-24), collectionViewLayout: layout)
+        collectionView = UICollectionView(frame: CGRect(x: 6, y: 242, width: SCREENSIZE.width-12, height: SCREENSIZE.width-12), collectionViewLayout: layout)
         collectionView?.delegate = self
         collectionView?.dataSource = self
         collectionView?.register(FangCustomizeUICollectionViewCell.self, forCellWithReuseIdentifier: "cell")
@@ -139,15 +158,15 @@ class AddUserDefinedCheckViewController: UIViewController,UICollectionViewDelega
         
         confirmButton.snp.makeConstraints { (make) in
             make.top.equalTo(collectionView!.snp.bottom).offset(16)
-            make.left.equalTo(16)
-            make.right.equalTo(-16)
+            make.left.equalTo(88)
+            make.right.equalTo(-88)
             make.height.equalTo(55)
         }
         confirmButton.layer.cornerRadius = 8
         confirmButton.clipsToBounds = true
-        confirmButton.backgroundColor = UIColor.init(red: 255/255, green: 255/255, blue: 255/255, alpha: 1)
-        confirmButton.setTitle("自定义日常", for: .normal)
-        confirmButton.setTitleColor(UIColor.init(red: 255/255, green: 193/255, blue: 7/255, alpha: 1), for: .normal)
+        confirmButton.backgroundColor = UIColor.init(red: 255/255, green: 193/255, blue: 7/255, alpha: 1)
+        confirmButton.setTitle("保存自定义日常", for: .normal)
+        confirmButton.setTitleColor(UIColor.init(red: 255/255, green: 255/255, blue: 255/255, alpha: 1), for: .normal)
         confirmButton.titleLabel?.font = UIFont.boldSystemFont(ofSize: 18)
         confirmButton.layer.shadowColor = UIColor.lightGray.cgColor
         confirmButton.layer.shadowOffset = CGSize(width: 3, height: 6)
@@ -163,7 +182,9 @@ class AddUserDefinedCheckViewController: UIViewController,UICollectionViewDelega
         return cell
     }
     
-    
+    @objc func edit() {
+        
+    }
     
     @objc func back() {
         self.navigationController?.popViewController(animated: true)

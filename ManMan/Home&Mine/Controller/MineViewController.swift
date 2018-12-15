@@ -103,14 +103,23 @@ class MineViewController: UIViewController,UITableViewDelegate,UITableViewDataSo
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         let listStr = listDetail[indexPath.row]
         
-        //,,"设置","问题反馈"
         switch listStr {
         case "我的flag":
             let flagViewController = FlagViewController()
             self.navigationController?.pushViewController(flagViewController, animated: true)
+            self.tabBarController?.tabBar.isHidden = true
         case "我的时间轴":
             let logViewController = LogViewController()
             self.navigationController?.pushViewController(logViewController, animated: true)
+            self.tabBarController?.tabBar.isHidden = true
+        case "设置":
+            let settingViewController = SettingViewController()
+            self.navigationController?.pushViewController(settingViewController, animated: true)
+            self.tabBarController?.tabBar.isHidden = true
+        case "问题反馈":
+            let feedbackViewController = FeedbackViewController()
+            self.navigationController?.pushViewController(feedbackViewController, animated: true)
+            self.tabBarController?.tabBar.isHidden = true
         default:
             break
         }

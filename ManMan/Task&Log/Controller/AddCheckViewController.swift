@@ -50,7 +50,8 @@ class AddCheckViewController: UIViewController,UICollectionViewDelegate,UICollec
         leftButton.snp.makeConstraints { (make) in
             make.centerY.equalToSuperview().offset(10)
             make.left.equalTo(16)
-            make.width.height.equalTo(20)
+            make.width.equalTo(15)
+            make.height.equalTo(20)
         }
         leftButton.setImage(UIImage(named: "back"), for: .normal)
         leftButton.addTarget(self, action: #selector(back), for: .touchUpInside)

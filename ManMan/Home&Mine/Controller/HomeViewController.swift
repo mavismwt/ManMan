@@ -75,8 +75,7 @@ class HomeViewController: UIViewController,UITableViewDelegate,UITableViewDataSo
     var topLineView = UIView()
     var calenderDetailButton = UIButton()
     var dateLabel = UILabel()
-    var oneSentance = UITextField()
-    var editTextButton = UIImageView()
+    var gotoFlag = UIButton()
     var addButton = UIButton()
     
     let addView = AddView()
@@ -95,10 +94,8 @@ class HomeViewController: UIViewController,UITableViewDelegate,UITableViewDataSo
         topLineView.addSubview(dateLabel)
         topLineView.addSubview(calenderDetailButton)
         
-        oneSentance.addSubview(editTextButton)
-        
         self.view.addSubview(topLineView)
-        self.view.addSubview(oneSentance)
+        self.view.addSubview(gotoFlag)
         self.view.addSubview(tableView)
         
         topLineView.snp.makeConstraints { (make) in
@@ -126,23 +123,19 @@ class HomeViewController: UIViewController,UITableViewDelegate,UITableViewDataSo
         dateLabel.textColor = UIColor.white
         dateLabel.font = UIFont.boldSystemFont(ofSize: 18)
         
-        oneSentance.snp.makeConstraints { (make) in
+        gotoFlag.snp.makeConstraints { (make) in
             make.top.equalTo(86)
             make.left.equalTo(16)
             make.right.equalTo(self.view.snp.right).offset(-16)
             make.height.equalTo(50)
         }
-        oneSentance.layer.cornerRadius = 8
-        oneSentance.clipsToBounds = true
-        oneSentance.placeholder = "   一句话..."
-        oneSentance.backgroundColor = UIColor.white
-        
-        editTextButton.snp.makeConstraints { (make) in
-            make.right.equalTo(oneSentance.snp.right).offset(-16)
-            make.centerY.equalTo(oneSentance.snp.centerY)
-            make.width.height.equalTo(16)
-        }
-        editTextButton.image = UIImage(named: "edit")
+        gotoFlag.layer.cornerRadius = 8
+        gotoFlag.clipsToBounds = true
+        gotoFlag.backgroundColor = UIColor.white
+        gotoFlag.setTitle("设定你的本月FLAG吧！", for: .normal)
+        gotoFlag.setTitleColor(UIColor.init(red: 255/255, green: 193/255, blue: 7/255, alpha: 1), for: .normal)
+        gotoFlag.contentHorizontalAlignment = UIControl.ContentHorizontalAlignment.left
+        gotoFlag.contentEdgeInsets = UIEdgeInsets(top: 0, left: 16, bottom: 0, right: 0)
         
         tableView.frame = CGRect(x: 0, y: 140, width: SCREENSIZE.width, height: SCREENSIZE.height-186)
         tableView.backgroundColor = UIColor.init(red: 238/255, green: 238/255, blue: 238/255, alpha: 1)
