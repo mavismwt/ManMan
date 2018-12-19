@@ -74,9 +74,11 @@ class HomeViewController: UIViewController,UITableViewDelegate,UITableViewDataSo
     
     var topLineView = UIView()
     var calenderDetailButton = UIButton()
-    var dateLabel = UILabel()
+    var monthLabel = UILabel()
+    var dayLabel = UILabel()
     var gotoFlag = UIButton()
     var addButton = UIButton()
+    var img = UIImageView()
     
     let addView = AddView()
     let tableView = UITableView()
@@ -91,7 +93,8 @@ class HomeViewController: UIViewController,UITableViewDelegate,UITableViewDataSo
         super.viewDidLoad()
         // Do any additional setup after loading the view, typically from a nib.
         
-        topLineView.addSubview(dateLabel)
+        topLineView.addSubview(monthLabel)
+        topLineView.addSubview(dayLabel)
         topLineView.addSubview(calenderDetailButton)
         
         self.view.addSubview(topLineView)
@@ -113,15 +116,14 @@ class HomeViewController: UIViewController,UITableViewDelegate,UITableViewDataSo
         calenderDetailButton.setImage(UIImage(named: "calenderIcon"), for: .normal)
         calenderDetailButton.addTarget(self, action: #selector(goTo), for: .touchUpInside)
         
-        dateLabel.snp.makeConstraints { (make) in
-            make.right.equalTo(topLineView.snp.right).offset(40)
-            make.centerY.equalTo(topLineView.snp.centerY).offset(10)
+        monthLabel.snp.makeConstraints { (make) in
+            make.right.equalTo(topLineView.snp.right).offset(-40)
+            make.bottom.equalTo(calenderDetailButton.snp.bottom)
             make.height.equalTo(18)
-            make.width.equalTo(120)
         }
-        dateLabel.text = getNowTime()
-        dateLabel.textColor = UIColor.white
-        dateLabel.font = UIFont.boldSystemFont(ofSize: 18)
+        monthLabel.text = getNowDate()
+        monthLabel.textColor = UIColor.white
+        monthLabel.font = UIFont.boldSystemFont(ofSize: 20)
         
         gotoFlag.snp.makeConstraints { (make) in
             make.top.equalTo(86)
@@ -136,6 +138,7 @@ class HomeViewController: UIViewController,UITableViewDelegate,UITableViewDataSo
         gotoFlag.setTitleColor(UIColor.init(red: 255/255, green: 193/255, blue: 7/255, alpha: 1), for: .normal)
         gotoFlag.contentHorizontalAlignment = UIControl.ContentHorizontalAlignment.left
         gotoFlag.contentEdgeInsets = UIEdgeInsets(top: 0, left: 16, bottom: 0, right: 0)
+        gotoFlag.addTarget(self, action: #selector(flag), for: .touchUpInside)
         
         tableView.frame = CGRect(x: 0, y: 140, width: SCREENSIZE.width, height: SCREENSIZE.height-186)
         tableView.backgroundColor = UIColor.init(red: 238/255, green: 238/255, blue: 238/255, alpha: 1)
@@ -153,6 +156,9 @@ class HomeViewController: UIViewController,UITableViewDelegate,UITableViewDataSo
         self.tabBarController?.tabBar.tintColor = UIColor.init(red: 255/255, green: 193/255, blue: 7/255, alpha: 1)
         self.tabBarController?.tabBar.shadowImage?.draw(in: CGRect(x: 0, y: 0, width: 0, height: 0))
         self.tabBarController?.tabBar.backgroundColor = UIColor.white
+        
+        img = UIImageView(frame: CGRect(x: SCREENSIZE.width/2, y: SCREENSIZE.height/2, width: 120, height: 120))
+        img.image = UIImage(named: "qian")
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
@@ -173,12 +179,37 @@ class HomeViewController: UIViewController,UITableViewDelegate,UITableViewDataSo
         return 95
     }
     
-    func getNowTime() -> String {
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        let cell:CheckCardCell = tableView.cellForRow(at: indexPath) as! CheckCardCell
+        let tapGestureRecognizer = UITapGestureRecognizer()
+//        tapGestureRecognizer.addTarget(self, action: #selector(check))
+//        cell.addGestureRecognizer(tapGestureRecognizer)
+        cell.selectionStyle = .none
+        UIView.animate(withDuration: 0.5, animations: {
+            self.view.addSubview(self.img)
+            self.img.transform = CGAffineTransform.identity
+                .scaledBy(x: 0.8, y: 0.8)
+                .translatedBy(x: 100, y: 100)
+            //self.img.removeFromSuperview()
+        })
+    }
+    
+    @objc func check() {
+        UIView.animate(withDuration: 0.5, animations: {
+            self.view.addSubview(self.img)
+            self.img.transform = CGAffineTransform.identity
+                .scaledBy(x: 0.8, y: 0.8)
+                .translatedBy(x: 100, y: 100)
+            //self.img.removeFromSuperview()
+        })
+    }
+    
+    func getNowDate() -> String {
         let date = Date()
         let timeFormatter = DateFormatter()
         timeFormatter.dateFormat = "MMM d"
-        let strNowTime = timeFormatter.string(from: date) as String
-        return strNowTime
+        let strNowMonth = timeFormatter.string(from: date) as String
+        return strNowMonth
     }
 
     func configTabBar() {
@@ -208,6 +239,11 @@ class HomeViewController: UIViewController,UITableViewDelegate,UITableViewDataSo
         addView.addButton.snp.makeConstraints { (make) in
             make.bottom.equalTo(addButton.snp.bottom)
         }
+    }
+    @objc func flag(){
+        let flagViewController = FlagViewController()
+        self.navigationController?.pushViewController(flagViewController, animated: true)
+        self.tabBarController?.tabBar.isHidden = true
     }
     @objc func backToHome() {
         self.addView.removeFromSuperview()

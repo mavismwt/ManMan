@@ -71,6 +71,7 @@ class AddFlagViewController: UIViewController {
             make.bottom.right.equalTo(-16)
         }
         inputText.font = UIFont.systemFont(ofSize: 15)
+        inputText.isEditable = true
         
         confirmButton.snp.makeConstraints { (make) in
             make.top.equalTo(textView.snp.bottom).offset(16)
@@ -93,6 +94,5 @@ class AddFlagViewController: UIViewController {
     
     @objc func back() {
         self.navigationController?.popViewController(animated: true)
-        self.tabBarController?.tabBar.isHidden = false
     }
 }

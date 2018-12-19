@@ -74,10 +74,9 @@ class FlagViewController: UIViewController,UITableViewDelegate,UITableViewDataSo
         letterButton.snp.makeConstraints { (make) in
             make.centerY.equalToSuperview().offset(10)
             make.right.equalTo(-16)
-            make.width.equalTo(28)
-            make.height.equalTo(24)
+            make.width.height.equalTo(20)
         }
-        letterButton.setImage(UIImage(named: "flag"), for: .normal)
+        letterButton.setImage(UIImage(named: "editWhite"), for: .normal)
         letterButton.addTarget(self, action: #selector(setMyFlag), for: .touchUpInside)
         
         tableView.snp.makeConstraints { (make) in
@@ -114,6 +113,7 @@ class FlagViewController: UIViewController,UITableViewDelegate,UITableViewDataSo
         var cell:CustomizeUITableViewCell? = tableView.dequeueReusableCell(withIdentifier: identifier) as? CustomizeUITableViewCell
         if (cell == nil)
         {
+            
         }
         //self.viewDidDisappear(true)
         return cell!

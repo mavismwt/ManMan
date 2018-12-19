@@ -17,7 +17,9 @@ class MineViewController: UIViewController,UITableViewDelegate,UITableViewDataSo
     var tableView = UITableView()
     
     let SCREENSIZE = UIScreen.main.bounds.size
+    let identifier = "reusedCell"
     let listDetail:[String] = ["我的flag","我的时间轴","设置","问题反馈"]
+    
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -76,6 +78,7 @@ class MineViewController: UIViewController,UITableViewDelegate,UITableViewDataSo
         tableView.delegate = self
         tableView.dataSource = self
         
+        tableView.register(ListTableViewCell.classForCoder(), forCellReuseIdentifier: identifier)
         
     }
     
@@ -84,15 +87,11 @@ class MineViewController: UIViewController,UITableViewDelegate,UITableViewDataSo
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let identifier = "reusedCell"
-        var cell:ListTableViewCell? = tableView.dequeueReusableCell(withIdentifier: identifier) as? ListTableViewCell
-        if (cell == nil)
-        {
-            cell = ListTableViewCell(style: UITableViewCell.CellStyle.default, reuseIdentifier: identifier)
-            cell?.accessoryType = UITableViewCell.AccessoryType.disclosureIndicator
-            let item = listDetail[indexPath.row]
-            cell?.title.text = item
-        }
+        
+        var cell: ListTableViewCell? = tableView.dequeueReusableCell(withIdentifier: identifier) as? ListTableViewCell
+        let item = listDetail[indexPath.row]
+        cell?.selectionStyle = .none
+        cell?.title.text = item
         return cell!
     }
     
@@ -101,8 +100,8 @@ class MineViewController: UIViewController,UITableViewDelegate,UITableViewDataSo
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        let cell:ListTableViewCell = tableView.cellForRow(at: indexPath) as! ListTableViewCell
         let listStr = listDetail[indexPath.row]
-        
         switch listStr {
         case "我的flag":
             let flagViewController = FlagViewController()

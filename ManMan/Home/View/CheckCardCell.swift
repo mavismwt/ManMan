@@ -14,14 +14,21 @@ class CheckCardCell: UITableViewCell {
     var taskIcon = UIImageView()
     var taskName = UILabel()
     var taskProcess = UILabel()
+    var checkButton = UIButton()
+    var background = UIImageView()
+    var backgroundImage = UIImageView()
+    var checkImg = UIImageView()
     
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         
+        cell.addSubview(backgroundImage)
+        cell.addSubview(background)
         cell.addSubview(taskIcon)
         cell.addSubview(taskName)
         cell.addSubview(taskProcess)
+        cell.addSubview(checkButton)
         self.addSubview(cell)
         
         self.frame = CGRect(x: 0, y: 0, width: UIScreen.main.bounds.size.width, height: 95)
@@ -38,7 +45,7 @@ class CheckCardCell: UITableViewCell {
         cell.clipsToBounds = true
         cell.layer.shadowColor = UIColor.lightGray.cgColor
         cell.layer.shadowOffset = CGSize(width: 3, height: 6)
-        
+
         taskIcon.snp.makeConstraints { (make) in
             make.centerY.equalTo(cell.snp.centerY)
             make.left.equalTo(16)
@@ -63,6 +70,42 @@ class CheckCardCell: UITableViewCell {
         taskProcess.text = "已完成10天"
         taskProcess.textColor = UIColor.init(red: 0, green: 0, blue: 0, alpha: 0.54)
         taskProcess.font = UIFont.systemFont(ofSize: 12)
+        
+        checkButton.snp.makeConstraints { (make) in
+            make.centerY.equalToSuperview()
+            make.right.equalToSuperview().offset(-16)
+            make.width.height.equalTo(34)
+        }
+        checkButton.setImage(UIImage(named: "check"), for: .normal)
+        checkButton.addTarget(self, action: #selector(check), for: .touchUpInside)
+        
+        background.snp.makeConstraints { (make) in
+            make.left.top.width.height.equalToSuperview()
+        }
+        background.backgroundColor = UIColor.white
+        
+        backgroundImage.snp.makeConstraints { (make) in
+            make.left.top.width.height.equalToSuperview()
+        }
+        backgroundImage.image = UIImage(named: "checked")
+        
+        checkImg.frame = CGRect()
+    }
+    
+    func reSetTableViewCell() {
+        
+    }
+    
+    @objc func check() {
+//        UIView.animate(withDuration: 5, delay: 5, options: .curveEaseIn, animations: {
+//            self.background.removeFromSuperview()
+//            self.checkButton.removeFromSuperview()
+//        }, completion: nil)
+        DispatchQueue.main.asyncAfter(deadline: .now()+0.5, execute:
+            {
+                self.background.removeFromSuperview()
+                self.checkButton.removeFromSuperview()
+        })
     }
     
     required init?(coder aDecoder: NSCoder) {

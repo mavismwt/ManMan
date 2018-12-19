@@ -40,7 +40,7 @@ class AddView: UIView {
             make.centerX.equalTo(addButton.snp.centerX).offset(-60)
             make.width.height.equalTo(65)
         }
-        addCheckButton.setImage(UIImage(named: "check"), for: .normal)
+        addCheckButton.setImage(UIImage(named: "qian"), for: .normal)
         
         addLogButton.snp.makeConstraints { (make) in
             make.bottom.equalTo(addButton.snp.top).offset(-16)

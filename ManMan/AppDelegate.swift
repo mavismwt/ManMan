@@ -22,7 +22,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         let secondNavigationController = UINavigationController(rootViewController: mineViewController)
         let tabbarController = UITabBarController()
         tabbarController.viewControllers = [firstNavigationController,secondNavigationController]
-        let tryView = EViewController()
         window?.rootViewController = tabbarController
         return true
     }

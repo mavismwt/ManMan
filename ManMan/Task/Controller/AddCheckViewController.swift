@@ -20,6 +20,9 @@ class AddCheckViewController: UIViewController,UICollectionViewDelegate,UICollec
     let layout = UICollectionViewFlowLayout()
     let SCREENSIZE = UIScreen.main.bounds.size
     
+    let imageName = ["fruit","word","drink","breakfast","makeup","sleep","read","bath","medicine"]
+    let titleStr = ["吃水果","背单词","喝水","早餐","化妆","早睡","读书","洗澡","吃药"]
+    
     override func viewDidLoad() {
         
         self.view.backgroundColor = UIColor.init(red: 238/255, green: 238/255, blue: 238/255, alpha: 1)
@@ -74,6 +77,7 @@ class AddCheckViewController: UIViewController,UICollectionViewDelegate,UICollec
         collectionView = UICollectionView(frame: CGRect(x: 12, y: 110, width: SCREENSIZE.width-24, height: SCREENSIZE.width+36), collectionViewLayout: layout)
         collectionView?.delegate = self
         collectionView?.dataSource = self
+        let cellFrame = CGRect(x: 0, y: 0, width:(SCREENSIZE.width-24)/3, height: (SCREENSIZE.width-24)/3+20)
         collectionView?.register(CustomizeUICollectionViewCell.self, forCellWithReuseIdentifier: "cell")
         collectionView?.backgroundColor = UIColor.init(red: 238/255, green: 238/255, blue: 238/255, alpha: 1)
         
@@ -102,8 +106,11 @@ class AddCheckViewController: UIViewController,UICollectionViewDelegate,UICollec
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "cell", for: indexPath)
-        
+        var cell:CustomizeUICollectionViewCell = collectionView.dequeueReusableCell(withReuseIdentifier: "cell", for: indexPath) as! CustomizeUICollectionViewCell
+        let imgName = imageName[indexPath.row]
+        let title = titleStr[indexPath.row]
+        cell.icon.image = UIImage(named: imgName)
+        cell.title.text = title
         return cell
     }
     
