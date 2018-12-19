@@ -1,16 +1,17 @@
 //
-//  LogTableViewCell.swift
+//  LastLogTableViewCell.swift
 //  ManMan
 //
-//  Created by Apple on 2018/12/18.
+//  Created by Apple on 2018/12/20.
 //  Copyright © 2018年 Mavismwt. All rights reserved.
 //
 
 import UIKit
 
-class LogCell: UIView {
+class LastLogCell: UIView {
     
     var line = UIView()
+    var dot = UIView()
     var icon = UIImageView()
     var title = UILabel()
     
@@ -20,20 +21,28 @@ class LogCell: UIView {
         super.init(frame: frame)
         
         self.frame = frame
-        //self.frame = CGRect(x: 0, y: 0, width: SCREENSIZE.width, height: 56)
-        //self.backgroundColor = UIColor.init(red: 238/255, green: 238/255, blue: 238/255, alpha: 1)
         
         self.addSubview(line)
+        self.addSubview(dot)
         self.addSubview(icon)
         self.addSubview(title)
         
         line.snp.makeConstraints { (make) in
-            make.top.equalToSuperview()
+            make.bottom.equalTo(self.snp.centerY)
             make.left.equalTo(32)
+            make.top.equalToSuperview()
             make.width.equalTo(2)
-            make.height.equalToSuperview()
         }
         line.backgroundColor = UIColor.init(red: 213/255, green: 213/255, blue: 213/255, alpha: 1)
+        
+        dot.snp.makeConstraints { (make) in
+            make.centerX.equalTo(line.snp.centerX)
+            make.centerY.equalToSuperview()
+            make.height.width.equalTo(8)
+        }
+        dot.layer.cornerRadius = 3
+        dot.clipsToBounds = true
+        dot.backgroundColor = UIColor.init(red: 213/255, green: 213/255, blue: 213/255, alpha: 1)
         
         icon.snp.makeConstraints { (make) in
             make.centerY.equalToSuperview()
@@ -66,3 +75,4 @@ class LogCell: UIView {
     }
     
 }
+

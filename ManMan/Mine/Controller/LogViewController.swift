@@ -9,7 +9,7 @@
 import UIKit
 import CVCalendar
 
-class LogViewController: UIViewController,UIScrollViewDelegate,UITableViewDelegate,UITableViewDataSource,CVCalendarViewDelegate,CVCalendarMenuViewDelegate,CVCalendarViewAppearanceDelegate {
+class LogViewController: UIViewController,UIScrollViewDelegate,CVCalendarViewDelegate,CVCalendarMenuViewDelegate,CVCalendarViewAppearanceDelegate {
     
     var topLineView = UIView()
     var leftButton = UIButton()
@@ -25,15 +25,72 @@ class LogViewController: UIViewController,UIScrollViewDelegate,UITableViewDelega
     
     var currentCalendar: Calendar!
     let SCREENSIZE = UIScreen.main.bounds.size
-    let identifier = "reusedCell"
+    
+    struct data {
+        var title:String?
+        var icon:String?
+        var isDate:Bool?
+    }
+    var datas:[data] = [data.init(title: "Nov.11", icon: "add", isDate: true),data.init(title: "我的", icon: "add", isDate: false),data.init(title: "你的", icon: "add", isDate: false)]
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        self.view.backgroundColor = UIColor.init(red: 238/255, green: 238/255, blue: 238/255, alpha: 1)
+        
         self.loadTopLineView()
+        self.setCalendarView()
+        self.getData()
+        self.setScrollView()
         
+    }
+    
+    func getData() {
+        for i in 0..<datas.count {
+            if i == 0 {
+                let cell = FirstLogCell.init(frame: CGRect(x: 0, y: 56*i, width: Int(SCREENSIZE.width), height: 56))
+                cell.title.text = datas[i].title
+                self.scrollView.addSubview(cell)
+            }else if i == datas.count-1 {
+                let cell = LastLogCell.init(frame: CGRect(x: 0, y: 56*i, width: Int(SCREENSIZE.width), height: 56))
+                cell.title.text = datas[i].title
+                cell.icon.image = UIImage(named: datas[i].icon!)
+                self.scrollView.addSubview(cell)
+            }else if datas[i].isDate! {
+                let cell = DateLogCell.init(frame: CGRect(x: 0, y: 56*i, width: Int(SCREENSIZE.width), height: 56))
+                cell.title.text = datas[i].title
+                self.scrollView.addSubview(cell)
+            }else {
+                let cell = LogCell.init(frame: CGRect(x: 0, y: 56*i, width: Int(SCREENSIZE.width), height: 56))
+                cell.title.text = datas[i].title
+                cell.icon.image = UIImage(named: datas[i].icon!)
+                self.scrollView.addSubview(cell)
+            }
+            
+        }
+        
+    }
+    
+    func setScrollView() {
+        scrollView.frame = CGRect(x: 16, y: 484, width: SCREENSIZE.width-32, height:SCREENSIZE.height-500)
+        if datas.count*56 < Int(self.view.bounds.height) {
+            scrollView.contentSize = CGSize(width: self.view.bounds.width-32, height: self.view.bounds.height-70)
+        }else{
+            let Height = CGFloat(datas.count*56)
+            scrollView.contentSize = CGSize(width: self.view.bounds.width-32, height: Height)
+        }
+        scrollView.backgroundColor = UIColor.init(red: 1, green: 1, blue: 1, alpha: 1)
+        //UIColor.init(red: 238/255, green: 238/255, blue: 238/255, alpha: 1)
+        scrollView.indexDisplayMode = .alwaysHidden
+        scrollView.layer.cornerRadius = 8
+        scrollView.clipsToBounds = true
+        scrollView.delegate = self
+        
+        self.view.addSubview(scrollView)
+    }
+    
+    func setCalendarView() {
         currentCalendar = Calendar.init(identifier: .gregorian)
-        
         //初始化星期菜单栏/日历
         let WidthOfCalendar = SCREENSIZE.width-32
         menuView = CVCalendarMenuView(frame: CGRect(x:16, y:86, width:WidthOfCalendar, height:15))
@@ -46,33 +103,9 @@ class LogViewController: UIViewController,UIScrollViewDelegate,UITableViewDelega
         menuView.menuViewDelegate = self
         calendarView.calendarDelegate = self
         calendarView.calendarAppearanceDelegate = self
-        
-        self.view.backgroundColor = UIColor.init(red: 238/255, green: 238/255, blue: 238/255, alpha: 1)
         //将菜单视图和日历视图添加到主视图上
         //self.view.addSubview(menuView)
         self.view.addSubview(calendarView)
-        
-        
-        scrollView.frame = CGRect(x: 16, y: 484, width: SCREENSIZE.width-32, height:SCREENSIZE.height-500)
-        scrollView.contentSize = CGSize(width: self.view.bounds.width-32, height: self.view.bounds.width*2)
-        scrollView.backgroundColor = UIColor.init(red: 1, green: 1, blue: 1, alpha: 1)
-            //UIColor.init(red: 238/255, green: 238/255, blue: 238/255, alpha: 1)
-        scrollView.indexDisplayMode = .alwaysHidden
-        scrollView.layer.cornerRadius = 8
-        scrollView.clipsToBounds = true
-        
-        tableView.frame = CGRect(x: 0, y: 16, width: SCREENSIZE.width-32, height:SCREENSIZE.height-500)
-        tableView.delegate = self
-        tableView.dataSource = self
-        tableView.separatorStyle = .none
-        tableView.register(LogCell.classForCoder(), forCellReuseIdentifier: identifier)
-        tableView.backgroundColor = UIColor.init(red: 1, green: 1, blue: 1, alpha: 1)
-        //tableView.isScrollEnabled = false
-        
-        scrollView.addSubview(tableView)
-        
-        self.view.addSubview(scrollView)
-        
     }
     
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
@@ -84,7 +117,6 @@ class LogViewController: UIViewController,UIScrollViewDelegate,UITableViewDelega
             UIView.animate(withDuration: 0.3, animations: {
                 self.calendarView.frame = CGRect(x:16, y:86, width:self.SCREENSIZE.width-32, height:64)
                 self.scrollView.frame = CGRect(x: 16, y:166, width: self.SCREENSIZE.width-32, height:self.SCREENSIZE.height-182)
-                self.tableView.frame =  CGRect(x: 16, y:0, width: self.SCREENSIZE.width-32, height:self.SCREENSIZE.height-182)
             })
         }else if vol.y > 60 {
             self.calendarView.changeMode(.monthView)
@@ -132,21 +164,7 @@ class LogViewController: UIViewController,UIScrollViewDelegate,UITableViewDelega
         leftButton.addTarget(self, action: #selector(back), for: .touchUpInside)
         
     }
-    //MARK:tableView协议
-    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return 8
-    }
-    
-    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        
-        var cell:LogCell? = tableView.dequeueReusableCell(withIdentifier: identifier) as? LogCell
-        cell?.selectionStyle = .none
-        return cell!
-    }
-    
-    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        return 56
-    }
+
     
     //MARK:calendar实现
     @objc func back() {

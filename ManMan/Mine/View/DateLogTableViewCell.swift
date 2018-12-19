@@ -1,17 +1,17 @@
 //
-//  LogTableViewCell.swift
+//  DateLogTableViewCell.swift
 //  ManMan
 //
-//  Created by Apple on 2018/12/18.
+//  Created by Apple on 2018/12/20.
 //  Copyright © 2018年 Mavismwt. All rights reserved.
 //
 
 import UIKit
 
-class LogCell: UIView {
+class DateLogCell: UIView {
     
     var line = UIView()
-    var icon = UIImageView()
+    var dot = UIView()
     var title = UILabel()
     
     let SCREENSIZE = UIScreen.main.bounds.size
@@ -20,36 +20,36 @@ class LogCell: UIView {
         super.init(frame: frame)
         
         self.frame = frame
-        //self.frame = CGRect(x: 0, y: 0, width: SCREENSIZE.width, height: 56)
-        //self.backgroundColor = UIColor.init(red: 238/255, green: 238/255, blue: 238/255, alpha: 1)
         
         self.addSubview(line)
-        self.addSubview(icon)
+        self.addSubview(dot)
         self.addSubview(title)
         
         line.snp.makeConstraints { (make) in
             make.top.equalToSuperview()
             make.left.equalTo(32)
+            make.bottom.equalToSuperview()
             make.width.equalTo(2)
-            make.height.equalToSuperview()
         }
         line.backgroundColor = UIColor.init(red: 213/255, green: 213/255, blue: 213/255, alpha: 1)
         
-        icon.snp.makeConstraints { (make) in
+        dot.snp.makeConstraints { (make) in
+            make.centerX.equalTo(line.snp.centerX)
             make.centerY.equalToSuperview()
-            make.left.equalTo(48)
-            make.width.height.equalTo(48)
+            make.height.width.equalTo(12)
         }
-        icon.image = UIImage(named: "drink")
+        dot.layer.cornerRadius = 6
+        dot.clipsToBounds = true
+        dot.backgroundColor = UIColor.init(red: 213/255, green: 213/255, blue: 213/255, alpha: 1)
         
         title.snp.makeConstraints { (make) in
             make.centerY.equalToSuperview()
-            make.left.equalTo(icon.snp.right).offset(8)
-            make.height.equalTo(14)
+            make.left.equalTo(line.snp.right).offset(16)
+            make.height.equalTo(24)
         }
-        title.font = UIFont.systemFont(ofSize: 14)
+        title.font = UIFont.systemFont(ofSize: 24)
         title.text = "喝水"
-        title.textColor = UIColor.init(red: 0, green: 0, blue: 0, alpha: 0.74)
+        title.textColor = UIColor.init(red: 213/255, green: 213/255, blue: 213/255, alpha: 1)
         
         let tapGestureRecognizer = UITapGestureRecognizer()
         tapGestureRecognizer.addTarget(self, action: #selector(check))
