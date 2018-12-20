@@ -8,7 +8,7 @@
 
 import UIKit
 
-class FlagViewController: UIViewController,UITableViewDelegate,UITableViewDataSource {
+class FlagViewController: UIViewController,UITableViewDelegate,UITableViewDataSource,UITextFieldDelegate {
     
     struct flagData {
         var profileURL = "UIImageView()"
@@ -26,11 +26,15 @@ class FlagViewController: UIViewController,UITableViewDelegate,UITableViewDataSo
     var backButton = UIButton()
     var titleView = UILabel()
     var letterButton = UIButton()
+    var commentView = CommentLineView()
     
+    let coverView = UIView()
     let tableView = UITableView()
     
     let SCREENSIZE = UIScreen.main.bounds.size
     let identifier = "reusedCell"
+    var HeightOfKeyboard:CGFloat? = 0
+    var dTime:TimeInterval? = 0
     var flagDatas = [flagData]()
     
     override func viewDidLoad() {
@@ -45,6 +49,7 @@ class FlagViewController: UIViewController,UITableViewDelegate,UITableViewDataSo
         
         self.view.addSubview(topLineView)
         self.view.addSubview(tableView)
+        self.view.addSubview(commentView)
         
         topLineView.snp.makeConstraints { (make) in
             make.top.equalTo(0)
@@ -91,8 +96,71 @@ class FlagViewController: UIViewController,UITableViewDelegate,UITableViewDataSo
         tableView.dataSource = self
         tableView.delegate = self
         
+        commentView.inputText.delegate = self
+        commentView.sendButton.addTarget(self, action: #selector(send), for: .touchUpInside)
+        commentView.inputText.returnKeyType = .send
         
+        coverView.backgroundColor = UIColor.init(red: 0, green: 0, blue: 0, alpha: 0.4)
+        coverView.frame = CGRect(x: 0, y: 0, width: 0, height: 0)
+        self.view.addSubview(coverView)
+        
+        NotificationCenter.default.addObserver(self, selector: #selector(self.keyboardWillChangeFrame(note:)), name: UIResponder.keyboardWillChangeFrameNotification, object: nil)
     }
+    
+    @objc func send() {
+        self.commentView.inputText.resignFirstResponder()
+    }
+    
+    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
+        //收起键盘
+        textField.resignFirstResponder()
+        //更新数据
+        return true
+    }
+    
+    func textFieldDidBeginEditing(_ textField: UITextField) {
+        self.view.addSubview(self.coverView)
+        coverView.snp.makeConstraints { (make) in
+            make.bottom.equalTo(commentView.snp.top)
+            make.top.equalTo(0)
+            make.left.equalTo(0)
+            make.width.equalToSuperview()
+        }
+        UIView.animate(withDuration: dTime!, animations: {
+            self.view.layoutIfNeeded()
+        })
+    }
+    func textFieldDidEndEditing(_ textField: UITextField) {
+        UIView.animate(withDuration: dTime!, animations: {
+            self.coverView.removeFromSuperview()
+        })
+    }
+    
+    @objc func keyboardWillChangeFrame(note: Notification) {
+        // 1.获取动画执行的时间
+        let duration = note.userInfo?[UIResponder.keyboardAnimationDurationUserInfoKey] as! TimeInterval
+        // 2.获取键盘最终 Y值
+        dTime = duration
+        let endFrame = (note.userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as! NSValue).cgRectValue
+        let y = endFrame.origin.y
+        HeightOfKeyboard = endFrame.origin.y
+        //计算工具栏距离底部的间距
+        let margin = UIScreen.main.bounds.height - y
+        print(margin)
+        // 更新约束,执行动画
+        commentView.snp.updateConstraints { (make) in
+            make.left.equalTo(0)
+            make.right.equalTo(0)
+            make.height.equalTo(60)
+            make.bottom.equalTo(-margin)
+        }
+        UIView.animate(withDuration: duration) {
+            self.view.layoutIfNeeded()
+        }
+    }
+    
+    
+    
     @objc func back() {
         self.navigationController?.popViewController(animated: true)
         self.navigationController?.isNavigationBarHidden = true
@@ -103,6 +171,12 @@ class FlagViewController: UIViewController,UITableViewDelegate,UITableViewDataSo
         let addFlagViewController = AddFlagViewController()
         self.navigationController?.pushViewController(addFlagViewController, animated: true)
     }
+    
+//    func textFieldDidEndEditing(_ textField: UITextField) {
+//        UIView.animate(withDuration: 0.4, animations: {
+//            self.commentView.frame = CGRect(x: 0, y: UIScreen.main.bounds.height-60, width: UIScreen.main.bounds.width, height: 60)
+//        })
+//    }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return 3

@@ -118,22 +118,22 @@ class CustomizeUITableViewCell: UITableViewCell {
         detail.text = "这是我的flag这是我的flag这是我的flag这是我的flag这是我的flag这是我的flag这是我的flag这是我的flag这是我的flag"
         
         commentView.snp.makeConstraints { (make) in
-            make.right.equalTo(-80)
+            make.right.equalTo(likeView.snp.left).offset(-16)
             make.bottom.equalTo(0)
-            make.width.equalTo(60)
+            make.width.equalTo(40)
             make.height.equalTo(40)
         }
         
         commentImg.snp.makeConstraints { (make) in
-            make.right.equalTo(commentView.snp.right).offset(-104)
-            make.bottom.equalTo(commentView.snp.bottom).offset(-13)
+            make.left.equalToSuperview()
+            make.centerY.equalToSuperview()
             make.width.height.equalTo(15)
         }
         commentImg.image = UIImage(named: "comment")
         
         commentNum.snp.makeConstraints { (make) in
             make.left.equalTo(commentImg.snp.right).offset(5)
-            make.centerY.equalTo(commentImg.snp.centerY)
+            make.centerY.equalToSuperview()
             make.width.equalTo(20)
             make.height.equalTo(12)
         }
@@ -147,6 +147,9 @@ class CustomizeUITableViewCell: UITableViewCell {
             make.height.equalTo(40)
             make.width.equalTo(40)
         }
+        let tapGestureRecognizer = UITapGestureRecognizer()
+        tapGestureRecognizer.addTarget(self, action: #selector(like))
+        likeView.addGestureRecognizer(tapGestureRecognizer)
         
         likeImg.snp.makeConstraints { (make) in
             make.right.equalTo(likeNum.snp.left).offset(-5)
@@ -165,6 +168,11 @@ class CustomizeUITableViewCell: UITableViewCell {
         likeNum.textColor = UIColor.init(red: 0/255, green: 0/255, blue: 0/255, alpha: 0.54)
         likeNum.text = "33"
     }
+    
+    @objc func like() {
+        likeImg.image = UIImage(named: "likeSelected")
+    }
+    
     
     func setValueForCell(flag:flagData){
         profile.image = UIImage(named: flag.profileURL)
