@@ -216,6 +216,7 @@ class LogViewController: UIViewController,UIScrollViewDelegate,CVCalendarViewDel
         return circleView
     }
     
+    
     func didSelectDayView(_ dayView: DayView, animationDidFinish: Bool) {
         print("selected")
     }

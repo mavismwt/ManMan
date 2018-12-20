@@ -34,6 +34,7 @@ class CustomizeUITableViewCell: UITableViewCell {
     var detail = UITextView()
     var commentImg = UIImageView()
     var commentNum = UILabel()
+    var likeView = UIView()
     var likeImg = UIImageView()
     var likeNum = UILabel()
     
@@ -47,12 +48,13 @@ class CustomizeUITableViewCell: UITableViewCell {
         
         commentView.addSubview(commentImg)
         commentView.addSubview(commentNum)
-        commentView.addSubview(likeImg)
-        commentView.addSubview(likeNum)
+        likeView.addSubview(likeImg)
+        likeView.addSubview(likeNum)
         
         cell.addSubview(basicInfo)
         cell.addSubview(detail)
         cell.addSubview(commentView)
+        cell.addSubview(likeView)
         
         self.backgroundColor = UIColor.init(red: 238/255, green: 238/255, blue: 238/255, alpha: 0.8)
         self.addSubview(cell)
@@ -116,8 +118,9 @@ class CustomizeUITableViewCell: UITableViewCell {
         detail.text = "这是我的flag这是我的flag这是我的flag这是我的flag这是我的flag这是我的flag这是我的flag这是我的flag这是我的flag"
         
         commentView.snp.makeConstraints { (make) in
-            make.right.bottom.equalTo(0)
-            make.width.equalTo(SCREENRECT.size.width)
+            make.right.equalTo(-80)
+            make.bottom.equalTo(0)
+            make.width.equalTo(60)
             make.height.equalTo(40)
         }
         
@@ -138,16 +141,23 @@ class CustomizeUITableViewCell: UITableViewCell {
         commentNum.textColor = UIColor.init(red: 0/255, green: 0/255, blue: 0/255, alpha: 0.54)
         commentNum.text = "33"
         
+        likeView.snp.makeConstraints { (make) in
+            make.right.equalTo(-32)
+            make.bottom.equalToSuperview()
+            make.height.equalTo(40)
+            make.width.equalTo(40)
+        }
+        
         likeImg.snp.makeConstraints { (make) in
-            make.right.equalTo(commentView.snp.right).offset(-52)
-            make.bottom.equalTo(commentView.snp.bottom).offset(-13)
+            make.right.equalTo(likeNum.snp.left).offset(-5)
+            make.centerY.equalToSuperview()
             make.width.height.equalTo(15)
         }
         likeImg.image = UIImage(named: "like")
         
         likeNum.snp.makeConstraints { (make) in
-            make.left.equalTo(likeImg.snp.right).offset(5)
-            make.centerY.equalTo(likeImg.snp.centerY)
+            make.right.equalToSuperview()
+            make.centerY.equalToSuperview()
             make.width.equalTo(20)
             make.height.equalTo(12)
         }

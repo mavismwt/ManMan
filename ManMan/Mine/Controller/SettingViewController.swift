@@ -18,6 +18,7 @@ class SettingViewController: UIViewController,UITableViewDelegate,UITableViewDat
     
     let identifier = "reusedCell"
     let SCREENSIZE = UIScreen.main.bounds.size
+    let listDetail:[String] = ["打卡声音","晚安提示","加入系统日历"]
     
     override func viewDidLoad() {
         
@@ -69,6 +70,7 @@ class SettingViewController: UIViewController,UITableViewDelegate,UITableViewDat
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         var cell:SettingTableViewCell? = tableView.dequeueReusableCell(withIdentifier: identifier) as? SettingTableViewCell
+        cell?.title.text = listDetail[indexPath.row]
         return cell!
     }
     

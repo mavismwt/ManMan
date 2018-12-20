@@ -86,7 +86,6 @@ class FlagViewController: UIViewController,UITableViewDelegate,UITableViewDataSo
         }
         tableView.backgroundColor = UIColor.init(red: 238/255, green: 238/255, blue: 238/255, alpha: 1)
         tableView.separatorStyle = .none
-        
         tableView.register(CustomizeUITableViewCell.classForCoder(), forCellReuseIdentifier: identifier)
         
         tableView.dataSource = self
@@ -111,6 +110,7 @@ class FlagViewController: UIViewController,UITableViewDelegate,UITableViewDataSo
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         var cell:CustomizeUITableViewCell? = tableView.dequeueReusableCell(withIdentifier: identifier) as? CustomizeUITableViewCell
+        cell?.selectionStyle = .none
         if (cell == nil)
         {
             

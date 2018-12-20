@@ -70,7 +70,7 @@ extension UITabBar
 }
 
 
-class HomeViewController: UIViewController,UITableViewDelegate,UITableViewDataSource {
+class HomeViewController: UIViewController,UITableViewDelegate,UITableViewDataSource,UIGestureRecognizerDelegate {
     
     var topLineView = UIView()
     var calenderDetailButton = UIButton()
@@ -157,7 +157,11 @@ class HomeViewController: UIViewController,UITableViewDelegate,UITableViewDataSo
         self.tabBarController?.tabBar.shadowImage?.draw(in: CGRect(x: 0, y: 0, width: 0, height: 0))
         self.tabBarController?.tabBar.backgroundColor = UIColor.white
         
-        img = UIImageView(frame: CGRect(x: SCREENSIZE.width/2, y: SCREENSIZE.height/2, width: 120, height: 120))
+        self.initImg()
+    }
+    
+    func initImg() {
+        img = UIImageView(frame: CGRect(x: SCREENSIZE.width/2, y: SCREENSIZE.height/2, width: 150, height: 150))
         img.image = UIImage(named: "qian")
     }
     
@@ -171,7 +175,6 @@ class HomeViewController: UIViewController,UITableViewDelegate,UITableViewDataSo
         {
             cell = CheckCardCell(style: UITableViewCell.CellStyle.default, reuseIdentifier: identifier)
         }
-        //self.viewDidDisappear(true)
         return cell!
     }
     
@@ -181,28 +184,56 @@ class HomeViewController: UIViewController,UITableViewDelegate,UITableViewDataSo
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         let cell:CheckCardCell = tableView.cellForRow(at: indexPath) as! CheckCardCell
-        let tapGestureRecognizer = UITapGestureRecognizer()
+//        let tapGestureRecognizer = UITapGestureRecognizer()
 //        tapGestureRecognizer.addTarget(self, action: #selector(check))
-//        cell.addGestureRecognizer(tapGestureRecognizer)
+//        cell.cell.addGestureRecognizer(tapGestureRecognizer)
         cell.selectionStyle = .none
-        UIView.animate(withDuration: 0.5, animations: {
+        self.img.frame = CGRect(x: cell.frame.width-130, y: cell.frame.maxY+90, width: 120, height: 120)
+        UIView.animate(withDuration: 0.3, animations: {
             self.view.addSubview(self.img)
-            self.img.transform = CGAffineTransform.identity
-                .scaledBy(x: 0.8, y: 0.8)
-                .translatedBy(x: 100, y: 100)
-            //self.img.removeFromSuperview()
+            self.img.frame = CGRect(x: cell.frame.width-80, y: cell.frame.maxY+40, width: 120, height: 120)
+        })
+        DispatchQueue.main.asyncAfter(deadline: .now()+0.3, execute:
+            {
+                cell.background.removeFromSuperview()
+                cell.checkButton.removeFromSuperview()
+                self.img.removeFromSuperview()
+                //self.initImg()
         })
     }
     
-    @objc func check() {
-        UIView.animate(withDuration: 0.5, animations: {
-            self.view.addSubview(self.img)
-            self.img.transform = CGAffineTransform.identity
-                .scaledBy(x: 0.8, y: 0.8)
-                .translatedBy(x: 100, y: 100)
-            //self.img.removeFromSuperview()
-        })
+    func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {
+        return true
     }
+    
+    func tableView(_ tableView: UITableView, trailingSwipeActionsConfigurationForRowAt indexPath: IndexPath) -> UISwipeActionsConfiguration? {
+        let delete = UIContextualAction(style: .destructive, title: "删除") {
+            (action, view, completionHandler) in
+            //将对应条目的数据删除
+            //self.items.remove(at: indexPath.row)
+            //completionHandler(true)
+        }
+        let dImg = UIImage(named: "delete")
+        let DImg = dImg?.reSizeImage(reSize: CGSize(width: 40, height: 40))
+        delete.image = DImg
+        delete.backgroundColor = UIColor(red: 238/255, green: 238/255, blue: 238/255,
+                                         alpha: 1)
+        //返回所有的事件按钮
+        let configuration = UISwipeActionsConfiguration(actions: [delete])
+        return configuration
+    }
+    
+//    func tableView(_ tableView: UITableView, titleForDeleteConfirmationButtonForRowAt indexPath: IndexPath) -> String?{
+//        return nil
+//    }
+//    func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
+//        if editingStyle == UITableViewCell.EditingStyle.delete {
+//            //self.diagnoseArr.removeObject(at: indexPath.row-1)
+//            //刷新tableview
+//            tableView.deleteRows(at: [indexPath], with: UITableView.RowAnimation.automatic)
+//        }
+//    }
+    
     
     func getNowDate() -> String {
         let date = Date()
@@ -231,14 +262,16 @@ class HomeViewController: UIViewController,UITableViewDelegate,UITableViewDataSo
         
     }
     @objc func add() {
-        self.tabBarController?.view.addSubview(addView)
-        addView.addGestureRecognizer(UITapGestureRecognizer.init(target: self, action: #selector(backToHome)))
-        addView.isUserInteractionEnabled = true
-        addView.addCheckButton.addTarget(self, action: #selector(addCheckTask), for: .touchUpInside)
-        addView.addLogButton.addTarget(self, action: #selector(addLog), for: .touchUpInside)
-        addView.addButton.snp.makeConstraints { (make) in
-            make.bottom.equalTo(addButton.snp.bottom)
-        }
+        UIView.animate(withDuration: 0.5, animations: {
+            self.tabBarController?.view.addSubview(self.addView)
+            self.addView.addGestureRecognizer(UITapGestureRecognizer.init(target: self, action: #selector(self.backToHome)))
+            self.addView.isUserInteractionEnabled = true
+            self.addView.addCheckButton.addTarget(self, action: #selector(self.addCheckTask), for: .touchUpInside)
+            self.addView.addLogButton.addTarget(self, action: #selector(self.addLog), for: .touchUpInside)
+            self.addView.addButton.snp.makeConstraints { (make) in
+                make.bottom.equalTo(self.addButton.snp.bottom)
+            }
+        })
     }
     @objc func flag(){
         let flagViewController = FlagViewController()

@@ -77,7 +77,7 @@ class CheckCardCell: UITableViewCell {
             make.width.height.equalTo(34)
         }
         checkButton.setImage(UIImage(named: "check"), for: .normal)
-        checkButton.addTarget(self, action: #selector(check), for: .touchUpInside)
+        //checkButton.addTarget(self, action: #selector(check), for: .touchUpInside)
         
         background.snp.makeConstraints { (make) in
             make.left.top.width.height.equalToSuperview()
