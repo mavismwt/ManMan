@@ -29,21 +29,21 @@ class AddView: UIView {
         self.addSubview(addLogButton)
         
         addButton.snp.makeConstraints { (make) in
-            make.bottom.equalTo(-15)
+            make.bottom.equalTo(0)
             make.centerX.equalToSuperview()
             make.width.height.equalTo(65)
         }
         addButton.image = UIImage(named: "add")
         
         addCheckButton.snp.makeConstraints { (make) in
-            make.bottom.equalTo(addButton.snp.top).offset(-16)
+            make.bottom.equalTo(addButton.snp.top).offset(0)
             make.centerX.equalTo(addButton.snp.centerX).offset(-60)
             make.width.height.equalTo(65)
         }
-        addCheckButton.setImage(UIImage(named: "qian"), for: .normal)
+        addCheckButton.setImage(UIImage(named: "checkIcon"), for: .normal)
         
         addLogButton.snp.makeConstraints { (make) in
-            make.bottom.equalTo(addButton.snp.top).offset(-16)
+            make.bottom.equalTo(addButton.snp.top).offset(0)
             make.centerX.equalTo(addButton.snp.centerX).offset(60)
             make.width.height.equalTo(65)
         }

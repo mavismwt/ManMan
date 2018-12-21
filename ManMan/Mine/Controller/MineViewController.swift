@@ -52,6 +52,10 @@ class MineViewController: UIViewController,UITableViewDelegate,UITableViewDataSo
         profileView.image = UIImage(named: "MyProfile")
         profileView.layer.cornerRadius = 36
         profileView.clipsToBounds = true
+//        let TapGestureRecognizer = UITapGestureRecognizer()
+//        TapGestureRecognizer.addTarget(self, action: #selector(login))
+//        profileView.addGestureRecognizer(TapGestureRecognizer)
+        
         
         nickname.snp.makeConstraints { (make) in
             make.top.equalTo(profileView.snp.bottom).offset(8)
@@ -96,6 +100,12 @@ class MineViewController: UIViewController,UITableViewDelegate,UITableViewDataSo
         endEditView.frame = self.view.frame
         endEditView.backgroundColor = UIColor.init(red: 1, green: 1, blue: 1, alpha: 0)
         endEditView.addGestureRecognizer(tapGestureRecognizer)
+    }
+    
+    @objc func login() {
+        let loginViewController = LoginViewController()
+        self.navigationController?.pushViewController(loginViewController, animated: true)
+        self.tabBarController?.tabBar.isHidden = true
     }
     
     @objc func changeEditStatus() {

@@ -18,6 +18,7 @@ class CheckCardCell: UITableViewCell {
     var background = UIImageView()
     var backgroundImage = UIImageView()
     var checkImg = UIImageView()
+    var isfinished = false
     
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         
@@ -76,8 +77,6 @@ class CheckCardCell: UITableViewCell {
             make.right.equalToSuperview().offset(-16)
             make.width.height.equalTo(34)
         }
-        checkButton.setImage(UIImage(named: "check"), for: .normal)
-        //checkButton.addTarget(self, action: #selector(check), for: .touchUpInside)
         
         background.snp.makeConstraints { (make) in
             make.left.top.width.height.equalToSuperview()

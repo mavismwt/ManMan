@@ -24,6 +24,9 @@
 		18632BE921CAC11800A0CA47 /* FirstDateLogCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18632BE821CAC11800A0CA47 /* FirstDateLogCell.swift */; };
 		18632BEB21CAC48500A0CA47 /* MonthLogCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18632BEA21CAC48500A0CA47 /* MonthLogCell.swift */; };
 		18632BED21CBADC900A0CA47 /* CommentLineView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18632BEC21CBADC800A0CA47 /* CommentLineView.swift */; };
+		18632BEF21CCD61D00A0CA47 /* LoginViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18632BEE21CCD61C00A0CA47 /* LoginViewController.swift */; };
+		18632BF121CCF62200A0CA47 /* LoadView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18632BF021CCF62200A0CA47 /* LoadView.swift */; };
+		18632BF321CCFC6A00A0CA47 /* StartViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18632BF221CCFC6A00A0CA47 /* StartViewController.swift */; };
 		18F9395021B7FF3C00306EB0 /* CustomizeUITableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18F9394F21B7FF3C00306EB0 /* CustomizeUITableViewCell.swift */; };
 		18F9395221B8381C00306EB0 /* HomeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18F9395121B8381C00306EB0 /* HomeViewController.swift */; };
 		18F9395421B8383200306EB0 /* MineViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18F9395321B8383200306EB0 /* MineViewController.swift */; };
@@ -127,6 +130,9 @@
 		18632BE821CAC11800A0CA47 /* FirstDateLogCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirstDateLogCell.swift; sourceTree = "<group>"; };
 		18632BEA21CAC48500A0CA47 /* MonthLogCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MonthLogCell.swift; sourceTree = "<group>"; };
 		18632BEC21CBADC800A0CA47 /* CommentLineView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommentLineView.swift; sourceTree = "<group>"; };
+		18632BEE21CCD61C00A0CA47 /* LoginViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginViewController.swift; sourceTree = "<group>"; };
+		18632BF021CCF62200A0CA47 /* LoadView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoadView.swift; sourceTree = "<group>"; };
+		18632BF221CCFC6A00A0CA47 /* StartViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StartViewController.swift; sourceTree = "<group>"; };
 		18F9394F21B7FF3C00306EB0 /* CustomizeUITableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomizeUITableViewCell.swift; sourceTree = "<group>"; };
 		18F9395121B8381C00306EB0 /* HomeViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeViewController.swift; sourceTree = "<group>"; };
 		18F9395321B8383200306EB0 /* MineViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MineViewController.swift; sourceTree = "<group>"; };
@@ -225,6 +231,7 @@
 			children = (
 				18F9396721BC378800306EB0 /* AddView.swift */,
 				18F9396921BC47C900306EB0 /* CheckCardCell.swift */,
+				18632BF021CCF62200A0CA47 /* LoadView.swift */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -284,6 +291,7 @@
 		18F9396B21BC47CE00306EB0 /* Controller */ = {
 			isa = PBXGroup;
 			children = (
+				18632BEE21CCD61C00A0CA47 /* LoginViewController.swift */,
 				18F9398721BCE3D100306EB0 /* ExampleViewController.swift */,
 				18F9398521BCE36D00306EB0 /* LetterViewController.swift */,
 			);
@@ -343,6 +351,7 @@
 				18F972EC21B7F8AF00FFAB90 /* Main.storyboard */,
 				18F972F121B7F8B000FFAB90 /* LaunchScreen.storyboard */,
 				18F972F421B7F8B000FFAB90 /* Info.plist */,
+				18632BF221CCFC6A00A0CA47 /* StartViewController.swift */,
 			);
 			path = ManMan;
 			sourceTree = "<group>";
@@ -538,6 +547,7 @@
 				18F9399021BD27AC00306EB0 /* AddLogViewController.swift in Sources */,
 				18F9398E21BD279A00306EB0 /* AddCheckViewController.swift in Sources */,
 				18632B0921C2A79A00A0CA47 /* FeedbackViewController.swift in Sources */,
+				18632BF321CCFC6A00A0CA47 /* StartViewController.swift in Sources */,
 				18632B0F21C4F31000A0CA47 /* SettingTableViewCell.swift in Sources */,
 				18632BE521CABB1600A0CA47 /* LastLogTableViewCell.swift in Sources */,
 				18F9396821BC378800306EB0 /* AddView.swift in Sources */,
@@ -557,8 +567,10 @@
 				18F9399221BE55C500306EB0 /* CustomizeUICollectinViewCell.swift in Sources */,
 				18F9395421B8383200306EB0 /* MineViewController.swift in Sources */,
 				18632BE921CAC11800A0CA47 /* FirstDateLogCell.swift in Sources */,
+				18632BEF21CCD61D00A0CA47 /* LoginViewController.swift in Sources */,
 				18632BEB21CAC48500A0CA47 /* MonthLogCell.swift in Sources */,
 				18632B0721C2996500A0CA47 /* FangCustomizeUICollectionViewCell.swift in Sources */,
+				18632BF121CCF62200A0CA47 /* LoadView.swift in Sources */,
 				18632AFA21C26D5000A0CA47 /* LogViewController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

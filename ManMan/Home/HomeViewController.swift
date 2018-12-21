@@ -81,6 +81,7 @@ class HomeViewController: UIViewController,UITableViewDelegate,UITableViewDataSo
     var img = UIImageView()
     
     let addView = AddView()
+    let load = LoadView()
     let tableView = UITableView()
     let identifier = "reusedCell"
     
@@ -88,6 +89,10 @@ class HomeViewController: UIViewController,UITableViewDelegate,UITableViewDataSo
     var itemNameArray:[String] = ["homeUnselected","mineUnselected"]
     var itemNameSelectArray:[String] = ["homeSelected","mineSelected"]
     var itemTitle:[String] = ["日常","我的"]
+    
+    override func viewWillAppear(_ animated: Bool) {
+        
+    }
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -161,8 +166,10 @@ class HomeViewController: UIViewController,UITableViewDelegate,UITableViewDataSo
     }
     
     func initImg() {
-        img = UIImageView(frame: CGRect(x: SCREENSIZE.width/2, y: SCREENSIZE.height/2, width: 150, height: 150))
+        img = UIImageView(frame: CGRect(x: SCREENSIZE.width/2, y: SCREENSIZE.height/2, width: 140, height: 140))
         img.image = UIImage(named: "qian")
+        img.layer.cornerRadius = 60
+        img.clipsToBounds = true
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
@@ -188,18 +195,23 @@ class HomeViewController: UIViewController,UITableViewDelegate,UITableViewDataSo
 //        tapGestureRecognizer.addTarget(self, action: #selector(check))
 //        cell.cell.addGestureRecognizer(tapGestureRecognizer)
         cell.selectionStyle = .none
-        self.img.frame = CGRect(x: cell.frame.width-130, y: cell.frame.maxY+90, width: 120, height: 120)
-        UIView.animate(withDuration: 0.3, animations: {
-            self.view.addSubview(self.img)
-            self.img.frame = CGRect(x: cell.frame.width-80, y: cell.frame.maxY+40, width: 120, height: 120)
-        })
-        DispatchQueue.main.asyncAfter(deadline: .now()+0.3, execute:
-            {
-                cell.background.removeFromSuperview()
+        self.img.frame = CGRect(x: cell.frame.width-145, y: cell.frame.maxY+85, width: 140, height: 140)
+        if cell.isfinished == false {
+            UIView.animate(withDuration: 0.4, delay: 0, options: .curveEaseIn, animations: {
                 cell.checkButton.removeFromSuperview()
-                self.img.removeFromSuperview()
-                //self.initImg()
-        })
+                self.view.addSubview(self.img)
+                self.img.frame = CGRect(x: cell.frame.width-115, y: cell.frame.maxY+50, width: 120, height: 120)
+                self.img.layer.cornerRadius = 60
+            }, completion: nil)
+            DispatchQueue.main.asyncAfter(deadline: .now()+0.4, execute:
+                {
+                    cell.background.removeFromSuperview()
+                    cell.checkButton.removeFromSuperview()
+                    self.img.removeFromSuperview()
+                    //self.initImg()
+            })
+            cell.isfinished = true
+        }
     }
     
     func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {
@@ -262,7 +274,7 @@ class HomeViewController: UIViewController,UITableViewDelegate,UITableViewDataSo
         
     }
     @objc func add() {
-        UIView.animate(withDuration: 0.5, animations: {
+        UIView.animate(withDuration: 0.5,animations: {
             self.tabBarController?.view.addSubview(self.addView)
             self.addView.addGestureRecognizer(UITapGestureRecognizer.init(target: self, action: #selector(self.backToHome)))
             self.addView.isUserInteractionEnabled = true
@@ -271,7 +283,12 @@ class HomeViewController: UIViewController,UITableViewDelegate,UITableViewDataSo
             self.addView.addButton.snp.makeConstraints { (make) in
                 make.bottom.equalTo(self.addButton.snp.bottom)
             }
-        })
+        }, completion: nil)
+        UIView.animate(withDuration: 0.5, delay: 0.0, usingSpringWithDamping: 0.4, initialSpringVelocity: 0.0,animations: {
+            self.addView.addLogButton.center.y -= 16
+            self.addView.addCheckButton.center.y -= 16
+            self.addView.addButton.center.y -= 16
+        }, completion: nil)
     }
     @objc func flag(){
         let flagViewController = FlagViewController()

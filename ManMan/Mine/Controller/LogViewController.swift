@@ -216,9 +216,19 @@ class LogViewController: UIViewController,UIScrollViewDelegate,CVCalendarViewDel
         return circleView
     }
     
+    func dayLabelColor(by weekDay: Weekday, status: CVStatus, present: CVPresent)
+        -> UIColor? {
+            switch (weekDay, status, present) {
+            case (_, .selected, _), (_, .highlighted, _): return UIColor.white
+            case (.sunday, .in, _): return UIColor.white //Color.sundayText
+            case (.sunday, _, _): return UIColor.black //Color.sundayTextDisabled
+            case (_, .in, _): return UIColor.orange
+            default: return UIColor.gray
+            }
+    }
     
     func didSelectDayView(_ dayView: DayView, animationDidFinish: Bool) {
-        print("selected")
+        //print("selected")
     }
     
     override func viewDidLayoutSubviews() {
