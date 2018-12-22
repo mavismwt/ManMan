@@ -90,13 +90,37 @@ class HomeViewController: UIViewController,UITableViewDelegate,UITableViewDataSo
     var itemNameSelectArray:[String] = ["homeSelected","mineSelected"]
     var itemTitle:[String] = ["日常","我的"]
     
+    struct taskDetail {
+        var name:String?
+        var icon:String?
+        var day:Int?
+        var isfinished:Bool?
+    }
+    
+    var tasks = [taskDetail]()
+    
     override func viewWillAppear(_ animated: Bool) {
-        
+        print("ok")
+        if let taskNumber:Int = UserDefaults.standard.value(forKey: "taskNumber") as? Int {
+            print(taskNumber)
+            switch taskNumber {
+            case 1:
+                tasks.append(taskDetail.init(name: "吃水果", icon: "fruit", day: 0, isfinished: false))
+            default:
+                tasks.append(taskDetail.init(name: "喝水", icon: "drink", day: 0, isfinished: false))
+            }
+            
+        }
     }
     
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view, typically from a nib.
+        self.tabBarController?.view.addSubview(load)
+        DispatchQueue.main.asyncAfter(deadline: .now()+2, execute:
+            {
+                self.load.removeFromSuperview()
+        })
         
         topLineView.addSubview(monthLabel)
         topLineView.addSubview(dayLabel)
@@ -173,7 +197,7 @@ class HomeViewController: UIViewController,UITableViewDelegate,UITableViewDataSo
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return 3
+        return tasks.count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
@@ -181,6 +205,8 @@ class HomeViewController: UIViewController,UITableViewDelegate,UITableViewDataSo
         if (cell == nil)
         {
             cell = CheckCardCell(style: UITableViewCell.CellStyle.default, reuseIdentifier: identifier)
+            cell?.taskName.text = tasks[indexPath.row].name
+            cell?.taskIcon.image = UIImage(named: tasks[indexPath.row].icon!)
         }
         return cell!
     }

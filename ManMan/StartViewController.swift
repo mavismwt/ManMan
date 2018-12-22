@@ -20,6 +20,7 @@ class StartViewController: UIViewController {
         DispatchQueue.main.asyncAfter(deadline: .now()+1, execute:
             {
                 let homeViewController = HomeViewController()
+                self.navigationController?.navigationBar.isHidden = true
                 self.navigationController?.pushViewController(homeViewController, animated: false)
         })
         

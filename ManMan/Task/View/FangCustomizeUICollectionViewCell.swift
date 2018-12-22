@@ -37,9 +37,9 @@ class FangCustomizeUICollectionViewCell: UICollectionViewCell {
         cell.backgroundColor = UIColor.init(red: 1, green: 1, blue: 1, alpha: 1)
         cell.layer.cornerRadius = 8
         cell.clipsToBounds = true
-        cell.layer.shadowColor = UIColor.black.cgColor
-        cell.layer.shadowOffset = CGSize(width: 3, height: 6)
-        cell.layer.shadowOpacity = 1
+//        cell.layer.shadowColor = UIColor.black.cgColor
+//        cell.layer.shadowOffset = CGSize(width: 3, height: 6)
+//        cell.layer.shadowOpacity = 1
         
         icon.snp.makeConstraints { (make) in
             make.centerX.equalToSuperview()

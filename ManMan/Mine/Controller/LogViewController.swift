@@ -111,14 +111,14 @@ class LogViewController: UIViewController,UIScrollViewDelegate,CVCalendarViewDel
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
         let panGestrue = scrollView.panGestureRecognizer
         let vol = panGestrue.velocity(in: self.view)
-        print(vol)
-        if vol.y < -60 {
+        //print(vol)
+        if vol.y < -500 {
             self.calendarView.changeMode(.weekView)
             UIView.animate(withDuration: 0.3, animations: {
                 self.calendarView.frame = CGRect(x:16, y:86, width:self.SCREENSIZE.width-32, height:64)
                 self.scrollView.frame = CGRect(x: 16, y:166, width: self.SCREENSIZE.width-32, height:self.SCREENSIZE.height-182)
             })
-        }else if vol.y > 60 {
+        }else if vol.y > 500 {
             self.calendarView.changeMode(.monthView)
             UIView.animate(withDuration: 0.3, animations: {
                 self.calendarView.frame = CGRect(x:16, y:86, width:self.SCREENSIZE.width-32, height:self.SCREENSIZE.width-32)
@@ -216,16 +216,16 @@ class LogViewController: UIViewController,UIScrollViewDelegate,CVCalendarViewDel
         return circleView
     }
     
-    func dayLabelColor(by weekDay: Weekday, status: CVStatus, present: CVPresent)
-        -> UIColor? {
-            switch (weekDay, status, present) {
-            case (_, .selected, _), (_, .highlighted, _): return UIColor.white
-            case (.sunday, .in, _): return UIColor.white //Color.sundayText
-            case (.sunday, _, _): return UIColor.black //Color.sundayTextDisabled
-            case (_, .in, _): return UIColor.orange
-            default: return UIColor.gray
-            }
-    }
+//    func dayLabelColor(by weekDay: Weekday, status: CVStatus, present: CVPresent)
+//        -> UIColor? {
+//            switch (weekDay, status, present) {
+//            case (_, .selected, _), (_, .highlighted, _): return UIColor.white
+//            case (.sunday, .in, _): return UIColor.black //Color.sundayText
+//            case (.sunday, _, _): return UIColor.black //Color.sundayTextDisabled
+//            case (_, .in, _): return UIColor.orange
+//            default: return UIColor.gray
+//            }
+//    }
     
     func didSelectDayView(_ dayView: DayView, animationDidFinish: Bool) {
         //print("selected")

@@ -20,10 +20,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         let startViewController = StartViewController()
         let firstNavigationController = UINavigationController(rootViewController: homeViewController)
         let secondNavigationController = UINavigationController(rootViewController: mineViewController)
-        let thirdNavigationController = UINavigationController(rootViewController: startViewController)
         let tabbarController = UITabBarController()
         tabbarController.viewControllers = [firstNavigationController,secondNavigationController]
-        window?.rootViewController = thirdNavigationController
+        window?.rootViewController = tabbarController
         return true
     }
 

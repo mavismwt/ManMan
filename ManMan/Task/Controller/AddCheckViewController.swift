@@ -13,6 +13,7 @@ class AddCheckViewController: UIViewController,UICollectionViewDelegate,UICollec
     var collectionView:UICollectionView?
     var topLineView = UIView()
     var leftButton = UIButton()
+    var rightButton = UIButton()
     var titleView = UILabel()
     var subTitleView = UILabel()
     
@@ -20,14 +21,16 @@ class AddCheckViewController: UIViewController,UICollectionViewDelegate,UICollec
     let layout = UICollectionViewFlowLayout()
     let SCREENSIZE = UIScreen.main.bounds.size
     
-    let imageName = ["fruit","word","drink","breakfast","makeup","sleep","read","bath","medicine"]
-    let titleStr = ["吃水果","背单词","喝水","早餐","化妆","早睡","读书","洗澡","吃药"]
+    let imageName = ["fruit","word","drink","breakfast","makeup","sleep","read","sport","medicine"]
+    let titleStr = ["吃水果","背单词","喝水","早餐","化妆","早睡","读书","运动","吃药"]
+    var selectedTaskNumber:Int?
     
     override func viewDidLoad() {
         
         self.view.backgroundColor = UIColor.init(red: 238/255, green: 238/255, blue: 238/255, alpha: 1)
         
         topLineView.addSubview(leftButton)
+        topLineView.addSubview(rightButton)
         topLineView.addSubview(titleView)
         
         self.view.addSubview(topLineView)
@@ -58,6 +61,14 @@ class AddCheckViewController: UIViewController,UICollectionViewDelegate,UICollec
         }
         leftButton.setImage(UIImage(named: "back"), for: .normal)
         leftButton.addTarget(self, action: #selector(back), for: .touchUpInside)
+        
+        rightButton.snp.makeConstraints { (make) in
+            make.centerY.equalToSuperview().offset(10)
+            make.right.equalTo(-16)
+            make.width.height.equalTo(60)
+        }
+        rightButton.setTitle("Done", for: .normal)
+        rightButton.addTarget(self, action: #selector(backTo), for: .touchUpInside)
         
         layout.itemSize = CGSize(width:(SCREENSIZE.width-24)/3, height: (SCREENSIZE.width-24)/3+20)
         //设置列间距,行间距,偏移 CGRect(x: 0, y: 0, width:(SCREENSIZE.width-24)/3, height: (SCREENSIZE.width-24)/3+20)
@@ -114,7 +125,27 @@ class AddCheckViewController: UIViewController,UICollectionViewDelegate,UICollec
         return cell
     }
     
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        var cell:CustomizeUICollectionViewCell = collectionView.cellForItem(at: indexPath) as! CustomizeUICollectionViewCell
+        UIView.animate(withDuration: 0.4, animations: {
+            cell.cell.backgroundColor = UIColor.init(red: 255/255, green: 213/255, blue: 97/255, alpha: 0.25)
+        }, completion: nil)
+        selectedTaskNumber = indexPath.row
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, didDeselectItemAt indexPath: IndexPath) {
+        var cell:CustomizeUICollectionViewCell = collectionView.cellForItem(at: indexPath) as! CustomizeUICollectionViewCell
+        UIView.animate(withDuration: 0.4, animations: {
+            cell.cell.backgroundColor = UIColor.init(red: 255/255, green: 255/255, blue: 255/255, alpha: 1)
+        }, completion: nil)
+    }
+    
     @objc func back() {
+        self.navigationController?.popViewController(animated: true)
+        self.tabBarController?.tabBar.isHidden = false
+    }
+    @objc func backTo() {
+        UserDefaults.standard.set(self.selectedTaskNumber, forKey: "taskNumber")
         self.navigationController?.popViewController(animated: true)
         self.tabBarController?.tabBar.isHidden = false
     }
@@ -122,5 +153,8 @@ class AddCheckViewController: UIViewController,UICollectionViewDelegate,UICollec
     @objc func UserDefined() {
         let addUserDefinedCheckViewController = AddUserDefinedCheckViewController()
         self.navigationController?.pushViewController(addUserDefinedCheckViewController, animated: true)
+    }
+    
+    override func viewWillDisappear(_ animated: Bool) {
     }
 }

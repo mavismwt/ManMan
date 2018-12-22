@@ -8,7 +8,7 @@
 
 import UIKit
 
-class AddUserDefinedCheckViewController: UIViewController,UICollectionViewDelegate,UICollectionViewDataSource,UIScrollViewDelegate {
+class AddUserDefinedCheckViewController: UIViewController,UICollectionViewDelegate,UICollectionViewDataSource,UIScrollViewDelegate,UITextFieldDelegate {
     
     var collectionView:UICollectionView?
     var topLineView = UIView()
@@ -19,13 +19,15 @@ class AddUserDefinedCheckViewController: UIViewController,UICollectionViewDelega
     var backgroudImage = UIImageView()
     var editButton = UIButton()
     var taskIcon = UIImageView()
-    var taskName = UILabel()
+    var taskName = UITextField()
     var taskProcess = UILabel()
     var subTitleView = UILabel()
     var confirmButton = UIButton()
+    var endEditView = UIView()
     
     let layout = UICollectionViewFlowLayout()
     let SCREENSIZE = UIScreen.main.bounds.size
+    let imageName = ["fruit","word","drink","breakfast","makeup","sleep","read","sport","medicine"]
     
     override func viewDidLoad() {
         
@@ -120,6 +122,8 @@ class AddUserDefinedCheckViewController: UIViewController,UICollectionViewDelega
         taskName.text = "喝水"
         taskName.textColor = UIColor.init(red: 0, green: 0, blue: 0, alpha: 0.87)
         taskName.font = UIFont.boldSystemFont(ofSize: 17)
+        taskName.delegate = self
+        NotificationCenter.default.addObserver(self, selector: #selector(textViewNotifitionAction), name:UITextView.textDidChangeNotification, object: nil)
         
         editButton.snp.makeConstraints { (make) in
             make.left.equalTo(taskName.snp.right).offset(8)
@@ -170,6 +174,13 @@ class AddUserDefinedCheckViewController: UIViewController,UICollectionViewDelega
         confirmButton.titleLabel?.font = UIFont.boldSystemFont(ofSize: 18)
         confirmButton.layer.shadowColor = UIColor.lightGray.cgColor
         confirmButton.layer.shadowOffset = CGSize(width: 3, height: 6)
+        confirmButton.addTarget(self, action: #selector(backToHome), for: .touchUpInside)
+        
+        let tapGestureRecognizer = UITapGestureRecognizer()
+        tapGestureRecognizer.addTarget(self, action: #selector(done))
+        endEditView.frame = self.view.frame
+        endEditView.backgroundColor = UIColor.init(red: 1, green: 1, blue: 1, alpha: 0)
+        endEditView.addGestureRecognizer(tapGestureRecognizer)
     }
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
@@ -177,17 +188,62 @@ class AddUserDefinedCheckViewController: UIViewController,UICollectionViewDelega
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "cell", for: indexPath)
-        
+        var cell:FangCustomizeUICollectionViewCell = collectionView.dequeueReusableCell(withReuseIdentifier: "cell", for: indexPath) as! FangCustomizeUICollectionViewCell
+        cell.icon.image = UIImage(named: self.imageName[indexPath.row])
         return cell
     }
     
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        var cell:FangCustomizeUICollectionViewCell = collectionView.cellForItem(at: indexPath) as! FangCustomizeUICollectionViewCell
+        UIView.animate(withDuration: 0.4, animations: {
+            cell.cell.backgroundColor = UIColor.init(red: 255/255, green: 213/255, blue: 97/255, alpha: 0.25)
+            self.taskIcon.image = UIImage(named: self.imageName[indexPath.row])
+        }, completion: nil)
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, didDeselectItemAt indexPath: IndexPath) {
+        var cell:FangCustomizeUICollectionViewCell = collectionView.cellForItem(at: indexPath) as! FangCustomizeUICollectionViewCell
+        UIView.animate(withDuration: 0.4, animations: {
+            cell.cell.backgroundColor = UIColor.init(red: 255/255, green: 255/255, blue: 255/255, alpha: 1)
+        }, completion: nil)
+    }
+    
     @objc func edit() {
+        self.taskName.becomeFirstResponder()
+    }
+    @objc func done() {
+        self.taskName.resignFirstResponder()
+    }
+    
+    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
+        //收起键盘
+        textField.resignFirstResponder()
+        //更新数据
+        return true
+    }
+    
+    func textFieldDidBeginEditing(_ textField: UITextField) {
+        self.view.addSubview(endEditView)
+    }
+    func textFieldDidEndEditing(_ textField: UITextField) {
+        endEditView.removeFromSuperview()
+    }
+    
+    @objc func textViewNotifitionAction(userInfo:NSNotification){
+        let textStr:NSString = taskName.text as! NSString
+        if (textStr.length >= 10) {
+            let str = textStr.substring(to: 10)
+            taskName.text = str;
+        }
         
     }
     
     @objc func back() {
         self.navigationController?.popViewController(animated: true)
+    }
+    
+    @objc func backToHome() {
+        self.navigationController?.popToRootViewController(animated: true)
         self.tabBarController?.tabBar.isHidden = false
     }
 }
