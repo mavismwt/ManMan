@@ -24,6 +24,7 @@ class LogViewController: UIViewController,UIScrollViewDelegate,CVCalendarViewDel
     private var calendarView: CVCalendarView!
     
     var currentCalendar: Calendar!
+    let inset = UIApplication.shared.delegate?.window??.safeAreaInsets ?? UIEdgeInsets.zero
     let SCREENSIZE = UIScreen.main.bounds.size
     
     struct data {
@@ -72,7 +73,14 @@ class LogViewController: UIViewController,UIScrollViewDelegate,CVCalendarViewDel
     }
     
     func setScrollView() {
-        scrollView.frame = CGRect(x: 16, y: 484, width: SCREENSIZE.width-32, height:SCREENSIZE.height-500)
+        self.view.addSubview(scrollView)
+        //scrollView.frame = CGRect(x: 16, y: calendarView.frame.minY+SCREENSIZE.width-8, width: SCREENSIZE.width-32, height: SCREENSIZE.height-calendarView.frame.maxY+SCREENSIZE.width-inset.bottom)
+        scrollView.snp.makeConstraints { (make) in
+            make.top.equalTo(calendarView.snp.bottom).offset(16)
+            make.left.equalTo(14)
+            make.right.equalTo(-14)
+            make.bottom.equalTo(-inset.bottom-16)
+        }
         if datas.count*56 < Int(self.view.bounds.height) {
             scrollView.contentSize = CGSize(width: self.view.bounds.width-32, height: self.view.bounds.height-70)
         }else{
@@ -86,15 +94,15 @@ class LogViewController: UIViewController,UIScrollViewDelegate,CVCalendarViewDel
         scrollView.clipsToBounds = true
         scrollView.delegate = self
         
-        self.view.addSubview(scrollView)
     }
     
     func setCalendarView() {
         currentCalendar = Calendar.init(identifier: .gregorian)
         //初始化星期菜单栏/日历
-        let WidthOfCalendar = SCREENSIZE.width-32
-        menuView = CVCalendarMenuView(frame: CGRect(x:16, y:86, width:WidthOfCalendar, height:15))
-        calendarView = CVCalendarView(frame: CGRect(x:16, y:86, width:WidthOfCalendar, height:WidthOfCalendar))
+        let WidthOfCalendar = SCREENSIZE.width-28
+        let navRect = self.navigationController?.navigationBar.frame
+        menuView = CVCalendarMenuView(frame: CGRect(x:14, y:(navRect?.height)!+inset.top+16, width:WidthOfCalendar, height:15))
+        calendarView = CVCalendarView(frame: CGRect(x:14, y:(navRect?.height)!+inset.top+16, width:WidthOfCalendar, height:WidthOfCalendar))
         calendarView.backgroundColor = UIColor.white
         calendarView.layer.cornerRadius = 8
         calendarView.layer.shadowColor = UIColor.black.cgColor
@@ -114,15 +122,24 @@ class LogViewController: UIViewController,UIScrollViewDelegate,CVCalendarViewDel
         //print(vol)
         if vol.y < -500 {
             self.calendarView.changeMode(.weekView)
-            UIView.animate(withDuration: 0.3, animations: {
-                self.calendarView.frame = CGRect(x:16, y:86, width:self.SCREENSIZE.width-32, height:64)
-                self.scrollView.frame = CGRect(x: 16, y:166, width: self.SCREENSIZE.width-32, height:self.SCREENSIZE.height-182)
+            UIView.animate(withDuration: 0.2, animations: {
+                let WidthOfCalendar = self.SCREENSIZE.width-28
+                let navRect = self.navigationController?.navigationBar.frame
+                self.calendarView.frame = CGRect(x:14, y:(navRect?.height)!+self.inset.top+16, width:WidthOfCalendar, height:60)
+                
             })
         }else if vol.y > 500 {
             self.calendarView.changeMode(.monthView)
-            UIView.animate(withDuration: 0.3, animations: {
-                self.calendarView.frame = CGRect(x:16, y:86, width:self.SCREENSIZE.width-32, height:self.SCREENSIZE.width-32)
-                self.scrollView.frame = CGRect(x: 16, y: self.SCREENSIZE.width+70, width: self.SCREENSIZE.width-32, height:self.SCREENSIZE.height-self.SCREENSIZE.width-86)
+            UIView.animate(withDuration: 0.2, animations: {
+                let WidthOfCalendar = self.SCREENSIZE.width-28
+                let navRect = self.navigationController?.navigationBar.frame
+                self.calendarView.frame = CGRect(x:14, y:(navRect?.height)!+self.inset.top+16, width:WidthOfCalendar, height:WidthOfCalendar)
+//                scrollView.snp.makeConstraints { (make) in
+//                    make.top.equalTo(self.calendarView.snp.bottom).offset(16)
+//                    make.left.equalTo(16)
+//                    make.right.equalTo(-16)
+//                    make.bottom.equalTo(-self.inset.bottom-16)
+//                }
             })
         }
         
@@ -138,15 +155,12 @@ class LogViewController: UIViewController,UIScrollViewDelegate,CVCalendarViewDel
         
         self.view.addSubview(topLineView)
         
-        topLineView.snp.makeConstraints { (make) in
-            make.top.equalTo(0)
-            make.width.equalTo(SCREENSIZE.width)
-            make.height.equalTo(70)
-        }
+        let navRect = self.navigationController?.navigationBar.frame
+        topLineView.frame = CGRect(x: 0, y: 0, width: (navRect?.width)!, height: (navRect?.height)!+inset.top)
         topLineView.backgroundColor = UIColor.init(red: 255/255, green: 193/255, blue: 7/255, alpha: 1)
         
         titleView.snp.makeConstraints { (make) in
-            make.centerY.equalToSuperview().offset(10)
+            make.centerY.equalToSuperview().offset(inset.top/2)
             make.centerX.equalToSuperview()
             make.height.equalTo(18)
         }
@@ -155,7 +169,7 @@ class LogViewController: UIViewController,UIScrollViewDelegate,CVCalendarViewDel
         titleView.font = UIFont.boldSystemFont(ofSize: 18)
         
         leftButton.snp.makeConstraints { (make) in
-            make.centerY.equalToSuperview().offset(10)
+            make.centerY.equalToSuperview().offset(inset.top/2)
             make.left.equalTo(16)
             make.width.equalTo(15)
             make.height.equalTo(20)

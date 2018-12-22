@@ -19,6 +19,7 @@ class MineViewController: UIViewController,UITableViewDelegate,UITableViewDataSo
     var endEditView = UIView()
     
    
+    let inset = UIApplication.shared.delegate?.window??.safeAreaInsets ?? UIEdgeInsets.zero
     let SCREENSIZE = UIScreen.main.bounds.size
     let identifier = "reusedCell"
     let listDetail:[String] = ["我的flag","我的时间轴","设置","问题反馈"]

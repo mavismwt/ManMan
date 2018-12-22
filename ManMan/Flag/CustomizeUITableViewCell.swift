@@ -33,10 +33,12 @@ class CustomizeUITableViewCell: UITableViewCell {
     var time = UILabel()
     var detail = UITextView()
     var commentImg = UIImageView()
-    var commentNum = UILabel()
+    var commentNumLabel = UILabel()
+    var commentNumber:Int = 0
     var likeView = UIView()
     var likeImg = UIImageView()
-    var likeNum = UILabel()
+    var likeNumLabel = UILabel()
+    var likeNumber:Int = 0
     
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         
@@ -47,9 +49,9 @@ class CustomizeUITableViewCell: UITableViewCell {
         basicInfo.addSubview(time)
         
         commentView.addSubview(commentImg)
-        commentView.addSubview(commentNum)
+        commentView.addSubview(commentNumLabel)
         likeView.addSubview(likeImg)
-        likeView.addSubview(likeNum)
+        likeView.addSubview(likeNumLabel)
         
         cell.addSubview(basicInfo)
         cell.addSubview(detail)
@@ -131,15 +133,15 @@ class CustomizeUITableViewCell: UITableViewCell {
         }
         commentImg.image = UIImage(named: "comment")
         
-        commentNum.snp.makeConstraints { (make) in
+        commentNumLabel.snp.makeConstraints { (make) in
             make.left.equalTo(commentImg.snp.right).offset(5)
             make.centerY.equalToSuperview()
             make.width.equalTo(20)
             make.height.equalTo(12)
         }
-        commentNum.font = UIFont(name: "PingFang SC", size: 12)
-        commentNum.textColor = UIColor.init(red: 0/255, green: 0/255, blue: 0/255, alpha: 0.54)
-        commentNum.text = "33"
+        commentNumLabel.font = UIFont(name: "PingFang SC", size: 12)
+        commentNumLabel.textColor = UIColor.init(red: 0/255, green: 0/255, blue: 0/255, alpha: 0.54)
+        commentNumLabel.text = "\(commentNumber)"
         
         likeView.snp.makeConstraints { (make) in
             make.right.equalTo(-32)
@@ -152,25 +154,32 @@ class CustomizeUITableViewCell: UITableViewCell {
         likeView.addGestureRecognizer(tapGestureRecognizer)
         
         likeImg.snp.makeConstraints { (make) in
-            make.right.equalTo(likeNum.snp.left).offset(-5)
+            make.right.equalTo(likeNumLabel.snp.left).offset(-5)
             make.centerY.equalToSuperview()
             make.width.height.equalTo(15)
         }
         likeImg.image = UIImage(named: "like")
         
-        likeNum.snp.makeConstraints { (make) in
+        likeNumLabel.snp.makeConstraints { (make) in
             make.right.equalToSuperview()
             make.centerY.equalToSuperview()
             make.width.equalTo(20)
             make.height.equalTo(12)
         }
-        likeNum.font = UIFont(name: "PingFang SC", size: 12)
-        likeNum.textColor = UIColor.init(red: 0/255, green: 0/255, blue: 0/255, alpha: 0.54)
-        likeNum.text = "33"
+        likeNumLabel.font = UIFont(name: "PingFang SC", size: 12)
+        likeNumLabel.textColor = UIColor.init(red: 0/255, green: 0/255, blue: 0/255, alpha: 0.54)
+        likeNumLabel.text = "\(likeNumber)"
     }
     
     @objc func like() {
-        likeImg.image = UIImage(named: "likeSelected")
+        UIView.transition(with: self.likeImg, duration: 0.5 , options: .transitionFlipFromLeft , animations: {
+            self.likeImg.image = UIImage(named: "likeSelected")
+        }, completion: nil)
+        DispatchQueue.main.asyncAfter(deadline: .now()+0.4, execute:
+            {
+                self.likeNumber += 1
+                self.likeNumLabel.text = "\(self.likeNumber)"
+        })
     }
     
     
@@ -178,8 +187,8 @@ class CustomizeUITableViewCell: UITableViewCell {
         profile.image = UIImage(named: flag.profileURL)
         nickname.text = flag.nicknameText
         detail.text = flag.detailText
-        commentNum.text = flag.commentNumText
-        likeNum.text = flag.likeNumText
+        commentNumLabel.text = flag.commentNumText
+        likeNumLabel.text = flag.likeNumText
     }
     
     required init(coder aDecoder: NSCoder) {

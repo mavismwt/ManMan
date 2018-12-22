@@ -17,6 +17,7 @@ class SettingViewController: UIViewController,UITableViewDelegate,UITableViewDat
     var tableView = UITableView()
     
     let identifier = "reusedCell"
+    let inset = UIApplication.shared.delegate?.window??.safeAreaInsets ?? UIEdgeInsets.zero
     let SCREENSIZE = UIScreen.main.bounds.size
     let listDetail:[String] = ["打卡声音","晚安提示","加入系统日历"]
     
@@ -30,15 +31,12 @@ class SettingViewController: UIViewController,UITableViewDelegate,UITableViewDat
         self.view.addSubview(topLineView)
         self.view.addSubview(tableView)
         
-        topLineView.snp.makeConstraints { (make) in
-            make.top.equalTo(0)
-            make.width.equalTo(SCREENSIZE.width)
-            make.height.equalTo(70)
-        }
+        let navRect = self.navigationController?.navigationBar.frame
+        topLineView.frame = CGRect(x: 0, y: 0, width: (navRect?.width)!, height: (navRect?.height)!+inset.top)
         topLineView.backgroundColor = UIColor.init(red: 255/255, green: 193/255, blue: 7/255, alpha: 1)
         
         titleView.snp.makeConstraints { (make) in
-            make.centerY.equalToSuperview().offset(10)
+            make.centerY.equalToSuperview().offset(inset.top/2)
             make.centerX.equalToSuperview()
             make.height.equalTo(18)
         }
@@ -47,7 +45,7 @@ class SettingViewController: UIViewController,UITableViewDelegate,UITableViewDat
         titleView.font = UIFont.boldSystemFont(ofSize: 18)
         
         leftButton.snp.makeConstraints { (make) in
-            make.centerY.equalToSuperview().offset(10)
+            make.centerY.equalToSuperview().offset(inset.top/2)
             make.left.equalTo(16)
             make.width.equalTo(15)
             make.height.equalTo(20)
@@ -55,9 +53,10 @@ class SettingViewController: UIViewController,UITableViewDelegate,UITableViewDat
         leftButton.setImage(UIImage(named: "back"), for: .normal)
         leftButton.addTarget(self, action: #selector(back), for: .touchUpInside)
         
-        tableView.frame = CGRect(x: 0, y: 86, width: SCREENSIZE.width, height: SCREENSIZE.height-86)
+        tableView.frame = CGRect(x: 0, y: (navRect?.height)!+inset.top+8, width: SCREENSIZE.width, height: SCREENSIZE.height-8-(navRect?.height)!-inset.top-inset.bottom)
         tableView.backgroundColor = UIColor.init(red: 238/255, green: 238/255, blue: 238/255, alpha: 1)
         tableView.register(SettingTableViewCell.classForCoder(), forCellReuseIdentifier: identifier)
+        
         tableView.separatorStyle = .none
         tableView.delegate = self
         tableView.dataSource = self
@@ -71,6 +70,7 @@ class SettingViewController: UIViewController,UITableViewDelegate,UITableViewDat
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         var cell:SettingTableViewCell? = tableView.dequeueReusableCell(withIdentifier: identifier) as? SettingTableViewCell
         cell?.title.text = listDetail[indexPath.row]
+        cell?.selectionStyle = .none
         return cell!
     }
     

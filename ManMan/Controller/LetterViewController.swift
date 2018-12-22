@@ -17,6 +17,7 @@ class LetterViewController: UIViewController {
     var letterHeader = UITextField()
     var letterBody = UITextView()
     
+    let inset = UIApplication.shared.delegate?.window??.safeAreaInsets ?? UIEdgeInsets.zero
     let SCREENSIZE = UIScreen.main.bounds.size
     
     override func viewDidLoad() {
@@ -31,11 +32,8 @@ class LetterViewController: UIViewController {
         self.view.addSubview(letterHeader)
         self.view.addSubview(letterBody)
         
-        topLineView.snp.makeConstraints { (make) in
-            make.top.equalTo(0)
-            make.width.equalTo(SCREENSIZE.width)
-            make.height.equalTo(70)
-        }
+        let navRect = self.navigationController?.navigationBar.frame
+        topLineView.frame = CGRect(x: 0, y: 0, width: (navRect?.width)!, height: (navRect?.height)!+inset.top)
         //topLineView.backgroundColor = UIColor.init(red: 255/255, green: 193/255, blue: 7/255, alpha: 1)
         
         titleView.snp.makeConstraints { (make) in

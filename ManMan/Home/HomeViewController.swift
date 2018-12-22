@@ -86,9 +86,12 @@ class HomeViewController: UIViewController,UITableViewDelegate,UITableViewDataSo
     let identifier = "reusedCell"
     
     let SCREENSIZE = UIScreen.main.bounds.size
+    let inset = UIApplication.shared.delegate?.window??.safeAreaInsets ?? UIEdgeInsets.zero
     var itemNameArray:[String] = ["homeUnselected","mineUnselected"]
     var itemNameSelectArray:[String] = ["homeSelected","mineSelected"]
     var itemTitle:[String] = ["日常","我的"]
+    let imageName = ["fruit","word","drink","breakfast","makeup","sleep","read","sport","medicine"]
+    let titleStr = ["吃水果","背单词","喝水","早餐","化妆","早睡","读书","运动","吃药"]
     
     struct taskDetail {
         var name:String?
@@ -100,16 +103,12 @@ class HomeViewController: UIViewController,UITableViewDelegate,UITableViewDataSo
     var tasks = [taskDetail]()
     
     override func viewWillAppear(_ animated: Bool) {
+        self.tabBarController?.tabBar.isHidden = false
         print("ok")
         if let taskNumber:Int = UserDefaults.standard.value(forKey: "taskNumber") as? Int {
             print(taskNumber)
-            switch taskNumber {
-            case 1:
-                tasks.append(taskDetail.init(name: "吃水果", icon: "fruit", day: 0, isfinished: false))
-            default:
-                tasks.append(taskDetail.init(name: "喝水", icon: "drink", day: 0, isfinished: false))
-            }
-            
+            tasks.append(taskDetail.init(name: titleStr[taskNumber], icon: imageName[taskNumber], day: 0, isfinished: false))
+            self.tableView.reloadData()
         }
     }
     
@@ -130,23 +129,20 @@ class HomeViewController: UIViewController,UITableViewDelegate,UITableViewDataSo
         self.view.addSubview(gotoFlag)
         self.view.addSubview(tableView)
         
-        topLineView.snp.makeConstraints { (make) in
-            make.top.equalTo(0)
-            make.width.equalTo(SCREENSIZE.width)
-            make.height.equalTo(70)
-        }
+        let navRect = self.navigationController?.navigationBar.frame
+        topLineView.frame = CGRect(x: 0, y: 0, width: (navRect?.width)!, height: (navRect?.height)!+inset.top)
         topLineView.backgroundColor = UIColor.init(red: 255/255, green: 193/255, blue: 7/255, alpha: 1)
         
         calenderDetailButton.snp.makeConstraints { (make) in
             make.left.equalTo(16)
-            make.centerY.equalTo(topLineView.snp.centerY).offset(10)
+            make.centerY.equalTo(topLineView.snp.centerY).offset(inset.top/2)
             make.width.height.equalTo(24)
         }
         calenderDetailButton.setImage(UIImage(named: "calenderIcon"), for: .normal)
         calenderDetailButton.addTarget(self, action: #selector(goTo), for: .touchUpInside)
         
         monthLabel.snp.makeConstraints { (make) in
-            make.right.equalTo(topLineView.snp.right).offset(-40)
+            make.right.equalTo(topLineView.snp.right).offset(-20)
             make.bottom.equalTo(calenderDetailButton.snp.bottom)
             make.height.equalTo(18)
         }
@@ -155,7 +151,7 @@ class HomeViewController: UIViewController,UITableViewDelegate,UITableViewDataSo
         monthLabel.font = UIFont.boldSystemFont(ofSize: 20)
         
         gotoFlag.snp.makeConstraints { (make) in
-            make.top.equalTo(86)
+            make.top.equalTo(topLineView.snp.bottom).offset(16)
             make.left.equalTo(16)
             make.right.equalTo(self.view.snp.right).offset(-16)
             make.height.equalTo(50)
@@ -169,7 +165,8 @@ class HomeViewController: UIViewController,UITableViewDelegate,UITableViewDataSo
         gotoFlag.contentEdgeInsets = UIEdgeInsets(top: 0, left: 16, bottom: 0, right: 0)
         gotoFlag.addTarget(self, action: #selector(flag), for: .touchUpInside)
         
-        tableView.frame = CGRect(x: 0, y: 140, width: SCREENSIZE.width, height: SCREENSIZE.height-186)
+        tableView.frame = CGRect(x: 0, y: inset.top+(navRect?.height)!+70, width: SCREENSIZE.width, height: SCREENSIZE.height-166-inset.top-inset.bottom)
+        print(self.view.safeAreaInsets)
         tableView.backgroundColor = UIColor.init(red: 238/255, green: 238/255, blue: 238/255, alpha: 1)
         tableView.separatorStyle = .none
         tableView.delegate = self
@@ -192,8 +189,6 @@ class HomeViewController: UIViewController,UITableViewDelegate,UITableViewDataSo
     func initImg() {
         img = UIImageView(frame: CGRect(x: SCREENSIZE.width/2, y: SCREENSIZE.height/2, width: 140, height: 140))
         img.image = UIImage(named: "qian")
-        img.layer.cornerRadius = 60
-        img.clipsToBounds = true
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
@@ -214,25 +209,28 @@ class HomeViewController: UIViewController,UITableViewDelegate,UITableViewDataSo
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         return 95
     }
-    
+    //songshlan@bingyn.net
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         let cell:CheckCardCell = tableView.cellForRow(at: indexPath) as! CheckCardCell
 //        let tapGestureRecognizer = UITapGestureRecognizer()
 //        tapGestureRecognizer.addTarget(self, action: #selector(check))
 //        cell.cell.addGestureRecognizer(tapGestureRecognizer)
         cell.selectionStyle = .none
-        self.img.frame = CGRect(x: cell.frame.width-145, y: cell.frame.maxY+85, width: 140, height: 140)
+        self.img.frame = CGRect(x: cell.frame.width-115, y: cell.frame.maxY+50, width: 150, height: 150)
         if cell.isfinished == false {
             UIView.animate(withDuration: 0.4, delay: 0, options: .curveEaseIn, animations: {
                 cell.checkButton.removeFromSuperview()
                 self.view.addSubview(self.img)
-                self.img.frame = CGRect(x: cell.frame.width-115, y: cell.frame.maxY+50, width: 120, height: 120)
+                self.img.frame = CGRect(x: cell.frame.width-115, y: cell.frame.maxY+50, width: 110, height: 110)
                 self.img.layer.cornerRadius = 60
             }, completion: nil)
             DispatchQueue.main.asyncAfter(deadline: .now()+0.4, execute:
                 {
-                    cell.background.removeFromSuperview()
-                    cell.checkButton.removeFromSuperview()
+//                    cell.background.removeFromSuperview()
+//                    cell.checkButton.removeFromSuperview()
+                    cell.days += 1
+                    cell.isfinished = true
+                    cell.reSetTableViewCell()
                     self.img.removeFromSuperview()
                     //self.initImg()
             })
@@ -244,33 +242,36 @@ class HomeViewController: UIViewController,UITableViewDelegate,UITableViewDataSo
         return true
     }
     
-    func tableView(_ tableView: UITableView, trailingSwipeActionsConfigurationForRowAt indexPath: IndexPath) -> UISwipeActionsConfiguration? {
-        let delete = UIContextualAction(style: .destructive, title: "删除") {
-            (action, view, completionHandler) in
-            //将对应条目的数据删除
-            //self.items.remove(at: indexPath.row)
-            //completionHandler(true)
-        }
-        let dImg = UIImage(named: "delete")
-        let DImg = dImg?.reSizeImage(reSize: CGSize(width: 40, height: 40))
-        delete.image = DImg
-        delete.backgroundColor = UIColor(red: 238/255, green: 238/255, blue: 238/255,
-                                         alpha: 1)
-        //返回所有的事件按钮
-        let configuration = UISwipeActionsConfiguration(actions: [delete])
-        return configuration
-    }
-    
-//    func tableView(_ tableView: UITableView, titleForDeleteConfirmationButtonForRowAt indexPath: IndexPath) -> String?{
-//        return nil
-//    }
-//    func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
-//        if editingStyle == UITableViewCell.EditingStyle.delete {
-//            //self.diagnoseArr.removeObject(at: indexPath.row-1)
-//            //刷新tableview
-//            tableView.deleteRows(at: [indexPath], with: UITableView.RowAnimation.automatic)
+//    func tableView(_ tableView: UITableView, trailingSwipeActionsConfigurationForRowAt indexPath: IndexPath) -> UISwipeActionsConfiguration? {
+//        let delete = UIContextualAction(style: .destructive, title: "删除") {
+//            (action, view, completionHandler) in
+//            //将对应条目的数据删除
+//            //self.items.remove(at: indexPath.row)
+//            //completionHandler(true)
 //        }
+//        let dImg = UIImage(named: "delete")
+//        let DImg = dImg?.reSizeImage(reSize: CGSize(width: 40, height: 40))
+//        delete.image = DImg
+//        delete.backgroundColor = UIColor(red: 238/255, green: 238/255, blue: 238/255,
+//                                         alpha: 1)
+//        //返回所有的事件按钮
+//        let configuration = UISwipeActionsConfiguration(actions: [delete])
+//        return configuration
 //    }
+    
+    
+    
+    func tableView(_ tableView: UITableView, titleForDeleteConfirmationButtonForRowAt indexPath: IndexPath) -> String?{
+        return "删除"
+    }
+    func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
+        if editingStyle == UITableViewCell.EditingStyle.delete {
+            //self.diagnoseArr.removeObject(at: indexPath.row-1)
+            //刷新tableview
+            tasks.remove(at: indexPath.row)
+            tableView.deleteRows(at: [indexPath], with: UITableView.RowAnimation.automatic)
+        }
+    }
     
     
     func getNowDate() -> String {

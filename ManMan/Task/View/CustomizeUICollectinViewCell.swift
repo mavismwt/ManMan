@@ -14,6 +14,7 @@ class CustomizeUICollectionViewCell: UICollectionViewCell {
     var title = UILabel()
     var cell = UIView()
     
+    let inset = UIApplication.shared.delegate?.window??.safeAreaInsets ?? UIEdgeInsets.zero
     let SCREENSIZE = UIScreen.main.bounds.size
     
     override init(frame: CGRect) {

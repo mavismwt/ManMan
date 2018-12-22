@@ -27,6 +27,7 @@
 		18632BEF21CCD61D00A0CA47 /* LoginViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18632BEE21CCD61C00A0CA47 /* LoginViewController.swift */; };
 		18632BF121CCF62200A0CA47 /* LoadView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18632BF021CCF62200A0CA47 /* LoadView.swift */; };
 		18632BF321CCFC6A00A0CA47 /* StartViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18632BF221CCFC6A00A0CA47 /* StartViewController.swift */; };
+		18632BF521CE212100A0CA47 /* FlagDetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18632BF421CE212100A0CA47 /* FlagDetailViewController.swift */; };
 		18F9395021B7FF3C00306EB0 /* CustomizeUITableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18F9394F21B7FF3C00306EB0 /* CustomizeUITableViewCell.swift */; };
 		18F9395221B8381C00306EB0 /* HomeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18F9395121B8381C00306EB0 /* HomeViewController.swift */; };
 		18F9395421B8383200306EB0 /* MineViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18F9395321B8383200306EB0 /* MineViewController.swift */; };
@@ -133,6 +134,7 @@
 		18632BEE21CCD61C00A0CA47 /* LoginViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginViewController.swift; sourceTree = "<group>"; };
 		18632BF021CCF62200A0CA47 /* LoadView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoadView.swift; sourceTree = "<group>"; };
 		18632BF221CCFC6A00A0CA47 /* StartViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StartViewController.swift; sourceTree = "<group>"; };
+		18632BF421CE212100A0CA47 /* FlagDetailViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FlagDetailViewController.swift; sourceTree = "<group>"; };
 		18F9394F21B7FF3C00306EB0 /* CustomizeUITableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomizeUITableViewCell.swift; sourceTree = "<group>"; };
 		18F9395121B8381C00306EB0 /* HomeViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeViewController.swift; sourceTree = "<group>"; };
 		18F9395321B8383200306EB0 /* MineViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MineViewController.swift; sourceTree = "<group>"; };
@@ -204,6 +206,7 @@
 				18F9731621B7FDC900FFAB90 /* FlagViewController.swift */,
 				18632B0C21C49E5500A0CA47 /* AddFlagViewController.swift */,
 				18632BEC21CBADC800A0CA47 /* CommentLineView.swift */,
+				18632BF421CE212100A0CA47 /* FlagDetailViewController.swift */,
 			);
 			path = Flag;
 			sourceTree = "<group>";
@@ -563,6 +566,7 @@
 				18F9398621BCE36D00306EB0 /* LetterViewController.swift in Sources */,
 				18F9398421BCD4D200306EB0 /* ListTableViewCell.swift in Sources */,
 				18632AF621C24C8000A0CA47 /* AddUserDefinedCheckViewController.swift in Sources */,
+				18632BF521CE212100A0CA47 /* FlagDetailViewController.swift in Sources */,
 				18F9396A21BC47C900306EB0 /* CheckCardCell.swift in Sources */,
 				18F9399221BE55C500306EB0 /* CustomizeUICollectinViewCell.swift in Sources */,
 				18F9395421B8383200306EB0 /* MineViewController.swift in Sources */,

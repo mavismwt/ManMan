@@ -19,6 +19,7 @@ class AddCheckViewController: UIViewController,UICollectionViewDelegate,UICollec
     
     var confirmButton = UIButton()
     let layout = UICollectionViewFlowLayout()
+    let inset = UIApplication.shared.delegate?.window??.safeAreaInsets ?? UIEdgeInsets.zero
     let SCREENSIZE = UIScreen.main.bounds.size
     
     let imageName = ["fruit","word","drink","breakfast","makeup","sleep","read","sport","medicine"]
@@ -37,15 +38,12 @@ class AddCheckViewController: UIViewController,UICollectionViewDelegate,UICollec
         self.view.addSubview(subTitleView)
         self.view.addSubview(confirmButton)
         
-        topLineView.snp.makeConstraints { (make) in
-            make.top.equalTo(0)
-            make.width.equalTo(SCREENSIZE.width)
-            make.height.equalTo(70)
-        }
+        let navRect = self.navigationController?.navigationBar.frame
+        topLineView.frame = CGRect(x: 0, y: 0, width: (navRect?.width)!, height: (navRect?.height)!+inset.top)
         topLineView.backgroundColor = UIColor.init(red: 255/255, green: 193/255, blue: 7/255, alpha: 1)
         
         titleView.snp.makeConstraints { (make) in
-            make.centerY.equalToSuperview().offset(10)
+            make.centerY.equalToSuperview().offset(inset.top/2)
             make.centerX.equalToSuperview()
             make.height.equalTo(18)
         }
@@ -54,7 +52,7 @@ class AddCheckViewController: UIViewController,UICollectionViewDelegate,UICollec
         titleView.font = UIFont.boldSystemFont(ofSize: 18)
         
         leftButton.snp.makeConstraints { (make) in
-            make.centerY.equalToSuperview().offset(10)
+            make.centerY.equalToSuperview().offset(inset.top/2)
             make.left.equalTo(16)
             make.width.equalTo(15)
             make.height.equalTo(20)
@@ -63,7 +61,7 @@ class AddCheckViewController: UIViewController,UICollectionViewDelegate,UICollec
         leftButton.addTarget(self, action: #selector(back), for: .touchUpInside)
         
         rightButton.snp.makeConstraints { (make) in
-            make.centerY.equalToSuperview().offset(10)
+            make.centerY.equalToSuperview().offset(inset.top/2)
             make.right.equalTo(-16)
             make.width.height.equalTo(60)
         }
@@ -85,7 +83,7 @@ class AddCheckViewController: UIViewController,UICollectionViewDelegate,UICollec
         subTitleView.textColor = UIColor.init(red: 0, green: 0, blue: 0, alpha: 0.54)
         subTitleView.font = UIFont.systemFont(ofSize: 17)
         
-        collectionView = UICollectionView(frame: CGRect(x: 12, y: 110, width: SCREENSIZE.width-24, height: SCREENSIZE.width+36), collectionViewLayout: layout)
+        collectionView = UICollectionView(frame: CGRect(x: 12, y: 40+(navRect?.height)!+inset.top, width: SCREENSIZE.width-24, height: SCREENSIZE.width+36), collectionViewLayout: layout)
         collectionView?.delegate = self
         collectionView?.dataSource = self
         let cellFrame = CGRect(x: 0, y: 0, width:(SCREENSIZE.width-24)/3, height: (SCREENSIZE.width-24)/3+20)

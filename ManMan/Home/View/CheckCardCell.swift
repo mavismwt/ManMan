@@ -14,10 +14,12 @@ class CheckCardCell: UITableViewCell {
     var taskIcon = UIImageView()
     var taskName = UILabel()
     var taskProcess = UILabel()
-    var checkButton = UIButton()
+    var checkButton = UIImageView()
     var background = UIImageView()
+    var deleteButton = UIButton()
     var backgroundImage = UIImageView()
     var checkImg = UIImageView()
+    var days:Int = 0
     var isfinished = false
     
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
@@ -68,7 +70,7 @@ class CheckCardCell: UITableViewCell {
             make.left.equalTo(88)
             make.height.equalTo(12)
         }
-        taskProcess.text = "已完成10天"
+        taskProcess.text = "已完成\(days)天"
         taskProcess.textColor = UIColor.init(red: 0, green: 0, blue: 0, alpha: 0.54)
         taskProcess.font = UIFont.systemFont(ofSize: 12)
         
@@ -77,6 +79,7 @@ class CheckCardCell: UITableViewCell {
             make.right.equalToSuperview().offset(-16)
             make.width.height.equalTo(34)
         }
+        checkButton.image = UIImage(named: "check")
         
         background.snp.makeConstraints { (make) in
             make.left.top.width.height.equalToSuperview()
@@ -89,22 +92,20 @@ class CheckCardCell: UITableViewCell {
         backgroundImage.image = UIImage(named: "checked")
         
         checkImg.frame = CGRect()
-    }
-    
-    func reSetTableViewCell() {
         
     }
     
+    func reSetTableViewCell() {
+        if isfinished == true {
+            taskProcess.text = "已完成\(days)天"
+            background.removeFromSuperview()
+            checkButton.removeFromSuperview()
+        }
+    }
+    
     @objc func check() {
-//        UIView.animate(withDuration: 5, delay: 5, options: .curveEaseIn, animations: {
-//            self.background.removeFromSuperview()
-//            self.checkButton.removeFromSuperview()
-//        }, completion: nil)
-        DispatchQueue.main.asyncAfter(deadline: .now()+0.5, execute:
-            {
-                self.background.removeFromSuperview()
-                self.checkButton.removeFromSuperview()
-        })
+        background.removeFromSuperview()
+        checkButton.removeFromSuperview()
     }
     
     required init?(coder aDecoder: NSCoder) {
