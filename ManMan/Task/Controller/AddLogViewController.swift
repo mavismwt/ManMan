@@ -8,7 +8,7 @@
 
 import UIKit
 
-class AddLogViewController: UIViewController {
+class AddLogViewController: UIViewController,UITextViewDelegate {
     
     var topLineView = UIView()
     var leftButton = UIButton()
@@ -81,7 +81,6 @@ class AddLogViewController: UIViewController {
             make.bottom.right.equalTo(-16)
         }
         inputText.font = UIFont.systemFont(ofSize: 15)
-        inputText.text = "此处输入日志"
         
         textLabel.snp.makeConstraints { (make) in
             make.right.equalTo(textView.snp.right)

@@ -32,7 +32,7 @@ class LogViewController: UIViewController,UIScrollViewDelegate,CVCalendarViewDel
         var icon:String?
         var isDate:Bool?
     }
-    var datas:[data] = [data.init(title: "Nov.11", icon: "add", isDate: true),data.init(title: "我的", icon: "add", isDate: false),data.init(title: "你的", icon: "add", isDate: false)]
+    var datas:[data] = [data.init(title: "Nov.11", icon: "", isDate: true),data.init(title: "早睡", icon: "sleep", isDate: false),data.init(title: "日志", icon: "log", isDate: false)]
     
     override func viewDidLoad() {
         super.viewDidLoad()

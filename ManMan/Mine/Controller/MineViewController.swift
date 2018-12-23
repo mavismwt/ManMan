@@ -153,7 +153,7 @@ class MineViewController: UIViewController,UITableViewDelegate,UITableViewDataSo
         let listStr = listDetail[indexPath.row]
         switch listStr {
         case "我的flag":
-            let flagViewController = FlagViewController()
+            let flagViewController = FlagDetailViewController()
             self.navigationController?.pushViewController(flagViewController, animated: true)
             self.tabBarController?.tabBar.isHidden = true
         case "我的时间轴":

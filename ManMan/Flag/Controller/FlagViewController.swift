@@ -96,10 +96,6 @@ class FlagViewController: UIViewController,UITableViewDelegate,UITableViewDataSo
         
     }
     
-
-    
-    
-    
     @objc func back() {
         self.navigationController?.popViewController(animated: true)
         self.navigationController?.isNavigationBarHidden = true
@@ -110,12 +106,6 @@ class FlagViewController: UIViewController,UITableViewDelegate,UITableViewDataSo
         let addFlagViewController = AddFlagViewController()
         self.navigationController?.pushViewController(addFlagViewController, animated: true)
     }
-    
-//    func textFieldDidEndEditing(_ textField: UITextField) {
-//        UIView.animate(withDuration: 0.4, animations: {
-//            self.commentView.frame = CGRect(x: 0, y: UIScreen.main.bounds.height-60, width: UIScreen.main.bounds.width, height: 60)
-//        })
-//    }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return 3
@@ -136,6 +126,10 @@ class FlagViewController: UIViewController,UITableViewDelegate,UITableViewDataSo
     }
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         return 161
+    }
+    
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        self.comment()
     }
     
     func gestureRecognizer(_ gestureRecognizer: UIGestureRecognizer, shouldReceive touch: UITouch) -> Bool {

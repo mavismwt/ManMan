@@ -98,6 +98,7 @@ class HomeViewController: UIViewController,UITableViewDelegate,UITableViewDataSo
     var itemTitle:[String] = ["日常","我的"]
     let imageName = ["fruit","word","drink","breakfast","makeup","sleep","read","sport","medicine"]
     let titleStr = ["吃水果","背单词","喝水","早餐","化妆","早睡","读书","运动","吃药"]
+    var isVolumnOn = true
     
     struct taskDetail {
         var name:String?
@@ -124,6 +125,10 @@ class HomeViewController: UIViewController,UITableViewDelegate,UITableViewDataSo
             self.tableView.reloadData()
             UserDefaults.standard.set(nil, forKey: "taskName")
             UserDefaults.standard.set(nil, forKey: "userDefinedTaskNumber")
+        }
+        if let isOn:Bool =  UserDefaults.standard.value(forKey: "isVolumnOn") as? Bool {
+            self.isVolumnOn = isOn
+            UserDefaults.standard.set(nil, forKey: "isVolumnOn")
         }
     }
     
@@ -270,7 +275,9 @@ class HomeViewController: UIViewController,UITableViewDelegate,UITableViewDataSo
                     cell.reSetTableViewCell()
                     self.img.removeFromSuperview()
                     //self.initImg()
-                    self.localMusic()
+                    if self.isVolumnOn == true {
+                        self.localMusic()
+                    }
             })
             cell.isfinished = true
         }

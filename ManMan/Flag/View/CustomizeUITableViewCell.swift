@@ -108,7 +108,7 @@ class CustomizeUITableViewCell: UITableViewCell {
         time.text = "2018年12月31日 13:00"
         
         detail.snp.makeConstraints{(make) in
-            make.top.equalToSuperview().offset(64)
+            make.top.equalTo(profile.snp.bottom).offset(0)
             make.left.equalToSuperview().offset(20)
             make.right.equalToSuperview().offset(-20)
             make.height.equalTo(70)
@@ -117,7 +117,8 @@ class CustomizeUITableViewCell: UITableViewCell {
         detail.isEditable = false
         detail.isSelectable = false
         detail.isOpaque = false
-        detail.text = "这是我的flag这是我的flag这是我的flag这是我的flag这是我的flag这是我的flag这是我的flag这是我的flag这是我的flag"
+        detail.isScrollEnabled = false
+        detail.text = "这是我的flag这是我的flag这是我的flag这是我的flag这是我的flag"
         
         commentView.snp.makeConstraints { (make) in
             make.right.equalTo(likeView.snp.left).offset(-16)
@@ -182,14 +183,20 @@ class CustomizeUITableViewCell: UITableViewCell {
         })
     }
     
+//    func textView(_ textView: UITextView, shouldChangeTextIn range: NSRange, replacementText text: String) -> Bool {
+//        let newText = (textView.text as NSString).replacingCharacters(in: range, with: text)
+//        var textWidth = SCREENRECT.size.width-64
+////            UIEdgeInsetsInsetRect(textView.frame, textView.textContainerInset)
+//        textWidth -= 2.0 * (textView.textContainer.lineFragmentPadding + 1);
+//
+//        let boundingRect = sizeOfString(string: newText, constrainedToWidth: Double(textWidth), font: textView.font!)
+//        let numberOfLines = boundingRect.height / textView.font!.lineHeight;
+//
+//        print(numberOfLines)
+//        return ((numberOfLines <= 3) && (newText.length <= 60));
+//
+//        }
     
-    func setValueForCell(flag:flagData){
-        profile.image = UIImage(named: flag.profileURL)
-        nickname.text = flag.nicknameText
-        detail.text = flag.detailText
-        commentNumLabel.text = flag.commentNumText
-        likeNumLabel.text = flag.likeNumText
-    }
     
     required init(coder aDecoder: NSCoder) {
         fatalError("init(code:)has not brrn implomented");

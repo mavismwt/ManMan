@@ -22,6 +22,8 @@ class FlagDetailViewController: UIViewController,UITableViewDelegate,UITableView
         var likeNumText = "UILabel()"
     }
     
+    var str = ["我的flag","不要摸鱼","flag就是拿来倒的"]
+    
     var topLineView = UIView()
     var backButton = UIButton()
     var titleView = UILabel()
@@ -36,6 +38,7 @@ class FlagDetailViewController: UIViewController,UITableViewDelegate,UITableView
     let identifier = "reusedCell"
     var HeightOfKeyboard:CGFloat? = 0
     var dTime:TimeInterval? = 0
+    var height:[CGFloat] = [0,0,0]
     var flagDatas = [flagData]()
     
     override func viewDidLoad() {
@@ -47,9 +50,10 @@ class FlagDetailViewController: UIViewController,UITableViewDelegate,UITableView
         topLineView.addSubview(backButton)
         topLineView.addSubview(titleView)
         
+        detailView.addSubview(tableView)
+        
         self.view.addSubview(topLineView)
         self.view.addSubview(detailView)
-        //self.view.addSubview(tableView)
         self.view.addSubview(commentView)
         
         self.setTopLineView()
@@ -66,15 +70,21 @@ class FlagDetailViewController: UIViewController,UITableViewDelegate,UITableView
         detailView.commentView.addGestureRecognizer(tapGestureRecognizer)
         
         let navRect = self.navigationController?.navigationBar.frame
-        tableView.frame = CGRect(x: 0, y: (navRect?.height)!+inset.top+8, width: SCREENSIZE.width, height: SCREENSIZE.height-8-(navRect?.height)!-inset.top-inset.bottom)
+        tableView.snp.makeConstraints { (make) in
+            make.top.equalTo(detailView.commentView.snp.bottom).offset(8)
+            make.bottom.equalToSuperview().offset(-16)
+            make.left.equalToSuperview().offset(16)
+            make.right.equalToSuperview().offset(-16)
+        }
+        tableView.layer.cornerRadius = 8
+        tableView.clipsToBounds = true
         tableView.backgroundColor = UIColor.init(red: 238/255, green: 238/255, blue: 238/255, alpha: 1)
         tableView.separatorStyle = .none
-        tableView.register(CustomizeUITableViewCell.classForCoder(), forCellReuseIdentifier: identifier)
-        
+        tableView.register(CommentTableViewCell.self, forCellReuseIdentifier: identifier)
         tableView.dataSource = self
         tableView.delegate = self
-        
-        
+        tableView.rowHeight = UITableView.automaticDimension
+        tableView.estimatedRowHeight = 300
     }
     
     func setTopLineView() {
@@ -121,7 +131,15 @@ class FlagDetailViewController: UIViewController,UITableViewDelegate,UITableView
         self.commentView.inputText.becomeFirstResponder()
     }
     @objc func send() {
+        //UIView.animate(withDuration: 0.3, animations: {
         self.commentView.inputText.resignFirstResponder()
+        self.str.append(self.commentView.inputText.text!)
+        self.height.append(0)
+        self.tableView.reloadData()
+        //self.view.layoutIfNeeded()
+        self.commentView.inputText.text = ""
+        //})
+        
     }
     @objc func beginEdit() {
         self.commentView.inputText.becomeFirstResponder()
@@ -178,47 +196,43 @@ class FlagDetailViewController: UIViewController,UITableViewDelegate,UITableView
         }
     }
     
-    
-    
     @objc func back() {
         self.navigationController?.popViewController(animated: true)
         self.navigationController?.isNavigationBarHidden = true
         //self.tabBarController?.tabBar.isHidden = false
     }
     
-    
-    
     @objc func setMyFlag() {
         let addFlagViewController = AddFlagViewController()
         self.navigationController?.pushViewController(addFlagViewController, animated: true)
     }
     
-    //    func textFieldDidEndEditing(_ textField: UITextField) {
-    //        UIView.animate(withDuration: 0.4, animations: {
-    //            self.commentView.frame = CGRect(x: 0, y: UIScreen.main.bounds.height-60, width: UIScreen.main.bounds.width, height: 60)
-    //        })
-    //    }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return 1
+        return str.count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        var cell:CustomizeUITableViewCell? = tableView.dequeueReusableCell(withIdentifier: identifier) as? CustomizeUITableViewCell
+        var cell:CommentTableViewCell? = tableView.dequeueReusableCell(withIdentifier: identifier) as? CommentTableViewCell
         cell?.selectionStyle = .none
         if (cell == nil)
         {
-            
+            let cell = CommentTableViewCell.init(style: .default, reuseIdentifier: identifier)
         }
-        let tapGestureRecognizer = UITapGestureRecognizer()
-        tapGestureRecognizer.addTarget(self, action: #selector(comment))
-        tapGestureRecognizer.delegate = self
-        cell?.commentView.addGestureRecognizer(tapGestureRecognizer)
-        //self.viewDidDisappear(true)
+        cell?.detail.text = str[indexPath.row]
+        height[indexPath.row] = FlagDetail.heightForTextView(textView: (cell?.detail)!, fixedWidth: (cell?.detail.frame.width)!) + 32
         return cell!
     }
+    
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        return 161
+        return height[indexPath.row]
+    }
+    
+    
+    internal class func heightForTextView(textView: UITextView, fixedWidth: CGFloat) -> CGFloat {
+        let size = CGSize(width: fixedWidth, height: CGFloat.greatestFiniteMagnitude)
+        let constraint = textView.sizeThatFits(size)
+        return constraint.height
     }
     
 }

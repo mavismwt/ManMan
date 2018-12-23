@@ -119,8 +119,7 @@ class FlagDetail: UIView {
         detail.isEditable = false
         detail.isSelectable = false
         detail.isOpaque = false
-        
-        
+        detail.isScrollEnabled = false
         
         commentView.snp.makeConstraints { (make) in
             make.right.equalTo(likeView.snp.left).offset(-16)

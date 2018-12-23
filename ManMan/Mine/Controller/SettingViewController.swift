@@ -16,6 +16,7 @@ class SettingViewController: UIViewController,UITableViewDelegate,UITableViewDat
     
     var tableView = UITableView()
     
+    var isVolumnOn:[Bool] = [true,true,true]
     let identifier = "reusedCell"
     let inset = UIApplication.shared.delegate?.window??.safeAreaInsets ?? UIEdgeInsets.zero
     let SCREENSIZE = UIScreen.main.bounds.size
@@ -71,6 +72,7 @@ class SettingViewController: UIViewController,UITableViewDelegate,UITableViewDat
         var cell:SettingTableViewCell? = tableView.dequeueReusableCell(withIdentifier: identifier) as? SettingTableViewCell
         cell?.title.text = listDetail[indexPath.row]
         cell?.selectionStyle = .none
+        isVolumnOn[indexPath.row] = (cell?.setting.isOn)!
         return cell!
     }
     
@@ -81,5 +83,9 @@ class SettingViewController: UIViewController,UITableViewDelegate,UITableViewDat
     @objc func back() {
         self.navigationController?.popViewController(animated: true)
         self.tabBarController?.tabBar.isHidden = false
+    }
+    
+    override func viewWillDisappear(_ animated: Bool) {
+        UserDefaults.standard.set(self.isVolumnOn[0], forKey: "isVolumnOn")
     }
 }
