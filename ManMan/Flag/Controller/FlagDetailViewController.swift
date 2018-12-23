@@ -25,7 +25,7 @@ class FlagDetailViewController: UIViewController,UITableViewDelegate,UITableView
     var topLineView = UIView()
     var backButton = UIButton()
     var titleView = UILabel()
-    var letterButton = UIButton()
+    var detailView = FlagDetail()
     var commentView = CommentLineView()
     
     let coverView = UIView()
@@ -46,12 +46,38 @@ class FlagDetailViewController: UIViewController,UITableViewDelegate,UITableView
         
         topLineView.addSubview(backButton)
         topLineView.addSubview(titleView)
-        topLineView.addSubview(letterButton)
         
         self.view.addSubview(topLineView)
-        self.view.addSubview(tableView)
+        self.view.addSubview(detailView)
+        //self.view.addSubview(tableView)
         self.view.addSubview(commentView)
         
+        self.setTopLineView()
+        self.setCommentLineView()
+        
+        detailView.snp.makeConstraints { (make) in
+            make.top.equalTo(topLineView.snp.bottom).offset(16)
+            make.left.equalToSuperview().offset(16)
+            make.right.equalTo(-16)
+            make.bottom.equalTo(commentView.snp.top).offset(-16)
+        }
+        let tapGestureRecognizer = UITapGestureRecognizer()
+        tapGestureRecognizer.addTarget(self, action: #selector(beginEdit))
+        detailView.commentView.addGestureRecognizer(tapGestureRecognizer)
+        
+        let navRect = self.navigationController?.navigationBar.frame
+        tableView.frame = CGRect(x: 0, y: (navRect?.height)!+inset.top+8, width: SCREENSIZE.width, height: SCREENSIZE.height-8-(navRect?.height)!-inset.top-inset.bottom)
+        tableView.backgroundColor = UIColor.init(red: 238/255, green: 238/255, blue: 238/255, alpha: 1)
+        tableView.separatorStyle = .none
+        tableView.register(CustomizeUITableViewCell.classForCoder(), forCellReuseIdentifier: identifier)
+        
+        tableView.dataSource = self
+        tableView.delegate = self
+        
+        
+    }
+    
+    func setTopLineView() {
         let navRect = self.navigationController?.navigationBar.frame
         topLineView.frame = CGRect(x: 0, y: 0, width: (navRect?.width)!, height: (navRect?.height)!+inset.top)
         topLineView.backgroundColor = UIColor.init(red: 255/255, green: 193/255, blue: 7/255, alpha: 1)
@@ -73,23 +99,9 @@ class FlagDetailViewController: UIViewController,UITableViewDelegate,UITableView
         }
         backButton.setImage(UIImage(named: "back"), for: .normal)
         backButton.addTarget(self, action: #selector(back), for: .touchUpInside)
-        
-        letterButton.snp.makeConstraints { (make) in
-            make.centerY.equalToSuperview().offset(10)
-            make.right.equalTo(-16)
-            make.width.height.equalTo(20)
-        }
-        letterButton.setImage(UIImage(named: "editWhite"), for: .normal)
-        letterButton.addTarget(self, action: #selector(setMyFlag), for: .touchUpInside)
-        
-        tableView.frame = CGRect(x: 0, y: (navRect?.height)!+inset.top+8, width: SCREENSIZE.width, height: SCREENSIZE.height-8-(navRect?.height)!-inset.top-inset.bottom)
-        tableView.backgroundColor = UIColor.init(red: 238/255, green: 238/255, blue: 238/255, alpha: 1)
-        tableView.separatorStyle = .none
-        tableView.register(CustomizeUITableViewCell.classForCoder(), forCellReuseIdentifier: identifier)
-        
-        tableView.dataSource = self
-        tableView.delegate = self
-        
+    }
+    
+    func setCommentLineView() {
         commentView.inputText.delegate = self
         commentView.sendButton.addTarget(self, action: #selector(send), for: .touchUpInside)
         commentView.inputText.returnKeyType = .send
@@ -98,19 +110,23 @@ class FlagDetailViewController: UIViewController,UITableViewDelegate,UITableView
         coverView.frame = CGRect(x: 0, y: 0, width: 0, height: 0)
         self.view.addSubview(coverView)
         let tapGestureRecognizer = UITapGestureRecognizer()
-        tapGestureRecognizer.addTarget(self, action: #selector(endEidt))
+        tapGestureRecognizer.addTarget(self, action: #selector(endEdit))
         tapGestureRecognizer.delegate = self
         coverView.addGestureRecognizer(tapGestureRecognizer)
         
         NotificationCenter.default.addObserver(self, selector: #selector(self.keyboardWillChangeFrame(note:)), name: UIResponder.keyboardWillChangeFrameNotification, object: nil)
     }
     
+    @objc func comment() {
+        self.commentView.inputText.becomeFirstResponder()
+    }
     @objc func send() {
         self.commentView.inputText.resignFirstResponder()
     }
-    
-    
-    @objc func endEidt() {
+    @objc func beginEdit() {
+        self.commentView.inputText.becomeFirstResponder()
+    }
+    @objc func endEdit() {
         self.commentView.inputText.resignFirstResponder()
     }
     
@@ -167,7 +183,7 @@ class FlagDetailViewController: UIViewController,UITableViewDelegate,UITableView
     @objc func back() {
         self.navigationController?.popViewController(animated: true)
         self.navigationController?.isNavigationBarHidden = true
-        self.tabBarController?.tabBar.isHidden = false
+        //self.tabBarController?.tabBar.isHidden = false
     }
     
     
@@ -184,7 +200,7 @@ class FlagDetailViewController: UIViewController,UITableViewDelegate,UITableView
     //    }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return 3
+        return 1
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
@@ -194,6 +210,10 @@ class FlagDetailViewController: UIViewController,UITableViewDelegate,UITableView
         {
             
         }
+        let tapGestureRecognizer = UITapGestureRecognizer()
+        tapGestureRecognizer.addTarget(self, action: #selector(comment))
+        tapGestureRecognizer.delegate = self
+        cell?.commentView.addGestureRecognizer(tapGestureRecognizer)
         //self.viewDidDisappear(true)
         return cell!
     }

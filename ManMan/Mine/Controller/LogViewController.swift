@@ -122,7 +122,7 @@ class LogViewController: UIViewController,UIScrollViewDelegate,CVCalendarViewDel
         //print(vol)
         if vol.y < -500 {
             self.calendarView.changeMode(.weekView)
-            UIView.animate(withDuration: 0.2, animations: {
+            UIView.animate(withDuration: 0.5, animations: {
                 let WidthOfCalendar = self.SCREENSIZE.width-28
                 let navRect = self.navigationController?.navigationBar.frame
                 self.calendarView.frame = CGRect(x:14, y:(navRect?.height)!+self.inset.top+16, width:WidthOfCalendar, height:60)
@@ -130,16 +130,10 @@ class LogViewController: UIViewController,UIScrollViewDelegate,CVCalendarViewDel
             })
         }else if vol.y > 500 {
             self.calendarView.changeMode(.monthView)
-            UIView.animate(withDuration: 0.2, animations: {
+            UIView.animate(withDuration: 0.5, animations: {
                 let WidthOfCalendar = self.SCREENSIZE.width-28
                 let navRect = self.navigationController?.navigationBar.frame
                 self.calendarView.frame = CGRect(x:14, y:(navRect?.height)!+self.inset.top+16, width:WidthOfCalendar, height:WidthOfCalendar)
-//                scrollView.snp.makeConstraints { (make) in
-//                    make.top.equalTo(self.calendarView.snp.bottom).offset(16)
-//                    make.left.equalTo(16)
-//                    make.right.equalTo(-16)
-//                    make.bottom.equalTo(-self.inset.bottom-16)
-//                }
             })
         }
         

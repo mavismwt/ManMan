@@ -28,6 +28,10 @@
 		18632BF121CCF62200A0CA47 /* LoadView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18632BF021CCF62200A0CA47 /* LoadView.swift */; };
 		18632BF321CCFC6A00A0CA47 /* StartViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18632BF221CCFC6A00A0CA47 /* StartViewController.swift */; };
 		18632BF521CE212100A0CA47 /* FlagDetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18632BF421CE212100A0CA47 /* FlagDetailViewController.swift */; };
+		18632BF721CF3B8D00A0CA47 /* AlertView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18632BF621CF3B8C00A0CA47 /* AlertView.swift */; };
+		188C22A621CF46C800E2546A /* FlagDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 188C22A521CF46C800E2546A /* FlagDetailView.swift */; };
+		188C22A921CF6D6100E2546A /* check.wav in Resources */ = {isa = PBXBuildFile; fileRef = 188C22A821CF6D6000E2546A /* check.wav */; };
+		188C22AD21CF6F5D00E2546A /* CommentTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 188C22AC21CF6F5D00E2546A /* CommentTableViewCell.swift */; };
 		18F9395021B7FF3C00306EB0 /* CustomizeUITableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18F9394F21B7FF3C00306EB0 /* CustomizeUITableViewCell.swift */; };
 		18F9395221B8381C00306EB0 /* HomeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18F9395121B8381C00306EB0 /* HomeViewController.swift */; };
 		18F9395421B8383200306EB0 /* MineViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18F9395321B8383200306EB0 /* MineViewController.swift */; };
@@ -135,6 +139,10 @@
 		18632BF021CCF62200A0CA47 /* LoadView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoadView.swift; sourceTree = "<group>"; };
 		18632BF221CCFC6A00A0CA47 /* StartViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StartViewController.swift; sourceTree = "<group>"; };
 		18632BF421CE212100A0CA47 /* FlagDetailViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FlagDetailViewController.swift; sourceTree = "<group>"; };
+		18632BF621CF3B8C00A0CA47 /* AlertView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AlertView.swift; sourceTree = "<group>"; };
+		188C22A521CF46C800E2546A /* FlagDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FlagDetailView.swift; sourceTree = "<group>"; };
+		188C22A821CF6D6000E2546A /* check.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = check.wav; sourceTree = "<group>"; };
+		188C22AC21CF6F5D00E2546A /* CommentTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommentTableViewCell.swift; sourceTree = "<group>"; };
 		18F9394F21B7FF3C00306EB0 /* CustomizeUITableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomizeUITableViewCell.swift; sourceTree = "<group>"; };
 		18F9395121B8381C00306EB0 /* HomeViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeViewController.swift; sourceTree = "<group>"; };
 		18F9395321B8383200306EB0 /* MineViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MineViewController.swift; sourceTree = "<group>"; };
@@ -202,11 +210,8 @@
 		18632AFE21C2964800A0CA47 /* Flag */ = {
 			isa = PBXGroup;
 			children = (
-				18F9394F21B7FF3C00306EB0 /* CustomizeUITableViewCell.swift */,
-				18F9731621B7FDC900FFAB90 /* FlagViewController.swift */,
-				18632B0C21C49E5500A0CA47 /* AddFlagViewController.swift */,
-				18632BEC21CBADC800A0CA47 /* CommentLineView.swift */,
-				18632BF421CE212100A0CA47 /* FlagDetailViewController.swift */,
+				188C22AB21CF6F2700E2546A /* View */,
+				188C22AA21CF6F1B00E2546A /* Controller */,
 			);
 			path = Flag;
 			sourceTree = "<group>";
@@ -244,6 +249,7 @@
 			children = (
 				18F9399121BE55C500306EB0 /* CustomizeUICollectinViewCell.swift */,
 				18632B0621C2996500A0CA47 /* FangCustomizeUICollectionViewCell.swift */,
+				18632BF621CF3B8C00A0CA47 /* AlertView.swift */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -289,6 +295,27 @@
 				18632B0821C2A79A00A0CA47 /* FeedbackViewController.swift */,
 			);
 			path = Controller;
+			sourceTree = "<group>";
+		};
+		188C22AA21CF6F1B00E2546A /* Controller */ = {
+			isa = PBXGroup;
+			children = (
+				18F9731621B7FDC900FFAB90 /* FlagViewController.swift */,
+				18632B0C21C49E5500A0CA47 /* AddFlagViewController.swift */,
+				18632BF421CE212100A0CA47 /* FlagDetailViewController.swift */,
+			);
+			path = Controller;
+			sourceTree = "<group>";
+		};
+		188C22AB21CF6F2700E2546A /* View */ = {
+			isa = PBXGroup;
+			children = (
+				18F9394F21B7FF3C00306EB0 /* CustomizeUITableViewCell.swift */,
+				18632BEC21CBADC800A0CA47 /* CommentLineView.swift */,
+				188C22A521CF46C800E2546A /* FlagDetailView.swift */,
+				188C22AC21CF6F5D00E2546A /* CommentTableViewCell.swift */,
+			);
+			path = View;
 			sourceTree = "<group>";
 		};
 		18F9396B21BC47CE00306EB0 /* Controller */ = {
@@ -342,6 +369,7 @@
 		18F972E721B7F8AE00FFAB90 /* ManMan */ = {
 			isa = PBXGroup;
 			children = (
+				188C22A821CF6D6000E2546A /* check.wav */,
 				18632AFD21C2963D00A0CA47 /* Home */,
 				18632B0021C2967A00A0CA47 /* Mine */,
 				18632AFE21C2964800A0CA47 /* Flag */,
@@ -521,6 +549,7 @@
 				18F972F321B7F8B000FFAB90 /* LaunchScreen.storyboard in Resources */,
 				18F972F021B7F8B000FFAB90 /* Assets.xcassets in Resources */,
 				18F972EE21B7F8AF00FFAB90 /* Main.storyboard in Resources */,
+				188C22A921CF6D6100E2546A /* check.wav in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -571,9 +600,12 @@
 				18F9399221BE55C500306EB0 /* CustomizeUICollectinViewCell.swift in Sources */,
 				18F9395421B8383200306EB0 /* MineViewController.swift in Sources */,
 				18632BE921CAC11800A0CA47 /* FirstDateLogCell.swift in Sources */,
+				188C22A621CF46C800E2546A /* FlagDetailView.swift in Sources */,
 				18632BEF21CCD61D00A0CA47 /* LoginViewController.swift in Sources */,
 				18632BEB21CAC48500A0CA47 /* MonthLogCell.swift in Sources */,
+				188C22AD21CF6F5D00E2546A /* CommentTableViewCell.swift in Sources */,
 				18632B0721C2996500A0CA47 /* FangCustomizeUICollectionViewCell.swift in Sources */,
+				18632BF721CF3B8D00A0CA47 /* AlertView.swift in Sources */,
 				18632BF121CCF62200A0CA47 /* LoadView.swift in Sources */,
 				18632AFA21C26D5000A0CA47 /* LogViewController.swift in Sources */,
 			);

@@ -12,18 +12,22 @@ class LoadView: UIView {
     
     var imageView = UIImageView()
     var textView = UITextView()
+    
+    var nickname = "Mavismwt"
+    var greet = "日安"
     let inset = UIApplication.shared.delegate?.window??.safeAreaInsets ?? UIEdgeInsets.zero
     
     override init(frame: CGRect) {
         super.init(frame: frame)
         
+        self.frame = UIScreen.main.bounds
         self.backgroundColor = UIColor.white
         self.addSubview(imageView)
         
-        let now = Date()
-        let dformatter = DateFormatter()
-        dformatter.dateFormat = "yyyy年MM月dd日 HH:mm:ss"
-        print("当前日期时间：\(dformatter.string(from: now))")
+//        let now = Date()
+//        let dformatter = DateFormatter()
+//        dformatter.dateFormat = "yyyy年MM月dd日 HH:mm:ss"
+//        print("当前日期时间：\(dformatter.string(from: now))")
         
         imageView.snp.makeConstraints { (make) in
             make.top.equalTo(inset.top+58)
@@ -31,17 +35,38 @@ class LoadView: UIView {
             make.width.equalTo(226)
             make.height.equalTo(234)
         }
-        var img = UIImage(named: "day")
-        img = img?.reSizeImage(reSize: CGSize(width: UIScreen.main.bounds.size.width, height: UIScreen.main.bounds.size.height))
+        
+        //获取当前时间
+        let now = Date()
+        // 创建一个日期格式器
+        let dformatter = DateFormatter()
+        dformatter.dateFormat = "yyyy年MM月dd日"
+        let jugmentResult = judgeDateByStartAndEnd(startStr: "18:00", endStr: "6:00", dateDay: "星期一,星期二,星期三,星期四,星期五,星期六,星期日")
+        var img = UIImage()
+        if jugmentResult == true {
+            img = UIImage(named: "night")!
+            greet = "晚安"
+        }else {
+            img = UIImage(named: "day")!
+            greet = "日安"
+        }
         imageView.image = img
         
-        let jugmentResult = LoadView.judgeDateByStartAndEnd(startStr: "15:30", endStr: "18:40", dateDay: "星期一,星期二,星期三,星期四,星期五,星期六,星期日")
-        print("jugmentResult :\(jugmentResult)")
-
+        self.addSubview(textView)
+        textView.text = "Hi \(nickname),\n\n\(greet)。\n\n今天是\(dformatter.string(from: now)),\n\n很高兴陪在你身边。"
+       // Hi \(nickname),\n\n\(greet)。\n\n今天是\(dformatter.string(from: now)),\n\n很高兴陪在你身边。
+        textView.snp.makeConstraints { (make) in
+            make.left.equalTo(41)
+            make.bottom.equalTo(-25-inset.bottom)
+            make.width.height.equalTo(300)
+        }
+        textView.textColor = UIColor.init(red: 255/255, green: 213/255, blue: 7/255, alpha: 1)
+        textView.font = UIFont.systemFont(ofSize: 18)
+        
         
     }
     //判断当前时间是否在某个时间段内
-    class func judgeDateByStartAndEnd(startStr : String, endStr : String, dateDay : String)->Bool{
+    func judgeDateByStartAndEnd(startStr : String, endStr : String, dateDay : String)->Bool{
         
         var today = Date()
         //let todayDay = TimeAndDateOperation.getweekDayWithDate(today)

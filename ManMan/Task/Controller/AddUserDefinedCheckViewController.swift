@@ -24,6 +24,7 @@ class AddUserDefinedCheckViewController: UIViewController,UICollectionViewDelega
     var subTitleView = UILabel()
     var confirmButton = UIButton()
     var endEditView = UIView()
+    var selectedTaskNumber:Int = 0
     
     let layout = UICollectionViewFlowLayout()
     let inset = UIApplication.shared.delegate?.window??.safeAreaInsets ?? UIEdgeInsets.zero
@@ -197,6 +198,7 @@ class AddUserDefinedCheckViewController: UIViewController,UICollectionViewDelega
             cell.cell.backgroundColor = UIColor.init(red: 255/255, green: 213/255, blue: 97/255, alpha: 0.25)
             self.taskIcon.image = UIImage(named: self.imageName[indexPath.row])
         }, completion: nil)
+        selectedTaskNumber = indexPath.row
     }
     
     func collectionView(_ collectionView: UICollectionView, didDeselectItemAt indexPath: IndexPath) {
@@ -241,8 +243,26 @@ class AddUserDefinedCheckViewController: UIViewController,UICollectionViewDelega
     }
     
     @objc func backToHome() {
-        self.navigationController?.popToRootViewController(animated: true)
-        self.tabBarController?.tabBar.isHidden = false
+        let alertView = AlertView()
+        UIView.animate(withDuration: 0.5, animations: {
+            self.view.addSubview(alertView)
+        })
+        DispatchQueue.main.asyncAfter(deadline: .now()+0.5, execute:
+            {
+                self.navigationController?.popToRootViewController(animated: true)
+        })
+        UserDefaults.standard.set(self.selectedTaskNumber, forKey: "userDefinedTaskNumber")
+        UserDefaults.standard.set(self.taskName.text, forKey: "taskName")
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        if let imageStr:String = UserDefaults.standard.value(forKey: "userDefinedTaskImage")as? String {
+            let name:String = UserDefaults.standard.value(forKey: "taskName") as! String
+            taskIcon.image = UIImage(named: imageStr)
+            taskName.text = name
+            UserDefaults.standard.set(nil, forKey: "userDefinedTaskImage")
+            UserDefaults.standard.set(nil, forKey: "taskName")
+        }
     }
 }
 

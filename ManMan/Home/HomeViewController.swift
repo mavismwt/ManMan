@@ -7,6 +7,9 @@
 //
 
 import UIKit
+import AVFoundation
+import MediaPlayer
+import AVKit
 
 extension UIImage {
     /**
@@ -72,6 +75,9 @@ extension UITabBar
 
 class HomeViewController: UIViewController,UITableViewDelegate,UITableViewDataSource,UIGestureRecognizerDelegate {
     
+    //初始化音频播放对象
+    var audioPlayer:AVAudioPlayer = AVAudioPlayer()
+    
     var topLineView = UIView()
     var calenderDetailButton = UIButton()
     var monthLabel = UILabel()
@@ -109,6 +115,15 @@ class HomeViewController: UIViewController,UITableViewDelegate,UITableViewDataSo
             print(taskNumber)
             tasks.append(taskDetail.init(name: titleStr[taskNumber], icon: imageName[taskNumber], day: 0, isfinished: false))
             self.tableView.reloadData()
+            UserDefaults.standard.set(nil, forKey: "taskNumber")
+        }
+        if let userDefinedTaskNumber:Int = UserDefaults.standard.value(forKey: "userDefinedTaskNumber") as? Int {
+            let userDefinedTaskName:String =
+                UserDefaults.standard.value(forKey: "taskName") as! String
+            tasks.append(taskDetail.init(name: userDefinedTaskName, icon: imageName[userDefinedTaskNumber], day: 0, isfinished: false))
+            self.tableView.reloadData()
+            UserDefaults.standard.set(nil, forKey: "taskName")
+            UserDefaults.standard.set(nil, forKey: "userDefinedTaskNumber")
         }
     }
     
@@ -191,6 +206,28 @@ class HomeViewController: UIViewController,UITableViewDelegate,UITableViewDataSo
         img.image = UIImage(named: "qian")
     }
     
+    func localMusic()  {
+        let path = Bundle.main.path(forResource: "check", ofType: "wav")
+        //        public init(fileURLWithPath path: String)
+        let soundUrl = URL(fileURLWithPath: path!)
+        
+        //在音频播放前首先创建一个异常捕捉语句
+        do{
+            //对音频播放对象进行初始化，并加载指定的音频播放对象
+            //            public init(contentsOf url: URL) throws
+            
+            try audioPlayer = AVAudioPlayer(contentsOf:soundUrl)
+            //设置音频对象播放的音量的大小
+            audioPlayer.volume = 1.0
+            //设置音频播放的次数，-1为无限循环播放
+            audioPlayer.numberOfLoops = 0
+            audioPlayer.play()
+        }catch{
+            print(error)
+        }
+        
+    }
+    
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return tasks.count
     }
@@ -218,13 +255,13 @@ class HomeViewController: UIViewController,UITableViewDelegate,UITableViewDataSo
         cell.selectionStyle = .none
         self.img.frame = CGRect(x: cell.frame.width-115, y: cell.frame.maxY+50, width: 150, height: 150)
         if cell.isfinished == false {
-            UIView.animate(withDuration: 0.4, delay: 0, options: .curveEaseIn, animations: {
+            UIView.animate(withDuration: 0.25, delay: 0, options: .curveEaseIn, animations: {
                 cell.checkButton.removeFromSuperview()
                 self.view.addSubview(self.img)
                 self.img.frame = CGRect(x: cell.frame.width-115, y: cell.frame.maxY+50, width: 110, height: 110)
                 self.img.layer.cornerRadius = 60
             }, completion: nil)
-            DispatchQueue.main.asyncAfter(deadline: .now()+0.4, execute:
+            DispatchQueue.main.asyncAfter(deadline: .now()+0.25, execute:
                 {
 //                    cell.background.removeFromSuperview()
 //                    cell.checkButton.removeFromSuperview()
@@ -233,6 +270,7 @@ class HomeViewController: UIViewController,UITableViewDelegate,UITableViewDataSo
                     cell.reSetTableViewCell()
                     self.img.removeFromSuperview()
                     //self.initImg()
+                    self.localMusic()
             })
             cell.isfinished = true
         }
@@ -242,37 +280,40 @@ class HomeViewController: UIViewController,UITableViewDelegate,UITableViewDataSo
         return true
     }
     
-//    func tableView(_ tableView: UITableView, trailingSwipeActionsConfigurationForRowAt indexPath: IndexPath) -> UISwipeActionsConfiguration? {
-//        let delete = UIContextualAction(style: .destructive, title: "删除") {
-//            (action, view, completionHandler) in
-//            //将对应条目的数据删除
-//            //self.items.remove(at: indexPath.row)
-//            //completionHandler(true)
-//        }
-//        let dImg = UIImage(named: "delete")
-//        let DImg = dImg?.reSizeImage(reSize: CGSize(width: 40, height: 40))
-//        delete.image = DImg
-//        delete.backgroundColor = UIColor(red: 238/255, green: 238/255, blue: 238/255,
-//                                         alpha: 1)
-//        //返回所有的事件按钮
-//        let configuration = UISwipeActionsConfiguration(actions: [delete])
-//        return configuration
-//    }
-    
-    
-    
-    func tableView(_ tableView: UITableView, titleForDeleteConfirmationButtonForRowAt indexPath: IndexPath) -> String?{
-        return "删除"
-    }
-    func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
-        if editingStyle == UITableViewCell.EditingStyle.delete {
-            //self.diagnoseArr.removeObject(at: indexPath.row-1)
-            //刷新tableview
-            tasks.remove(at: indexPath.row)
+    // 左滑按钮设置
+    func tableView(_ tableView: UITableView, editActionsForRowAt indexPath: IndexPath) -> [UITableViewRowAction]? {
+        let detail = UITableViewRowAction(style: .normal, title: "编辑") {
+            action, index in
+            print("favorite button tapped")
+            UserDefaults.standard.set(self.tasks[indexPath.row].icon, forKey: "userDefinedTaskImage")
+            UserDefaults.standard.set(self.tasks[indexPath.row].name, forKey: "taskName")
+            let addUserDefinedCheckViewController = AddUserDefinedCheckViewController()
+            self.navigationController?.pushViewController(addUserDefinedCheckViewController, animated: true)
+            self.tabBarController?.tabBar.isHidden = true
+        }
+        detail.backgroundColor = UIColor.init(red: 120/255, green: 199/255, blue: 229/255, alpha: 1)
+        
+        let delete = UITableViewRowAction(style: .normal, title: "删除") {
+            action, index in
+            print("share button tapped")
+            self.tasks.remove(at: indexPath.row)
             tableView.deleteRows(at: [indexPath], with: UITableView.RowAnimation.automatic)
         }
+        delete.backgroundColor = UIColor.init(red: 241/255, green: 107/255, blue: 104/255, alpha: 1)
+        
+        return [delete,detail]
     }
     
+    // MARK: - alert
+    
+    func alertShow(title:String)
+    {
+        let alertView = UIAlertView(title: nil, message: title, delegate: nil, cancelButtonTitle: "确定")
+    
+        alertView.show()
+    }
+    
+
     
     func getNowDate() -> String {
         let date = Date()
@@ -343,4 +384,7 @@ class HomeViewController: UIViewController,UITableViewDelegate,UITableViewDataSo
         self.tabBarController?.tabBar.isHidden = true
     }
     
+    override func viewWillDisappear(_ animated: Bool) {
+        //self.tabBarController?.tabBar.isHidden = true
+    }
 }
