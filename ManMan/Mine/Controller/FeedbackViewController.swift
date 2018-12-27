@@ -8,7 +8,7 @@
 
 import UIKit
 
-class FeedbackViewController: UIViewController {
+class FeedbackViewController: UIViewController,UITextViewDelegate,UITextFieldDelegate {
     
     var topLineView = UIView()
     var leftButton = UIButton()
@@ -19,9 +19,10 @@ class FeedbackViewController: UIViewController {
     var inputText = UITextView()
     var secondSubTitle = UILabel()
     var secondTextView = UIView()
-    var secondInputText = UITextView()
+    var secondInputText = UITextField()
     var textLabel = UILabel()
     var confirmButton = UIButton()
+    let endEditView = UIView()
     let inset = UIApplication.shared.delegate?.window??.safeAreaInsets ?? UIEdgeInsets.zero
     let SCREENSIZE = UIScreen.main.bounds.size
     
@@ -89,6 +90,7 @@ class FeedbackViewController: UIViewController {
             make.bottom.right.equalTo(-16)
         }
         inputText.font = UIFont.systemFont(ofSize: 15)
+        inputText.delegate = self
         
         secondSubTitle.snp.makeConstraints { (make) in
             make.top.equalTo(textView.snp.bottom).offset(16)
@@ -115,6 +117,7 @@ class FeedbackViewController: UIViewController {
             make.bottom.right.equalTo(-16)
         }
         secondInputText.font = UIFont.systemFont(ofSize: 15)
+        secondInputText.delegate = self
         
         textLabel.snp.makeConstraints { (make) in
             make.left.equalTo(16)
@@ -137,6 +140,30 @@ class FeedbackViewController: UIViewController {
         confirmButton.clipsToBounds = true
         confirmButton.addTarget(self, action: #selector(confirm), for: .touchUpInside)
         
+        let tapGestureRecognizer = UITapGestureRecognizer()
+        tapGestureRecognizer.addTarget(self, action: #selector(done))
+        endEditView.frame = self.view.frame
+        endEditView.backgroundColor = UIColor.init(red: 1, green: 1, blue: 1, alpha: 0)
+        endEditView.addGestureRecognizer(tapGestureRecognizer)
+        
+    }
+    
+    func textViewDidBeginEditing(_ textView: UITextView) {
+        self.view.addSubview(endEditView)
+    }
+    func textViewDidEndEditing(_ textView: UITextView) {
+        endEditView.removeFromSuperview()
+    }
+    
+    func textFieldDidBeginEditing(_ textField: UITextField) {
+        self.view.addSubview(endEditView)
+    }
+    func textFieldDidEndEditing(_ textField: UITextField) {
+        endEditView.removeFromSuperview()
+    }
+    
+    @objc func done() {
+        secondInputText.resignFirstResponder()
     }
     
     @objc func confirm() {
@@ -145,7 +172,8 @@ class FeedbackViewController: UIViewController {
     }
     
     @objc func back() {
-        self.navigationController?.popViewController(animated: true)
-        self.tabBarController?.tabBar.isHidden = false
+        secondInputText.resignFirstResponder()
+//        self.navigationController?.popViewController(animated: true)
+//        self.tabBarController?.tabBar.isHidden = false
     }
 }

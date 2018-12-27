@@ -24,8 +24,8 @@ class AlertView: UIView {
         self.backgroundColor = UIColor.init(red: 238/255, green: 238/255, blue: 238/255, alpha: 1)
         self.layer.cornerRadius = 12
         self.clipsToBounds = true
-        self.layer.shadowColor = UIColor.gray as! CGColor
-        self.layer.shadowOffset = CGSize(width: 4, height: 8)
+        //self.layer.shadowColor = UIColor.gray as! CGColor
+        //self.layer.shadowOffset = CGSize(width: 4, height: 8)
         
         self.addSubview(imageView)
         self.addSubview(alertLabel)

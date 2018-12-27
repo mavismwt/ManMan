@@ -7,6 +7,9 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		1860F5C521D13BA500BD221F /* LogDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1860F5C421D13BA500BD221F /* LogDetailView.swift */; };
+		1860F5C821D4705C00BD221F /* flagCardTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1860F5C721D4705C00BD221F /* flagCardTableViewCell.swift */; };
+		1860F5CA21D48B2000BD221F /* package.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1860F5C921D48B2000BD221F /* package.swift */; };
 		18632AF621C24C8000A0CA47 /* AddUserDefinedCheckViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18632AF521C24C8000A0CA47 /* AddUserDefinedCheckViewController.swift */; };
 		18632AFA21C26D5000A0CA47 /* LogViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18632AF921C26D5000A0CA47 /* LogViewController.swift */; };
 		18632B0721C2996500A0CA47 /* FangCustomizeUICollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18632B0621C2996500A0CA47 /* FangCustomizeUICollectionViewCell.swift */; };
@@ -121,6 +124,9 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		1860F5C421D13BA500BD221F /* LogDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LogDetailView.swift; sourceTree = "<group>"; };
+		1860F5C721D4705C00BD221F /* flagCardTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = flagCardTableViewCell.swift; sourceTree = "<group>"; };
+		1860F5C921D48B2000BD221F /* package.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = package.swift; sourceTree = "<group>"; };
 		18632AF521C24C8000A0CA47 /* AddUserDefinedCheckViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddUserDefinedCheckViewController.swift; sourceTree = "<group>"; };
 		18632AF921C26D5000A0CA47 /* LogViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LogViewController.swift; sourceTree = "<group>"; };
 		18632B0621C2996500A0CA47 /* FangCustomizeUICollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FangCustomizeUICollectionViewCell.swift; sourceTree = "<group>"; };
@@ -240,6 +246,7 @@
 				18F9396721BC378800306EB0 /* AddView.swift */,
 				18F9396921BC47C900306EB0 /* CheckCardCell.swift */,
 				18632BF021CCF62200A0CA47 /* LoadView.swift */,
+				1860F5C721D4705C00BD221F /* flagCardTableViewCell.swift */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -282,6 +289,7 @@
 				18632BE621CABB3C00A0CA47 /* DateLogTableViewCell.swift */,
 				18632BE821CAC11800A0CA47 /* FirstDateLogCell.swift */,
 				18632BEA21CAC48500A0CA47 /* MonthLogCell.swift */,
+				1860F5C421D13BA500BD221F /* LogDetailView.swift */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -383,6 +391,7 @@
 				18F972F121B7F8B000FFAB90 /* LaunchScreen.storyboard */,
 				18F972F421B7F8B000FFAB90 /* Info.plist */,
 				18632BF221CCFC6A00A0CA47 /* StartViewController.swift */,
+				1860F5C921D48B2000BD221F /* package.swift */,
 			);
 			path = ManMan;
 			sourceTree = "<group>";
@@ -604,10 +613,13 @@
 				18632BEF21CCD61D00A0CA47 /* LoginViewController.swift in Sources */,
 				18632BEB21CAC48500A0CA47 /* MonthLogCell.swift in Sources */,
 				188C22AD21CF6F5D00E2546A /* CommentTableViewCell.swift in Sources */,
+				1860F5CA21D48B2000BD221F /* package.swift in Sources */,
 				18632B0721C2996500A0CA47 /* FangCustomizeUICollectionViewCell.swift in Sources */,
 				18632BF721CF3B8D00A0CA47 /* AlertView.swift in Sources */,
 				18632BF121CCF62200A0CA47 /* LoadView.swift in Sources */,
+				1860F5C821D4705C00BD221F /* flagCardTableViewCell.swift in Sources */,
 				18632AFA21C26D5000A0CA47 /* LogViewController.swift in Sources */,
+				1860F5C521D13BA500BD221F /* LogDetailView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -800,7 +812,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = mwt.ManMan;
+				PRODUCT_BUNDLE_IDENTIFIER = ManMan;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 4.2;
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -819,7 +831,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = mwt.ManMan;
+				PRODUCT_BUNDLE_IDENTIFIER = ManMan;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 4.2;
 				TARGETED_DEVICE_FAMILY = "1,2";

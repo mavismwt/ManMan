@@ -88,7 +88,7 @@ class HomeViewController: UIViewController,UITableViewDelegate,UITableViewDataSo
     
     let addView = AddView()
     let load = LoadView()
-    let tableView = UITableView()
+    var tableView = UITableView(frame: CGRect(x: 0, y: 0, width: 200, height: 200), style: .grouped)
     let identifier = "reusedCell"
     
     let SCREENSIZE = UIScreen.main.bounds.size
@@ -136,7 +136,7 @@ class HomeViewController: UIViewController,UITableViewDelegate,UITableViewDataSo
         super.viewDidLoad()
         // Do any additional setup after loading the view, typically from a nib.
         self.tabBarController?.view.addSubview(load)
-        DispatchQueue.main.asyncAfter(deadline: .now()+2, execute:
+        DispatchQueue.main.asyncAfter(deadline: .now()+3, execute:
             {
                 self.load.removeFromSuperview()
         })
@@ -146,7 +146,7 @@ class HomeViewController: UIViewController,UITableViewDelegate,UITableViewDataSo
         topLineView.addSubview(calenderDetailButton)
         
         self.view.addSubview(topLineView)
-        self.view.addSubview(gotoFlag)
+        //self.view.addSubview(gotoFlag)
         self.view.addSubview(tableView)
         
         let navRect = self.navigationController?.navigationBar.frame
@@ -170,23 +170,22 @@ class HomeViewController: UIViewController,UITableViewDelegate,UITableViewDataSo
         monthLabel.textColor = UIColor.white
         monthLabel.font = UIFont.boldSystemFont(ofSize: 20)
         
-        gotoFlag.snp.makeConstraints { (make) in
-            make.top.equalTo(topLineView.snp.bottom).offset(16)
-            make.left.equalTo(16)
-            make.right.equalTo(self.view.snp.right).offset(-16)
-            make.height.equalTo(50)
-        }
-        gotoFlag.layer.cornerRadius = 8
-        gotoFlag.clipsToBounds = true
-        gotoFlag.backgroundColor = UIColor.white
-        gotoFlag.setTitle("设定你的本月FLAG吧！", for: .normal)
-        gotoFlag.setTitleColor(UIColor.init(red: 255/255, green: 193/255, blue: 7/255, alpha: 1), for: .normal)
-        gotoFlag.contentHorizontalAlignment = UIControl.ContentHorizontalAlignment.left
-        gotoFlag.contentEdgeInsets = UIEdgeInsets(top: 0, left: 16, bottom: 0, right: 0)
-        gotoFlag.addTarget(self, action: #selector(flag), for: .touchUpInside)
+//        gotoFlag.snp.makeConstraints { (make) in
+//            make.top.equalTo(topLineView.snp.bottom).offset(16)
+//            make.left.equalTo(16)
+//            make.right.equalTo(self.view.snp.right).offset(-16)
+//            make.height.equalTo(50)
+//        }
+//        gotoFlag.layer.cornerRadius = 8
+//        gotoFlag.clipsToBounds = true
+//        gotoFlag.backgroundColor = UIColor.white
+//        gotoFlag.setTitle("设定你的本月FLAG吧！", for: .normal)
+//        gotoFlag.setTitleColor(UIColor.init(red: 255/255, green: 193/255, blue: 7/255, alpha: 1), for: .normal)
+//        gotoFlag.contentHorizontalAlignment = UIControl.ContentHorizontalAlignment.left
+//        gotoFlag.contentEdgeInsets = UIEdgeInsets(top: 0, left: 16, bottom: 0, right: 0)
+//        gotoFlag.addTarget(self, action: #selector(flag), for: .touchUpInside)
         
-        tableView.frame = CGRect(x: 0, y: inset.top+(navRect?.height)!+70, width: SCREENSIZE.width, height: SCREENSIZE.height-166-inset.top-inset.bottom)
-        print(self.view.safeAreaInsets)
+        tableView.frame =  CGRect(x: 0, y: inset.top+(navRect?.height)!, width: SCREENSIZE.width, height: SCREENSIZE.height-166-inset.top-inset.bottom)
         tableView.backgroundColor = UIColor.init(red: 238/255, green: 238/255, blue: 238/255, alpha: 1)
         tableView.separatorStyle = .none
         tableView.delegate = self
@@ -233,23 +232,57 @@ class HomeViewController: UIViewController,UITableViewDelegate,UITableViewDataSo
         
     }
     
+    func numberOfSections(in tableView: UITableView) -> Int {
+        return 2
+    }
+    
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return tasks.count
+        if section == 0 {
+            return 1
+        }else{
+            return tasks.count
+        }
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        var cell:CheckCardCell? = tableView.dequeueReusableCell(withIdentifier: identifier) as? CheckCardCell
-        if (cell == nil)
-        {
-            cell = CheckCardCell(style: UITableViewCell.CellStyle.default, reuseIdentifier: identifier)
-            cell?.taskName.text = tasks[indexPath.row].name
-            cell?.taskIcon.image = UIImage(named: tasks[indexPath.row].icon!)
+        if indexPath.section == 0 {
+            var flagCell:FlagCardCell? = tableView.dequeueReusableCell(withIdentifier: "flagCard") as? FlagCardCell
+            if flagCell == nil {
+                flagCell = FlagCardCell(style: .default, reuseIdentifier: "flagCard")
+            }
+            flagCell!.gotoFlag.addTarget(self, action: #selector(flag), for: .touchUpInside)
+            return flagCell!
+        }else{
+            var cell:CheckCardCell? = tableView.dequeueReusableCell(withIdentifier: identifier) as? CheckCardCell
+            if (cell == nil)
+            {
+                cell = CheckCardCell(style: UITableViewCell.CellStyle.default, reuseIdentifier: identifier)
+                cell?.taskName.text = tasks[indexPath.row].name
+                cell?.taskIcon.image = UIImage(named: tasks[indexPath.row].icon!)
+            }
+            return cell!
         }
-        return cell!
+    }
+    
+    func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
+        return nil
+    }
+    func tableView(_ tableView: UITableView, viewForFooterInSection section: Int) -> UIView? {
+        return nil
+    }
+    func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
+        return 0
+    }
+    func tableView(_ tableView: UITableView, heightForFooterInSection section: Int) -> CGFloat {
+        return 0
     }
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        return 95
+        if indexPath.section == 0 {
+            return 70
+        }else{
+            return 95
+        }
     }
     //songshlan@bingyn.net
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
@@ -275,9 +308,9 @@ class HomeViewController: UIViewController,UITableViewDelegate,UITableViewDataSo
                     cell.reSetTableViewCell()
                     self.img.removeFromSuperview()
                     //self.initImg()
-                    if self.isVolumnOn == true {
+                    //if self.isVolumnOn == true {
                         self.localMusic()
-                    }
+                    //}
             })
             cell.isfinished = true
         }

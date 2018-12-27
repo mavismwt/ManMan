@@ -244,10 +244,10 @@ class AddUserDefinedCheckViewController: UIViewController,UICollectionViewDelega
     
     @objc func backToHome() {
         let alertView = AlertView()
-        UIView.animate(withDuration: 0.5, animations: {
+        UIView.animate(withDuration: 1, animations: {
             self.view.addSubview(alertView)
         })
-        DispatchQueue.main.asyncAfter(deadline: .now()+0.5, execute:
+        DispatchQueue.main.asyncAfter(deadline: .now()+1, execute:
             {
                 self.navigationController?.popToRootViewController(animated: true)
         })

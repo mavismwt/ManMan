@@ -20,7 +20,7 @@ class SettingViewController: UIViewController,UITableViewDelegate,UITableViewDat
     let identifier = "reusedCell"
     let inset = UIApplication.shared.delegate?.window??.safeAreaInsets ?? UIEdgeInsets.zero
     let SCREENSIZE = UIScreen.main.bounds.size
-    let listDetail:[String] = ["打卡声音","晚安提示","加入系统日历"]
+    let listDetail:[String] = ["打卡声音"]
     
     override func viewDidLoad() {
         
@@ -65,7 +65,7 @@ class SettingViewController: UIViewController,UITableViewDelegate,UITableViewDat
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return 3
+        return listDetail.count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {

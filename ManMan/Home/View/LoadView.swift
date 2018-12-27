@@ -21,7 +21,6 @@ class LoadView: UIView {
         super.init(frame: frame)
         
         self.frame = UIScreen.main.bounds
-        self.backgroundColor = UIColor.white
         self.addSubview(imageView)
         
 //        let now = Date()
@@ -46,21 +45,24 @@ class LoadView: UIView {
         if jugmentResult == true {
             img = UIImage(named: "night")!
             greet = "晚安"
+            textView.textColor = UIColor.init(red: 255/255, green: 239/255, blue: 195/255, alpha: 1)
+            self.backgroundColor = UIColor.init(red: 126/255, green: 127/255, blue: 155/255, alpha: 1)
         }else {
             img = UIImage(named: "day")!
             greet = "日安"
+            textView.textColor = UIColor.init(red: 255/255, green: 193/255, blue: 7/255, alpha: 1)
+            self.backgroundColor = UIColor.white
         }
         imageView.image = img
         
         self.addSubview(textView)
         textView.text = "Hi \(nickname),\n\n\(greet)。\n\n今天是\(dformatter.string(from: now)),\n\n很高兴陪在你身边。"
-       // Hi \(nickname),\n\n\(greet)。\n\n今天是\(dformatter.string(from: now)),\n\n很高兴陪在你身边。
+        textView.backgroundColor = UIColor.init(red: 0, green: 0, blue: 0, alpha: 0)
         textView.snp.makeConstraints { (make) in
             make.left.equalTo(41)
             make.bottom.equalTo(-25-inset.bottom)
             make.width.height.equalTo(300)
         }
-        textView.textColor = UIColor.init(red: 255/255, green: 213/255, blue: 7/255, alpha: 1)
         textView.font = UIFont.systemFont(ofSize: 18)
         
         
