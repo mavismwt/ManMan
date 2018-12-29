@@ -86,8 +86,16 @@ class AddFlagViewController: UIViewController {
     }
     
     @objc func confirm() {
-        self.navigationController?.popViewController(animated: true)
-        self.tabBarController?.tabBar.isHidden = false
+        let alertView = AlertView()
+        UIView.animate(withDuration: 1, animations: {
+            self.view.addSubview(alertView)
+        })
+        DispatchQueue.main.asyncAfter(deadline: .now()+1, execute:
+            {
+                self.navigationController?.popViewController(animated: true)
+        })
+         UserDefaults.standard.set(self.inputText.text, forKey: "flagDetail")
+        //self.tabBarController?.tabBar.isHidden = false
     }
     
     @objc func back() {

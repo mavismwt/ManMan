@@ -15,10 +15,13 @@ class LogViewController: UIViewController,UIScrollViewDelegate,CVCalendarViewDel
     var leftButton = UIButton()
     var rightButton = UIButton()
     var titleView = UILabel()
+    var monthView = UILabel()
+    var cView = UIView()
     
     var scrollView = UIScrollView()
     var tableView = UITableView()
     var cell = LogCell()
+    var showMoreView = ShowMoreView()
 
     private var menuView: CVCalendarMenuView!
     private var calendarView: CVCalendarView!
@@ -32,7 +35,7 @@ class LogViewController: UIViewController,UIScrollViewDelegate,CVCalendarViewDel
         var icon:String?
         var isDate:Bool?
     }
-    var datas:[data] = [data.init(title: "Nov.11", icon: "", isDate: true),data.init(title: "早睡", icon: "sleep", isDate: false),data.init(title: "日志", icon: "log", isDate: false)]
+    var datas:[data] = [data.init(title: "Dec.29", icon: "", isDate: true),data.init(title: "早睡", icon: "sleep", isDate: false),data.init(title: "日志", icon: "log", isDate: false)]
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -76,7 +79,7 @@ class LogViewController: UIViewController,UIScrollViewDelegate,CVCalendarViewDel
         self.view.addSubview(scrollView)
         //scrollView.frame = CGRect(x: 16, y: calendarView.frame.minY+SCREENSIZE.width-8, width: SCREENSIZE.width-32, height: SCREENSIZE.height-calendarView.frame.maxY+SCREENSIZE.width-inset.bottom)
         scrollView.snp.makeConstraints { (make) in
-            make.top.equalTo(calendarView.snp.bottom).offset(16)
+            make.top.equalTo(cView.snp.bottom).offset(16)
             make.left.equalTo(14)
             make.right.equalTo(-14)
             make.bottom.equalTo(-inset.bottom-16)
@@ -97,23 +100,36 @@ class LogViewController: UIViewController,UIScrollViewDelegate,CVCalendarViewDel
     }
     
     func setCalendarView() {
+        
         currentCalendar = Calendar.init(identifier: .gregorian)
         //初始化星期菜单栏/日历
         let WidthOfCalendar = SCREENSIZE.width-28
         let navRect = self.navigationController?.navigationBar.frame
-        menuView = CVCalendarMenuView(frame: CGRect(x:14, y:(navRect?.height)!+inset.top+16, width:WidthOfCalendar, height:15))
-        calendarView = CVCalendarView(frame: CGRect(x:14, y:(navRect?.height)!+inset.top+16, width:WidthOfCalendar, height:WidthOfCalendar))
-        calendarView.backgroundColor = UIColor.white
-        calendarView.layer.cornerRadius = 8
-        calendarView.layer.shadowColor = UIColor.black.cgColor
-        calendarView.layer.shadowOffset = CGSize(width: 3, height: 6)
+        cView.frame = CGRect(x:14, y:(navRect?.height)!+inset.top+16, width:WidthOfCalendar, height:WidthOfCalendar)
+        cView.backgroundColor = UIColor.white
+        cView.layer.cornerRadius = 8
+        cView.layer.shadowColor = UIColor.black.cgColor
+        cView.layer.shadowOffset = CGSize(width: 3, height: 6)
+        monthView.frame = CGRect(x:0, y:8, width:WidthOfCalendar, height:24)
+        monthView.textAlignment = .center
+        monthView.text = "December"
+        menuView = CVCalendarMenuView(frame: CGRect(x:0, y:50, width:WidthOfCalendar, height:24))
+//        menuView.backgroundColor = UIColor.white
+//        menuView.layer.cornerRadius = 8
+        calendarView = CVCalendarView(frame: CGRect(x:0, y:80, width:WidthOfCalendar, height:WidthOfCalendar-80))
+//        calendarView.backgroundColor = UIColor.white
+//        calendarView.layer.cornerRadius = 8
+//        calendarView.layer.shadowColor = UIColor.black.cgColor
+//        calendarView.layer.shadowOffset = CGSize(width: 3, height: 6)
         //代理
         menuView.menuViewDelegate = self
         calendarView.calendarDelegate = self
         calendarView.calendarAppearanceDelegate = self
         //将菜单视图和日历视图添加到主视图上
-        //self.view.addSubview(menuView)
-        self.view.addSubview(calendarView)
+        cView.addSubview(monthView)
+        cView.addSubview(calendarView)
+        cView.addSubview(menuView)
+        self.view.addSubview(cView)
     }
     
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
@@ -122,18 +138,20 @@ class LogViewController: UIViewController,UIScrollViewDelegate,CVCalendarViewDel
         //print(vol)
         if vol.y < -500 {
             self.calendarView.changeMode(.weekView)
-            UIView.animate(withDuration: 0.5, animations: {
+            UIView.animate(withDuration: 0.35, animations: {
                 let WidthOfCalendar = self.SCREENSIZE.width-28
                 let navRect = self.navigationController?.navigationBar.frame
-                self.calendarView.frame = CGRect(x:14, y:(navRect?.height)!+self.inset.top+16, width:WidthOfCalendar, height:60)
+                //self.calendarView.frame = CGRect(x:0, y:(navRect?.height)!+self.inset.top+16, width:WidthOfCalendar, height:60)
+                self.cView.frame = CGRect(x:14, y:(navRect?.height)!+self.inset.top+16, width:WidthOfCalendar, height:140)
                 
             })
         }else if vol.y > 500 {
             self.calendarView.changeMode(.monthView)
-            UIView.animate(withDuration: 0.5, animations: {
+            UIView.animate(withDuration: 0.35, animations: {
                 let WidthOfCalendar = self.SCREENSIZE.width-28
                 let navRect = self.navigationController?.navigationBar.frame
-                self.calendarView.frame = CGRect(x:14, y:(navRect?.height)!+self.inset.top+16, width:WidthOfCalendar, height:WidthOfCalendar)
+                //self.calendarView.frame = CGRect(x:0, y:(navRect?.height)!+self.inset.top+16, width:WidthOfCalendar, height:WidthOfCalendar)
+                self.cView.frame = CGRect(x:14, y:(navRect?.height)!+self.inset.top+16, width:WidthOfCalendar, height:WidthOfCalendar)
             })
         }
         
@@ -171,16 +189,51 @@ class LogViewController: UIViewController,UIScrollViewDelegate,CVCalendarViewDel
         leftButton.setImage(UIImage(named: "back"), for: .normal)
         leftButton.addTarget(self, action: #selector(back), for: .touchUpInside)
         
+        rightButton.snp.makeConstraints { (make) in
+            make.centerY.equalToSuperview().offset(inset.top/2)
+            make.right.equalTo(-16)
+            make.width.equalTo(20)
+            make.height.equalTo(20)
+        }
+        rightButton.setImage(UIImage(named: "more"), for: .normal)
+        rightButton.addTarget(self, action: #selector(showMore), for: .touchUpInside)
+        
     }
 
-    
-    //MARK:calendar实现
     @objc func back() {
         self.navigationController?.popViewController(animated: true)
         self.tabBarController?.tabBar.isHidden = false
-//        //切换为周历
-//        calendarView.changeMode(.weekView)
     }
+    
+    @objc func showMore() {
+        let navRect = self.navigationController?.navigationBar.frame
+        showMoreView = ShowMoreView.init(frame: CGRect(x: 0, y: (navRect?.height)!+inset.top, width: SCREENSIZE.width, height: SCREENSIZE.height-(navRect?.height)!+inset.top-inset.bottom))
+        self.view.addSubview(showMoreView)
+        showMoreView.detail.addTarget(self, action: #selector(showDetail), for: .touchUpInside)
+        showMoreView.share.addTarget(self, action: #selector(shareView), for: .touchUpInside)
+        let tapGestureRecognizer = UITapGestureRecognizer()
+        tapGestureRecognizer.addTarget(self, action: #selector(cancel))
+        showMoreView.addGestureRecognizer(tapGestureRecognizer)
+    }
+    
+    @objc func showDetail() {
+        let logDetailViewController = LogDetailViewController()
+        self.navigationController?.pushViewController(logDetailViewController, animated: true)
+        showMoreView.removeFromSuperview()
+    }
+    
+    @objc func shareView() {
+        let shareViewController = ShareViewController()
+        self.navigationController?.pushViewController(shareViewController, animated: true)
+        showMoreView.removeFromSuperview()
+    }
+    
+    @objc func cancel() {
+        showMoreView.removeFromSuperview()
+    }
+    
+    
+    //MARK:calendar实现
     
     func presentationMode() -> CalendarMode {
         return .monthView
@@ -237,6 +290,53 @@ class LogViewController: UIViewController,UIScrollViewDelegate,CVCalendarViewDel
     
     func didSelectDayView(_ dayView: DayView, animationDidFinish: Bool) {
         //print("selected")
+    }
+    
+    func presentedDateUpdated(_ date: CVDate) {
+        //导航栏显示当前日历的年月
+        var month = String()
+        switch date.month {
+        case 1:
+            month = "January"
+            break
+        case 2:
+            month = "February"
+            break
+        case 3:
+            month = "March"
+            break
+        case 4:
+            month = "April"
+            break
+        case 5:
+            month = "May"
+            break
+        case 6:
+            month = "June"
+            break
+        case 7:
+            month = "July"
+            break
+        case 8:
+            month = "Augest"
+            break
+        case 9:
+            month = "September"
+            break
+        case 10:
+            month = "October"
+            break
+        case 11:
+            month = "November"
+            break
+        case 12:
+            month = "December"
+            break
+        default:
+            break
+        }
+        self.monthView.text = month
+        //date.globalDescription
     }
     
     override func viewDidLayoutSubviews() {

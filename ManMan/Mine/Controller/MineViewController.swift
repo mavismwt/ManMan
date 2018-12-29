@@ -7,8 +7,9 @@
 //
 
 import UIKit
+import MessageUI
 
-class MineViewController: UIViewController,UITableViewDelegate,UITableViewDataSource,UITextFieldDelegate,UIGestureRecognizerDelegate {
+class MineViewController: UIViewController,UITableViewDelegate,UITableViewDataSource,UITextFieldDelegate,UIGestureRecognizerDelegate,MFMailComposeViewControllerDelegate {
     
     var topLineView = UIView()
     var profileView = UIImageView()
@@ -165,13 +166,81 @@ class MineViewController: UIViewController,UITableViewDelegate,UITableViewDataSo
             self.navigationController?.pushViewController(settingViewController, animated: true)
             self.tabBarController?.tabBar.isHidden = true
         case "问题反馈":
-            let feedbackViewController = FeedbackViewController()
-            self.navigationController?.pushViewController(feedbackViewController, animated: true)
-            self.tabBarController?.tabBar.isHidden = true
+            self.sendEmail()
+//            let feedbackViewController = FeedbackViewController()
+//            self.navigationController?.pushViewController(feedbackViewController, animated: true)
+//            self.tabBarController?.tabBar.isHidden = true
         default:
             break
         }
     }
+    
+    func configuredMailComposeViewController() -> MFMailComposeViewController {
+        
+        let mailComposeVC = MFMailComposeViewController()
+        mailComposeVC.mailComposeDelegate = self
+        
+        //设置邮件地址、主题及正文
+        mailComposeVC.setToRecipients(["mavismwt@bingyan.net","songzilan@foxmail.com"])
+        mailComposeVC.setSubject("问题反馈")
+        //mailComposeVC.setMessageBody("<邮件正文>", isHTML: false)
+        
+        //获取设备名称
+        let deviceName = UIDevice.current.name
+        //获取系统版本号
+        let systemVersion = UIDevice.current.systemVersion
+        //获取设备的型号
+        let deviceModel = UIDevice.current.model
+        //获取设备唯一标识符
+        let deviceUUID = UIDevice.current.identifierForVendor?.uuidString
+        
+        let infoDic = Bundle.main.infoDictionary
+        // 获取App的版本号
+        let appVersion = infoDic?["CFBundleShortVersionString"]
+        // 获取App的build版本
+        let appBuildVersion = infoDic?["CFBundleVersion"]
+        // 获取App的名称
+        let appName = infoDic?["CFBundleDisplayName"]
+        //调用
+        let modelName = UIDevice.current.modelName
+        mailComposeVC.setMessageBody("\n\n\n\n\n\n应用名称：\(appName)\n应用版本：\(appVersion)\n系统版本：\(systemVersion)\n设备型号：\(modelName)", isHTML: false)
+        
+        return mailComposeVC
+        
+    }
+    func showSendMailErrorAlert() {
+        let sendMailErrorAlert = UIAlertController(title: "无法发送邮件", message: "您的设备尚未设置邮箱，请在“邮件”应用中设置后再尝试发送。", preferredStyle: .alert)
+        sendMailErrorAlert.addAction(UIAlertAction(title: "确定", style: .default) { _ in })
+        self.present(sendMailErrorAlert, animated: true){}
+        
+    }
+    func mailComposeController(_ controller: MFMailComposeViewController, didFinishWith result: MFMailComposeResult, error: Error?) {
+        switch result.rawValue {
+        case MFMailComposeResult.cancelled.rawValue:
+            print("取消发送")
+        case MFMailComposeResult.sent.rawValue:
+            print("发送成功")
+        default:
+            break
+        }
+        self.dismiss(animated: true, completion: nil)
+    }
+    func sendEmail() {
+        if MFMailComposeViewController.canSendMail() {
+            //注意这个实例要写在if block里，否则无法发送邮件时会出现两次提示弹窗（一次是系统的）
+            let mailComposeViewController = configuredMailComposeViewController()
+            self.present(mailComposeViewController, animated: true, completion: nil)
+        } else {
+            self.showSendMailErrorAlert()
+        }
+    }
+    
+    
+    
+    
+ 
+    
+    
     
     override func viewWillAppear(_ animated: Bool) {
         self.tabBarController?.tabBar.addSubview(coverView)
@@ -184,3 +253,44 @@ class MineViewController: UIViewController,UITableViewDelegate,UITableViewDataSo
     }
     
 }
+
+public extension UIDevice {
+    
+    var modelName: String {
+        var systemInfo = utsname()
+        uname(&systemInfo)
+        let machineMirror = Mirror(reflecting: systemInfo.machine)
+        let identifier = machineMirror.children.reduce("") { identifier, element in
+            guard let value = element.value as? Int8, value != 0 else { return identifier }
+            return identifier + String(UnicodeScalar(UInt8(value)))
+        }
+        
+        switch identifier {
+        case "iPod5,1":                                 return "iPod Touch 5"
+        case "iPod7,1":                                 return "iPod Touch 6"
+        case "iPhone3,1", "iPhone3,2", "iPhone3,3":     return "iPhone 4"
+        case "iPhone4,1":                               return "iPhone 4s"
+        case "iPhone5,1", "iPhone5,2":                  return "iPhone 5"
+        case "iPhone5,3", "iPhone5,4":                  return "iPhone 5c"
+        case "iPhone6,1", "iPhone6,2":                  return "iPhone 5s"
+        case "iPhone7,2":                               return "iPhone 6"
+        case "iPhone7,1":                               return "iPhone 6 Plus"
+        case "iPhone8,1":                               return "iPhone 6s"
+        case "iPhone8,2":                               return "iPhone 6s Plus"
+        case "iPad2,1", "iPad2,2", "iPad2,3", "iPad2,4":return "iPad 2"
+        case "iPad3,1", "iPad3,2", "iPad3,3":           return "iPad 3"
+        case "iPad3,4", "iPad3,5", "iPad3,6":           return "iPad 4"
+        case "iPad4,1", "iPad4,2", "iPad4,3":           return "iPad Air"
+        case "iPad5,3", "iPad5,4":                      return "iPad Air 2"
+        case "iPad2,5", "iPad2,6", "iPad2,7":           return "iPad Mini"
+        case "iPad4,4", "iPad4,5", "iPad4,6":           return "iPad Mini 2"
+        case "iPad4,7", "iPad4,8", "iPad4,9":           return "iPad Mini 3"
+        case "iPad5,1", "iPad5,2":                      return "iPad Mini 4"
+        case "iPad6,7", "iPad6,8":                      return "iPad Pro"
+        case "AppleTV5,3":                              return "Apple TV"
+        case "i386", "x86_64":                          return "Simulator"
+        default:                                        return identifier
+        }
+    }
+}
+

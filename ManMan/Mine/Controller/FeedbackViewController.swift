@@ -7,8 +7,9 @@
 //
 
 import UIKit
+import MessageUI
 
-class FeedbackViewController: UIViewController,UITextViewDelegate,UITextFieldDelegate {
+class FeedbackViewController: UIViewController,UITextViewDelegate,UITextFieldDelegate,MFMailComposeViewControllerDelegate {
     
     var topLineView = UIView()
     var leftButton = UIButton()
@@ -167,8 +168,9 @@ class FeedbackViewController: UIViewController,UITextViewDelegate,UITextFieldDel
     }
     
     @objc func confirm() {
-        self.navigationController?.popViewController(animated: true)
-        self.tabBarController?.tabBar.isHidden = false
+//        self.navigationController?.popViewController(animated: true)
+//        self.tabBarController?.tabBar.isHidden = false
+        
     }
     
     @objc func back() {
@@ -176,4 +178,46 @@ class FeedbackViewController: UIViewController,UITextViewDelegate,UITextFieldDel
 //        self.navigationController?.popViewController(animated: true)
 //        self.tabBarController?.tabBar.isHidden = false
     }
+    
+    func configuredMailComposeViewController() -> MFMailComposeViewController {
+        
+        let mailComposeVC = MFMailComposeViewController()
+        mailComposeVC.mailComposeDelegate = self
+        
+        //设置邮件地址、主题及正文
+        mailComposeVC.setToRecipients(["<你的邮箱地址>"])
+        mailComposeVC.setSubject("<邮件主题>")
+        mailComposeVC.setMessageBody("<邮件正文>", isHTML: false)
+        
+        return mailComposeVC
+        
+    }
+    func showSendMailErrorAlert() {
+        let sendMailErrorAlert = UIAlertController(title: "无法发送邮件", message: "您的设备尚未设置邮箱，请在“邮件”应用中设置后再尝试发送。", preferredStyle: .alert)
+        sendMailErrorAlert.addAction(UIAlertAction(title: "确定", style: .default) { _ in })
+        self.present(sendMailErrorAlert, animated: true){}
+        
+    }
+    func mailComposeController(_ controller: MFMailComposeViewController, didFinishWith result: MFMailComposeResult, error: Error?) {
+        switch result.rawValue {
+        case MFMailComposeResult.cancelled.rawValue:
+            print("取消发送")
+        case MFMailComposeResult.sent.rawValue:
+            print("发送成功")
+        default:
+            break
+        }
+        self.dismiss(animated: true, completion: nil)
+    }
+    
+    func sendEmail() {
+        if MFMailComposeViewController.canSendMail() {
+            //注意这个实例要写在if block里，否则无法发送邮件时会出现两次提示弹窗（一次是系统的）
+            let mailComposeViewController = configuredMailComposeViewController()
+            self.present(mailComposeViewController, animated: true, completion: nil)
+        } else {
+            self.showSendMailErrorAlert()
+        }
+    }
+    
 }

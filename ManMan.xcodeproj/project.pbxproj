@@ -9,7 +9,15 @@
 /* Begin PBXBuildFile section */
 		1860F5C521D13BA500BD221F /* LogDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1860F5C421D13BA500BD221F /* LogDetailView.swift */; };
 		1860F5C821D4705C00BD221F /* flagCardTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1860F5C721D4705C00BD221F /* flagCardTableViewCell.swift */; };
-		1860F5CA21D48B2000BD221F /* package.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1860F5C921D48B2000BD221F /* package.swift */; };
+		1860F5CA21D48B2000BD221F /* MailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1860F5C921D48B2000BD221F /* MailViewController.swift */; };
+		1860F5CD21D5E53600BD221F /* MessageUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1860F5CC21D5E53600BD221F /* MessageUI.framework */; };
+		1860F5EB21D692CD00BD221F /* ShowMoreView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1860F5EA21D692CD00BD221F /* ShowMoreView.swift */; };
+		1860F5ED21D696CE00BD221F /* LogDetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1860F5EC21D696CE00BD221F /* LogDetailViewController.swift */; };
+		1860F5EF21D6A00700BD221F /* ShareTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1860F5EE21D6A00700BD221F /* ShareTableViewCell.swift */; };
+		1860F60521D74B4400BD221F /* SnapKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1860F60221D74B3A00BD221F /* SnapKit.framework */; };
+		1860F60621D74B4400BD221F /* SnapKit.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 1860F60221D74B3A00BD221F /* SnapKit.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		1860F60921D74B4900BD221F /* CVCalendar.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1860F5FB21D74B3300BD221F /* CVCalendar.framework */; };
+		1860F60A21D74B4900BD221F /* CVCalendar.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 1860F5FB21D74B3300BD221F /* CVCalendar.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		18632AF621C24C8000A0CA47 /* AddUserDefinedCheckViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18632AF521C24C8000A0CA47 /* AddUserDefinedCheckViewController.swift */; };
 		18632AFA21C26D5000A0CA47 /* LogViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18632AF921C26D5000A0CA47 /* LogViewController.swift */; };
 		18632B0721C2996500A0CA47 /* FangCustomizeUICollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18632B0621C2996500A0CA47 /* FangCustomizeUICollectionViewCell.swift */; };
@@ -17,10 +25,6 @@
 		18632B0B21C2A7AD00A0CA47 /* SettingViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18632B0A21C2A7AD00A0CA47 /* SettingViewController.swift */; };
 		18632B0D21C49E5500A0CA47 /* AddFlagViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18632B0C21C49E5500A0CA47 /* AddFlagViewController.swift */; };
 		18632B0F21C4F31000A0CA47 /* SettingTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18632B0E21C4F31000A0CA47 /* SettingTableViewCell.swift */; };
-		18632BC421C62BED00A0CA47 /* CVCalendar.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 18632BC321C62BDC00A0CA47 /* CVCalendar.framework */; };
-		18632BC521C62BED00A0CA47 /* CVCalendar.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 18632BC321C62BDC00A0CA47 /* CVCalendar.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
-		18632BD821C65CF100A0CA47 /* SnapKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 18F9397521BC484400306EB0 /* SnapKit.framework */; };
-		18632BD921C65CF100A0CA47 /* SnapKit.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 18F9397521BC484400306EB0 /* SnapKit.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		18632BE121C89D0600A0CA47 /* LogTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18632BE021C89D0600A0CA47 /* LogTableViewCell.swift */; };
 		18632BE521CABB1600A0CA47 /* LastLogTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18632BE421CABB1600A0CA47 /* LastLogTableViewCell.swift */; };
 		18632BE721CABB3C00A0CA47 /* DateLogTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18632BE621CABB3C00A0CA47 /* DateLogTableViewCell.swift */; };
@@ -29,7 +33,7 @@
 		18632BED21CBADC900A0CA47 /* CommentLineView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18632BEC21CBADC800A0CA47 /* CommentLineView.swift */; };
 		18632BEF21CCD61D00A0CA47 /* LoginViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18632BEE21CCD61C00A0CA47 /* LoginViewController.swift */; };
 		18632BF121CCF62200A0CA47 /* LoadView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18632BF021CCF62200A0CA47 /* LoadView.swift */; };
-		18632BF321CCFC6A00A0CA47 /* StartViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18632BF221CCFC6A00A0CA47 /* StartViewController.swift */; };
+		18632BF321CCFC6A00A0CA47 /* ShareViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18632BF221CCFC6A00A0CA47 /* ShareViewController.swift */; };
 		18632BF521CE212100A0CA47 /* FlagDetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18632BF421CE212100A0CA47 /* FlagDetailViewController.swift */; };
 		18632BF721CF3B8D00A0CA47 /* AlertView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18632BF621CF3B8C00A0CA47 /* AlertView.swift */; };
 		188C22A621CF46C800E2546A /* FlagDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 188C22A521CF46C800E2546A /* FlagDetailView.swift */; };
@@ -57,40 +61,40 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
-		18632BC221C62BDC00A0CA47 /* PBXContainerItemProxy */ = {
+		1860F5FA21D74B3300BD221F /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
-			containerPortal = 18632BBE21C62BDC00A0CA47 /* CVCalendar.xcodeproj */;
+			containerPortal = 1860F5F621D74B3300BD221F /* CVCalendar.xcodeproj */;
 			proxyType = 2;
 			remoteGlobalIDString = 45D9D8B31C5006AA006673B2;
 			remoteInfo = CVCalendar;
 		};
-		18632BC621C62BED00A0CA47 /* PBXContainerItemProxy */ = {
+		1860F60121D74B3A00BD221F /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
-			containerPortal = 18632BBE21C62BDC00A0CA47 /* CVCalendar.xcodeproj */;
-			proxyType = 1;
-			remoteGlobalIDString = 45D9D8B21C5006AA006673B2;
-			remoteInfo = CVCalendar;
-		};
-		18632BDA21C65CF100A0CA47 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 18F9396F21BC484400306EB0 /* SnapKit.xcodeproj */;
-			proxyType = 1;
-			remoteGlobalIDString = EEBCC9D719CC627D0083B827;
-			remoteInfo = SnapKit;
-		};
-		18F9397421BC484400306EB0 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 18F9396F21BC484400306EB0 /* SnapKit.xcodeproj */;
+			containerPortal = 1860F5FC21D74B3A00BD221F /* SnapKit.xcodeproj */;
 			proxyType = 2;
 			remoteGlobalIDString = EEBCC9D819CC627D0083B827;
 			remoteInfo = SnapKit;
 		};
-		18F9397621BC484400306EB0 /* PBXContainerItemProxy */ = {
+		1860F60321D74B3A00BD221F /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
-			containerPortal = 18F9396F21BC484400306EB0 /* SnapKit.xcodeproj */;
+			containerPortal = 1860F5FC21D74B3A00BD221F /* SnapKit.xcodeproj */;
 			proxyType = 2;
 			remoteGlobalIDString = EEBCC9E219CC627E0083B827;
 			remoteInfo = "SnapKit Tests";
+		};
+		1860F60721D74B4400BD221F /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 1860F5FC21D74B3A00BD221F /* SnapKit.xcodeproj */;
+			proxyType = 1;
+			remoteGlobalIDString = EEBCC9D719CC627D0083B827;
+			remoteInfo = SnapKit;
+		};
+		1860F60B21D74B4900BD221F /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 1860F5F621D74B3300BD221F /* CVCalendar.xcodeproj */;
+			proxyType = 1;
+			remoteGlobalIDString = 45D9D8B21C5006AA006673B2;
+			remoteInfo = CVCalendar;
 		};
 		18F972FA21B7F8B000FFAB90 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
@@ -115,8 +119,8 @@
 			dstPath = "";
 			dstSubfolderSpec = 10;
 			files = (
-				18632BC521C62BED00A0CA47 /* CVCalendar.framework in Embed Frameworks */,
-				18632BD921C65CF100A0CA47 /* SnapKit.framework in Embed Frameworks */,
+				1860F60621D74B4400BD221F /* SnapKit.framework in Embed Frameworks */,
+				1860F60A21D74B4900BD221F /* CVCalendar.framework in Embed Frameworks */,
 			);
 			name = "Embed Frameworks";
 			runOnlyForDeploymentPostprocessing = 0;
@@ -126,7 +130,13 @@
 /* Begin PBXFileReference section */
 		1860F5C421D13BA500BD221F /* LogDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LogDetailView.swift; sourceTree = "<group>"; };
 		1860F5C721D4705C00BD221F /* flagCardTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = flagCardTableViewCell.swift; sourceTree = "<group>"; };
-		1860F5C921D48B2000BD221F /* package.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = package.swift; sourceTree = "<group>"; };
+		1860F5C921D48B2000BD221F /* MailViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MailViewController.swift; sourceTree = "<group>"; };
+		1860F5CC21D5E53600BD221F /* MessageUI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MessageUI.framework; path = System/Library/Frameworks/MessageUI.framework; sourceTree = SDKROOT; };
+		1860F5EA21D692CD00BD221F /* ShowMoreView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShowMoreView.swift; sourceTree = "<group>"; };
+		1860F5EC21D696CE00BD221F /* LogDetailViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LogDetailViewController.swift; sourceTree = "<group>"; };
+		1860F5EE21D6A00700BD221F /* ShareTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShareTableViewCell.swift; sourceTree = "<group>"; };
+		1860F5F621D74B3300BD221F /* CVCalendar.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = CVCalendar.xcodeproj; path = "CVCalendar-master的副本/CVCalendar.xcodeproj"; sourceTree = "<group>"; };
+		1860F5FC21D74B3A00BD221F /* SnapKit.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = SnapKit.xcodeproj; path = "SnapKit-develop的副本/SnapKit.xcodeproj"; sourceTree = "<group>"; };
 		18632AF521C24C8000A0CA47 /* AddUserDefinedCheckViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddUserDefinedCheckViewController.swift; sourceTree = "<group>"; };
 		18632AF921C26D5000A0CA47 /* LogViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LogViewController.swift; sourceTree = "<group>"; };
 		18632B0621C2996500A0CA47 /* FangCustomizeUICollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FangCustomizeUICollectionViewCell.swift; sourceTree = "<group>"; };
@@ -134,7 +144,6 @@
 		18632B0A21C2A7AD00A0CA47 /* SettingViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingViewController.swift; sourceTree = "<group>"; };
 		18632B0C21C49E5500A0CA47 /* AddFlagViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddFlagViewController.swift; sourceTree = "<group>"; };
 		18632B0E21C4F31000A0CA47 /* SettingTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingTableViewCell.swift; sourceTree = "<group>"; };
-		18632BBE21C62BDC00A0CA47 /* CVCalendar.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = CVCalendar.xcodeproj; path = "../../../../Downloads/CVCalendar-master/CVCalendar.xcodeproj"; sourceTree = "<group>"; };
 		18632BE021C89D0600A0CA47 /* LogTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LogTableViewCell.swift; sourceTree = "<group>"; };
 		18632BE421CABB1600A0CA47 /* LastLogTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LastLogTableViewCell.swift; sourceTree = "<group>"; };
 		18632BE621CABB3C00A0CA47 /* DateLogTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DateLogTableViewCell.swift; sourceTree = "<group>"; };
@@ -143,7 +152,7 @@
 		18632BEC21CBADC800A0CA47 /* CommentLineView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommentLineView.swift; sourceTree = "<group>"; };
 		18632BEE21CCD61C00A0CA47 /* LoginViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginViewController.swift; sourceTree = "<group>"; };
 		18632BF021CCF62200A0CA47 /* LoadView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoadView.swift; sourceTree = "<group>"; };
-		18632BF221CCFC6A00A0CA47 /* StartViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StartViewController.swift; sourceTree = "<group>"; };
+		18632BF221CCFC6A00A0CA47 /* ShareViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShareViewController.swift; sourceTree = "<group>"; };
 		18632BF421CE212100A0CA47 /* FlagDetailViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FlagDetailViewController.swift; sourceTree = "<group>"; };
 		18632BF621CF3B8C00A0CA47 /* AlertView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AlertView.swift; sourceTree = "<group>"; };
 		188C22A521CF46C800E2546A /* FlagDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FlagDetailView.swift; sourceTree = "<group>"; };
@@ -154,7 +163,6 @@
 		18F9395321B8383200306EB0 /* MineViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MineViewController.swift; sourceTree = "<group>"; };
 		18F9396721BC378800306EB0 /* AddView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddView.swift; sourceTree = "<group>"; };
 		18F9396921BC47C900306EB0 /* CheckCardCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CheckCardCell.swift; sourceTree = "<group>"; };
-		18F9396F21BC484400306EB0 /* SnapKit.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = SnapKit.xcodeproj; path = "../../../../Downloads/SnapKit-develop/SnapKit.xcodeproj"; sourceTree = "<group>"; };
 		18F9398321BCD4D200306EB0 /* ListTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ListTableViewCell.swift; sourceTree = "<group>"; };
 		18F9398521BCE36D00306EB0 /* LetterViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LetterViewController.swift; sourceTree = "<group>"; };
 		18F9398721BCE3D100306EB0 /* ExampleViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExampleViewController.swift; sourceTree = "<group>"; };
@@ -182,8 +190,9 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				18632BC421C62BED00A0CA47 /* CVCalendar.framework in Frameworks */,
-				18632BD821C65CF100A0CA47 /* SnapKit.framework in Frameworks */,
+				1860F5CD21D5E53600BD221F /* MessageUI.framework in Frameworks */,
+				1860F60521D74B4400BD221F /* SnapKit.framework in Frameworks */,
+				1860F60921D74B4900BD221F /* CVCalendar.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -204,6 +213,33 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		1860F5CB21D5E53500BD221F /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				1860F5FC21D74B3A00BD221F /* SnapKit.xcodeproj */,
+				1860F5F621D74B3300BD221F /* CVCalendar.xcodeproj */,
+				1860F5CC21D5E53600BD221F /* MessageUI.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		1860F5F721D74B3300BD221F /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				1860F5FB21D74B3300BD221F /* CVCalendar.framework */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		1860F5FD21D74B3A00BD221F /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				1860F60221D74B3A00BD221F /* SnapKit.framework */,
+				1860F60421D74B3A00BD221F /* SnapKit Tests.xctest */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
 		18632AFD21C2963D00A0CA47 /* Home */ = {
 			isa = PBXGroup;
 			children = (
@@ -256,7 +292,6 @@
 			children = (
 				18F9399121BE55C500306EB0 /* CustomizeUICollectinViewCell.swift */,
 				18632B0621C2996500A0CA47 /* FangCustomizeUICollectionViewCell.swift */,
-				18632BF621CF3B8C00A0CA47 /* AlertView.swift */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -271,14 +306,6 @@
 			path = Controller;
 			sourceTree = "<group>";
 		};
-		18632BBF21C62BDC00A0CA47 /* Products */ = {
-			isa = PBXGroup;
-			children = (
-				18632BC321C62BDC00A0CA47 /* CVCalendar.framework */,
-			);
-			name = Products;
-			sourceTree = "<group>";
-		};
 		18632BDC21C663B500A0CA47 /* View */ = {
 			isa = PBXGroup;
 			children = (
@@ -290,6 +317,8 @@
 				18632BE821CAC11800A0CA47 /* FirstDateLogCell.swift */,
 				18632BEA21CAC48500A0CA47 /* MonthLogCell.swift */,
 				1860F5C421D13BA500BD221F /* LogDetailView.swift */,
+				1860F5EA21D692CD00BD221F /* ShowMoreView.swift */,
+				1860F5EE21D6A00700BD221F /* ShareTableViewCell.swift */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -299,8 +328,10 @@
 			children = (
 				18F9395321B8383200306EB0 /* MineViewController.swift */,
 				18632AF921C26D5000A0CA47 /* LogViewController.swift */,
+				18632BF221CCFC6A00A0CA47 /* ShareViewController.swift */,
 				18632B0A21C2A7AD00A0CA47 /* SettingViewController.swift */,
 				18632B0821C2A79A00A0CA47 /* FeedbackViewController.swift */,
+				1860F5EC21D696CE00BD221F /* LogDetailViewController.swift */,
 			);
 			path = Controller;
 			sourceTree = "<group>";
@@ -336,24 +367,6 @@
 			path = Controller;
 			sourceTree = "<group>";
 		};
-		18F9396E21BC483800306EB0 /* framework */ = {
-			isa = PBXGroup;
-			children = (
-				18632BBE21C62BDC00A0CA47 /* CVCalendar.xcodeproj */,
-				18F9396F21BC484400306EB0 /* SnapKit.xcodeproj */,
-			);
-			path = framework;
-			sourceTree = "<group>";
-		};
-		18F9397021BC484400306EB0 /* Products */ = {
-			isa = PBXGroup;
-			children = (
-				18F9397521BC484400306EB0 /* SnapKit.framework */,
-				18F9397721BC484400306EB0 /* SnapKit Tests.xctest */,
-			);
-			name = Products;
-			sourceTree = "<group>";
-		};
 		18F972DC21B7F8AE00FFAB90 = {
 			isa = PBXGroup;
 			children = (
@@ -361,6 +374,7 @@
 				18F972FC21B7F8B000FFAB90 /* ManManTests */,
 				18F9730721B7F8B100FFAB90 /* ManManUITests */,
 				18F972E621B7F8AE00FFAB90 /* Products */,
+				1860F5CB21D5E53500BD221F /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -378,20 +392,19 @@
 			isa = PBXGroup;
 			children = (
 				188C22A821CF6D6000E2546A /* check.wav */,
+				18632BF621CF3B8C00A0CA47 /* AlertView.swift */,
 				18632AFD21C2963D00A0CA47 /* Home */,
 				18632B0021C2967A00A0CA47 /* Mine */,
 				18632AFE21C2964800A0CA47 /* Flag */,
 				18632AFF21C2966C00A0CA47 /* Task */,
 				18F9396B21BC47CE00306EB0 /* Controller */,
-				18F9396E21BC483800306EB0 /* framework */,
 				18F972E821B7F8AF00FFAB90 /* AppDelegate.swift */,
 				18F972EA21B7F8AF00FFAB90 /* ViewController.swift */,
 				18F972EF21B7F8B000FFAB90 /* Assets.xcassets */,
 				18F972EC21B7F8AF00FFAB90 /* Main.storyboard */,
 				18F972F121B7F8B000FFAB90 /* LaunchScreen.storyboard */,
 				18F972F421B7F8B000FFAB90 /* Info.plist */,
-				18632BF221CCFC6A00A0CA47 /* StartViewController.swift */,
-				1860F5C921D48B2000BD221F /* package.swift */,
+				1860F5C921D48B2000BD221F /* MailViewController.swift */,
 			);
 			path = ManMan;
 			sourceTree = "<group>";
@@ -429,8 +442,8 @@
 			buildRules = (
 			);
 			dependencies = (
-				18632BC721C62BED00A0CA47 /* PBXTargetDependency */,
-				18632BDB21C65CF100A0CA47 /* PBXTargetDependency */,
+				1860F60821D74B4400BD221F /* PBXTargetDependency */,
+				1860F60C21D74B4900BD221F /* PBXTargetDependency */,
 			);
 			name = ManMan;
 			productName = ManMan;
@@ -509,12 +522,12 @@
 			projectDirPath = "";
 			projectReferences = (
 				{
-					ProductGroup = 18632BBF21C62BDC00A0CA47 /* Products */;
-					ProjectRef = 18632BBE21C62BDC00A0CA47 /* CVCalendar.xcodeproj */;
+					ProductGroup = 1860F5F721D74B3300BD221F /* Products */;
+					ProjectRef = 1860F5F621D74B3300BD221F /* CVCalendar.xcodeproj */;
 				},
 				{
-					ProductGroup = 18F9397021BC484400306EB0 /* Products */;
-					ProjectRef = 18F9396F21BC484400306EB0 /* SnapKit.xcodeproj */;
+					ProductGroup = 1860F5FD21D74B3A00BD221F /* Products */;
+					ProjectRef = 1860F5FC21D74B3A00BD221F /* SnapKit.xcodeproj */;
 				},
 			);
 			projectRoot = "";
@@ -527,25 +540,25 @@
 /* End PBXProject section */
 
 /* Begin PBXReferenceProxy section */
-		18632BC321C62BDC00A0CA47 /* CVCalendar.framework */ = {
+		1860F5FB21D74B3300BD221F /* CVCalendar.framework */ = {
 			isa = PBXReferenceProxy;
 			fileType = wrapper.framework;
 			path = CVCalendar.framework;
-			remoteRef = 18632BC221C62BDC00A0CA47 /* PBXContainerItemProxy */;
+			remoteRef = 1860F5FA21D74B3300BD221F /* PBXContainerItemProxy */;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
-		18F9397521BC484400306EB0 /* SnapKit.framework */ = {
+		1860F60221D74B3A00BD221F /* SnapKit.framework */ = {
 			isa = PBXReferenceProxy;
 			fileType = wrapper.framework;
 			path = SnapKit.framework;
-			remoteRef = 18F9397421BC484400306EB0 /* PBXContainerItemProxy */;
+			remoteRef = 1860F60121D74B3A00BD221F /* PBXContainerItemProxy */;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
-		18F9397721BC484400306EB0 /* SnapKit Tests.xctest */ = {
+		1860F60421D74B3A00BD221F /* SnapKit Tests.xctest */ = {
 			isa = PBXReferenceProxy;
 			fileType = wrapper.cfbundle;
 			path = "SnapKit Tests.xctest";
-			remoteRef = 18F9397621BC484400306EB0 /* PBXContainerItemProxy */;
+			remoteRef = 1860F60321D74B3A00BD221F /* PBXContainerItemProxy */;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
 /* End PBXReferenceProxy section */
@@ -588,14 +601,16 @@
 				18F9399021BD27AC00306EB0 /* AddLogViewController.swift in Sources */,
 				18F9398E21BD279A00306EB0 /* AddCheckViewController.swift in Sources */,
 				18632B0921C2A79A00A0CA47 /* FeedbackViewController.swift in Sources */,
-				18632BF321CCFC6A00A0CA47 /* StartViewController.swift in Sources */,
+				18632BF321CCFC6A00A0CA47 /* ShareViewController.swift in Sources */,
 				18632B0F21C4F31000A0CA47 /* SettingTableViewCell.swift in Sources */,
 				18632BE521CABB1600A0CA47 /* LastLogTableViewCell.swift in Sources */,
 				18F9396821BC378800306EB0 /* AddView.swift in Sources */,
+				1860F5EF21D6A00700BD221F /* ShareTableViewCell.swift in Sources */,
 				18632B0B21C2A7AD00A0CA47 /* SettingViewController.swift in Sources */,
 				18F9395221B8381C00306EB0 /* HomeViewController.swift in Sources */,
 				18632BE721CABB3C00A0CA47 /* DateLogTableViewCell.swift in Sources */,
 				18F972EB21B7F8AF00FFAB90 /* ViewController.swift in Sources */,
+				1860F5ED21D696CE00BD221F /* LogDetailViewController.swift in Sources */,
 				18F9395021B7FF3C00306EB0 /* CustomizeUITableViewCell.swift in Sources */,
 				18F9731721B7FDC900FFAB90 /* FlagViewController.swift in Sources */,
 				18632BED21CBADC900A0CA47 /* CommentLineView.swift in Sources */,
@@ -607,13 +622,14 @@
 				18632BF521CE212100A0CA47 /* FlagDetailViewController.swift in Sources */,
 				18F9396A21BC47C900306EB0 /* CheckCardCell.swift in Sources */,
 				18F9399221BE55C500306EB0 /* CustomizeUICollectinViewCell.swift in Sources */,
+				1860F5EB21D692CD00BD221F /* ShowMoreView.swift in Sources */,
 				18F9395421B8383200306EB0 /* MineViewController.swift in Sources */,
 				18632BE921CAC11800A0CA47 /* FirstDateLogCell.swift in Sources */,
 				188C22A621CF46C800E2546A /* FlagDetailView.swift in Sources */,
 				18632BEF21CCD61D00A0CA47 /* LoginViewController.swift in Sources */,
 				18632BEB21CAC48500A0CA47 /* MonthLogCell.swift in Sources */,
 				188C22AD21CF6F5D00E2546A /* CommentTableViewCell.swift in Sources */,
-				1860F5CA21D48B2000BD221F /* package.swift in Sources */,
+				1860F5CA21D48B2000BD221F /* MailViewController.swift in Sources */,
 				18632B0721C2996500A0CA47 /* FangCustomizeUICollectionViewCell.swift in Sources */,
 				18632BF721CF3B8D00A0CA47 /* AlertView.swift in Sources */,
 				18632BF121CCF62200A0CA47 /* LoadView.swift in Sources */,
@@ -642,15 +658,15 @@
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
-		18632BC721C62BED00A0CA47 /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			name = CVCalendar;
-			targetProxy = 18632BC621C62BED00A0CA47 /* PBXContainerItemProxy */;
-		};
-		18632BDB21C65CF100A0CA47 /* PBXTargetDependency */ = {
+		1860F60821D74B4400BD221F /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			name = SnapKit;
-			targetProxy = 18632BDA21C65CF100A0CA47 /* PBXContainerItemProxy */;
+			targetProxy = 1860F60721D74B4400BD221F /* PBXContainerItemProxy */;
+		};
+		1860F60C21D74B4900BD221F /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			name = CVCalendar;
+			targetProxy = 1860F60B21D74B4900BD221F /* PBXContainerItemProxy */;
 		};
 		18F972FB21B7F8B000FFAB90 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;

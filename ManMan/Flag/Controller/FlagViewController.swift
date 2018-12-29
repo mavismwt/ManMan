@@ -38,6 +38,13 @@ class FlagViewController: UIViewController,UITableViewDelegate,UITableViewDataSo
     var dTime:TimeInterval? = 0
     var flagDatas = [flagData]()
     
+    var datas = ["1.跟朋友出去旅游一次\n2.周末在家做饭","回家胖五斤以内","学编程"]
+    
+    
+    override func viewWillAppear(_ animated: Bool) {
+        self.tableView.reloadData()
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view, typically from a nib.
@@ -114,14 +121,33 @@ class FlagViewController: UIViewController,UITableViewDelegate,UITableViewDataSo
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         var cell:CustomizeUITableViewCell? = tableView.dequeueReusableCell(withIdentifier: identifier) as? CustomizeUITableViewCell
         cell?.selectionStyle = .none
-        if (cell == nil)
-        {
-            
-        }
         let tapGestureRecognizer = UITapGestureRecognizer()
         tapGestureRecognizer.addTarget(self, action: #selector(comment))
         tapGestureRecognizer.delegate = self
         cell?.commentView.addGestureRecognizer(tapGestureRecognizer)
+        if indexPath.row == 0 {
+            let tag = UILabel()
+            cell?.addSubview(tag)
+            cell?.detail.text = datas[indexPath.row]
+            if let myFlagDetail:String = UserDefaults.standard.value(forKey: "flagDetail") as? String {
+                cell?.detail.text = myFlagDetail
+                UserDefaults.standard.set(nil, forKey: "flagDetail")
+            }
+            tag.text = "我"
+            tag.font = UIFont.systemFont(ofSize: 12)
+            tag.textAlignment = .center
+            tag.textColor = UIColor.white
+            tag.backgroundColor = UIColor.init(red: 255/255, green: 193/255, blue: 7/255, alpha: 1)
+            tag.layer.cornerRadius = 2
+            tag.clipsToBounds = true
+            tag.snp.makeConstraints { (make) in
+                make.centerY.equalTo((cell?.nickname.snp.centerY)!)
+                make.left.equalTo((cell?.nickname.snp.right)!).offset(8)
+                make.width.height.equalTo(14)
+            }
+        }else{
+            cell?.detail.text = datas[indexPath.row]
+        }
         return cell!
     }
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
@@ -129,7 +155,9 @@ class FlagViewController: UIViewController,UITableViewDelegate,UITableViewDataSo
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        self.comment()
+        let cell:CustomizeUITableViewCell = tableView.cellForRow(at: indexPath) as! CustomizeUITableViewCell
+        UserDefaults.standard.set(cell.detail.text, forKey: "detail")
+        
     }
     
     func gestureRecognizer(_ gestureRecognizer: UIGestureRecognizer, shouldReceive touch: UITouch) -> Bool {

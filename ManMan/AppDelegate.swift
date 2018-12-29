@@ -17,7 +17,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         // Override point for customization after application launch.
         let homeViewController = HomeViewController()
         let mineViewController = MineViewController()
-        let startViewController = StartViewController()
         let firstNavigationController = UINavigationController(rootViewController: homeViewController)
         let secondNavigationController = UINavigationController(rootViewController: mineViewController)
         let tabbarController = UITabBarController()

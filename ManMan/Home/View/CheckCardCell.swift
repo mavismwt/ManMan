@@ -70,7 +70,7 @@ class CheckCardCell: UITableViewCell {
             make.left.equalTo(88)
             make.height.equalTo(12)
         }
-        taskProcess.text = "已完成\(days)天"
+        taskProcess.text = "已坚持\(days)天"
         taskProcess.textColor = UIColor.init(red: 0, green: 0, blue: 0, alpha: 0.54)
         taskProcess.font = UIFont.systemFont(ofSize: 12)
         
@@ -97,7 +97,7 @@ class CheckCardCell: UITableViewCell {
     
     func reSetTableViewCell() {
         if isfinished == true {
-            taskProcess.text = "已完成\(days)天"
+            taskProcess.text = "已坚持\(days)天"
             background.removeFromSuperview()
             checkButton.removeFromSuperview()
         }

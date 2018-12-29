@@ -12,6 +12,7 @@ class CommentLineView: UIView {
     
     var inputText = UITextField()
     var sendButton = UIButton()
+    let inset = UIApplication.shared.delegate?.window??.safeAreaInsets ?? UIEdgeInsets.zero
     
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -19,7 +20,7 @@ class CommentLineView: UIView {
         self.addSubview(inputText)
         self.addSubview(sendButton)
         
-        self.frame = CGRect(x: 0, y: UIScreen.main.bounds.height-60, width: UIScreen.main.bounds.width, height: 60)
+        self.frame = CGRect(x: 0, y: UIScreen.main.bounds.height-60-inset.bottom, width: UIScreen.main.bounds.width, height: 60)
         self.backgroundColor = UIColor.init(red: 245/255, green: 245/255, blue: 245/255, alpha: 1)
         
         inputText.snp.makeConstraints { (make) in

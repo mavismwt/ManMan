@@ -14,15 +14,15 @@ class FlagDetailViewController: UIViewController,UITableViewDelegate,UITableView
         var profileURL = "UIImageView()"
         var nicknameText = "UILabel()"
         var detailText = "UITextView()"
-        var comment = [{
-            var userName = ""
-            var userComment = ""
-            }]
+//        var comment = [{
+//            var userName = ""
+//            var userComment = ""
+//            }]
         var commentNumText = "UILabel()"
         var likeNumText = "UILabel()"
     }
     
-    var str = ["我的flag","不要摸鱼","flag就是拿来倒的"]
+    var str = ["好棒啊！","flag就是拿来倒的"]
     
     var topLineView = UIView()
     var backButton = UIButton()
@@ -68,6 +68,9 @@ class FlagDetailViewController: UIViewController,UITableViewDelegate,UITableView
         let tapGestureRecognizer = UITapGestureRecognizer()
         tapGestureRecognizer.addTarget(self, action: #selector(beginEdit))
         detailView.commentView.addGestureRecognizer(tapGestureRecognizer)
+        if let detail:String = UserDefaults.standard.value(forKey: "detail") as? String {
+            detailView.detail.text = detail
+        }
         
         let navRect = self.navigationController?.navigationBar.frame
         tableView.snp.makeConstraints { (make) in
@@ -97,7 +100,7 @@ class FlagDetailViewController: UIViewController,UITableViewDelegate,UITableView
             make.centerX.equalToSuperview()
             make.height.equalTo(18)
         }
-        titleView.text = "Comment"
+        titleView.text = "FLAG"
         titleView.textColor = UIColor.init(red: 1, green: 1, blue: 1, alpha: 1)
         titleView.font = UIFont.boldSystemFont(ofSize: 18)
         
@@ -136,7 +139,10 @@ class FlagDetailViewController: UIViewController,UITableViewDelegate,UITableView
         self.str.append(self.commentView.inputText.text!)
         self.height.append(0)
         self.tableView.reloadData()
-        //self.view.layoutIfNeeded()
+        UIView.animate(withDuration: 0.5, animations: {
+            self.detailView.commentNumber = self.str.count
+            self.detailView.layoutIfNeeded()
+        })
         self.commentView.inputText.text = ""
         //})
         

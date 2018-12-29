@@ -39,6 +39,7 @@ class CustomizeUITableViewCell: UITableViewCell {
     var likeImg = UIImageView()
     var likeNumLabel = UILabel()
     var likeNumber:Int = 0
+    var isliked = false
     
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         
@@ -173,14 +174,17 @@ class CustomizeUITableViewCell: UITableViewCell {
     }
     
     @objc func like() {
-        UIView.transition(with: self.likeImg, duration: 0.5 , options: .transitionFlipFromLeft , animations: {
-            self.likeImg.image = UIImage(named: "likeSelected")
-        }, completion: nil)
-        DispatchQueue.main.asyncAfter(deadline: .now()+0.4, execute:
-            {
-                self.likeNumber += 1
-                self.likeNumLabel.text = "\(self.likeNumber)"
-        })
+        if isliked == false {
+            isliked = true
+            UIView.transition(with: self.likeImg, duration: 0.5 , options: .transitionFlipFromLeft , animations: {
+                self.likeImg.image = UIImage(named: "likeSelected")
+            }, completion: nil)
+            DispatchQueue.main.asyncAfter(deadline: .now()+0.4, execute:
+                {
+                    self.likeNumber += 1
+                    self.likeNumLabel.text = "\(self.likeNumber)"
+            })
+        }
     }
     
 //    func textView(_ textView: UITextView, shouldChangeTextIn range: NSRange, replacementText text: String) -> Bool {

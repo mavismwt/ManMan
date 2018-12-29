@@ -64,6 +64,8 @@ class LoadView: UIView {
             make.width.height.equalTo(300)
         }
         textView.font = UIFont.systemFont(ofSize: 18)
+        textView.isEditable = false
+        textView.isSelectable = false
         
         
     }

@@ -143,9 +143,16 @@ class AddCheckViewController: UIViewController,UICollectionViewDelegate,UICollec
         self.tabBarController?.tabBar.isHidden = false
     }
     @objc func backTo() {
+        let alertView = AlertView()
+        UIView.animate(withDuration: 1, animations: {
+            self.view.addSubview(alertView)
+        })
+        DispatchQueue.main.asyncAfter(deadline: .now()+1, execute:
+            {
+                self.navigationController?.popViewController(animated: true)
+        })
         UserDefaults.standard.set(self.selectedTaskNumber, forKey: "taskNumber")
-        self.navigationController?.popViewController(animated: true)
-        self.tabBarController?.tabBar.isHidden = false
+        
     }
     
     @objc func UserDefined() {

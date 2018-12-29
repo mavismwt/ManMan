@@ -17,10 +17,10 @@ class FlagDetail: UIView {
         var profileURL = "UIImageView()"
         var nicknameText = "UILabel()"
         var detailText = "UITextView()"
-        var comment = [{
-            var userName = ""
-            var userComment = ""
-            }]
+//        var comment = [{
+//            var userName = ""
+//            var userComment = ""
+//            }]
         var commentNumText = "UILabel()"
         var likeNumText = "UILabel()"
     }
@@ -33,7 +33,7 @@ class FlagDetail: UIView {
     var detail = UITextView()
     var commentImg = UIImageView()
     var commentNumLabel = UILabel()
-    var commentNumber:Int = 0
+    var commentNumber:Int = 2
     var likeView = UIView()
     var likeImg = UIImageView()
     var likeNumLabel = UILabel()
@@ -107,7 +107,7 @@ class FlagDetail: UIView {
         time.textColor = UIColor.init(red: 0/255, green: 0/255, blue: 0/255, alpha: 0.54)
         time.text = "2018年12月31日 13:00"
         
-        detail.text = "这是我的flag这是我的flag这是我的flag这是我的flag这是我的flag这是我的flag这是我的flag这是我的flag这是我的flag"
+        detail.text = "1.跟朋友出去旅游一次\n2.周末在家做饭"
         let height = FlagDetail.heightForTextView(textView: detail, fixedWidth: UIScreen.main.bounds.size.width-72)
         detail.snp.makeConstraints{(make) in
             make.top.equalToSuperview().offset(64)
@@ -184,11 +184,10 @@ class FlagDetail: UIView {
         })
     }
     
-    
     func setValueForCell(flag:flagData){
-        profile.image = UIImage(named: flag.profileURL)
-        nickname.text = flag.nicknameText
-        detail.text = flag.detailText
+        //profile.image = UIImage(named: flag.profileURL)
+        //nickname.text = flag.nicknameText
+        //detail.text = flag.detailText
         commentNumLabel.text = flag.commentNumText
         likeNumLabel.text = flag.likeNumText
     }

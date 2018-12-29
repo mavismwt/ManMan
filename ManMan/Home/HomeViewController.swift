@@ -111,7 +111,6 @@ class HomeViewController: UIViewController,UITableViewDelegate,UITableViewDataSo
     
     override func viewWillAppear(_ animated: Bool) {
         self.tabBarController?.tabBar.isHidden = false
-        print("ok")
         if let taskNumber:Int = UserDefaults.standard.value(forKey: "taskNumber") as? Int {
             print(taskNumber)
             tasks.append(taskDetail.init(name: titleStr[taskNumber], icon: imageName[taskNumber], day: 0, isfinished: false))
@@ -169,21 +168,6 @@ class HomeViewController: UIViewController,UITableViewDelegate,UITableViewDataSo
         monthLabel.text = getNowDate()
         monthLabel.textColor = UIColor.white
         monthLabel.font = UIFont.boldSystemFont(ofSize: 20)
-        
-//        gotoFlag.snp.makeConstraints { (make) in
-//            make.top.equalTo(topLineView.snp.bottom).offset(16)
-//            make.left.equalTo(16)
-//            make.right.equalTo(self.view.snp.right).offset(-16)
-//            make.height.equalTo(50)
-//        }
-//        gotoFlag.layer.cornerRadius = 8
-//        gotoFlag.clipsToBounds = true
-//        gotoFlag.backgroundColor = UIColor.white
-//        gotoFlag.setTitle("设定你的本月FLAG吧！", for: .normal)
-//        gotoFlag.setTitleColor(UIColor.init(red: 255/255, green: 193/255, blue: 7/255, alpha: 1), for: .normal)
-//        gotoFlag.contentHorizontalAlignment = UIControl.ContentHorizontalAlignment.left
-//        gotoFlag.contentEdgeInsets = UIEdgeInsets(top: 0, left: 16, bottom: 0, right: 0)
-//        gotoFlag.addTarget(self, action: #selector(flag), for: .touchUpInside)
         
         tableView.frame =  CGRect(x: 0, y: inset.top+(navRect?.height)!, width: SCREENSIZE.width, height: SCREENSIZE.height-166-inset.top-inset.bottom)
         tableView.backgroundColor = UIColor.init(red: 238/255, green: 238/255, blue: 238/255, alpha: 1)
@@ -291,12 +275,12 @@ class HomeViewController: UIViewController,UITableViewDelegate,UITableViewDataSo
 //        tapGestureRecognizer.addTarget(self, action: #selector(check))
 //        cell.cell.addGestureRecognizer(tapGestureRecognizer)
         cell.selectionStyle = .none
-        self.img.frame = CGRect(x: cell.frame.width-115, y: cell.frame.maxY+50, width: 150, height: 150)
+        self.img.frame = CGRect(x: cell.frame.width-115, y: cell.frame.maxY-20, width: 150, height: 150)
         if cell.isfinished == false {
             UIView.animate(withDuration: 0.25, delay: 0, options: .curveEaseIn, animations: {
                 cell.checkButton.removeFromSuperview()
                 self.view.addSubview(self.img)
-                self.img.frame = CGRect(x: cell.frame.width-115, y: cell.frame.maxY+50, width: 110, height: 110)
+                self.img.frame = CGRect(x: cell.frame.width-115, y: cell.frame.maxY-20, width: 110, height: 110)
                 self.img.layer.cornerRadius = 60
             }, completion: nil)
             DispatchQueue.main.asyncAfter(deadline: .now()+0.25, execute:
