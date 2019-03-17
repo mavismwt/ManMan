@@ -112,10 +112,11 @@ class HomeViewController: UIViewController,UITableViewDelegate,UITableViewDataSo
     override func viewWillAppear(_ animated: Bool) {
         self.tabBarController?.tabBar.isHidden = false
         if let taskNumber:Int = UserDefaults.standard.value(forKey: "taskNumber") as? Int {
-            print(taskNumber)
             tasks.append(taskDetail.init(name: titleStr[taskNumber], icon: imageName[taskNumber], day: 0, isfinished: false))
-            self.tableView.reloadData()
             UserDefaults.standard.set(nil, forKey: "taskNumber")
+            print(self.tasks)
+            self.tableView.reloadData()
+            self.view.layoutIfNeeded()
         }
         if let userDefinedTaskNumber:Int = UserDefaults.standard.value(forKey: "userDefinedTaskNumber") as? Int {
             let userDefinedTaskName:String =
@@ -125,8 +126,12 @@ class HomeViewController: UIViewController,UITableViewDelegate,UITableViewDataSo
             UserDefaults.standard.set(nil, forKey: "taskName")
             UserDefaults.standard.set(nil, forKey: "userDefinedTaskNumber")
         }
-        if let isOn:Bool =  UserDefaults.standard.value(forKey: "isVolumnOn") as? Bool {
-            self.isVolumnOn = isOn
+        if let isOn:Int =  UserDefaults.standard.value(forKey: "isVolumnOn") as? Int {
+            if isOn == 1 {
+                self.isVolumnOn = true
+            } else {
+                self.isVolumnOn = false
+            }
             UserDefaults.standard.set(nil, forKey: "isVolumnOn")
         }
     }
@@ -275,12 +280,13 @@ class HomeViewController: UIViewController,UITableViewDelegate,UITableViewDataSo
 //        tapGestureRecognizer.addTarget(self, action: #selector(check))
 //        cell.cell.addGestureRecognizer(tapGestureRecognizer)
         cell.selectionStyle = .none
-        self.img.frame = CGRect(x: cell.frame.width-115, y: cell.frame.maxY-20, width: 150, height: 150)
+        //self.img.frame = CGRect(x: cell.frame.width-115, y: cell.frame.maxY-20, width: 150, height: 150)
+        self.img.frame = CGRect(x: cell.frame.width-115, y: cell.frame.maxY, width: 150, height: 150)
         if cell.isfinished == false {
             UIView.animate(withDuration: 0.25, delay: 0, options: .curveEaseIn, animations: {
                 cell.checkButton.removeFromSuperview()
                 self.view.addSubview(self.img)
-                self.img.frame = CGRect(x: cell.frame.width-115, y: cell.frame.maxY-20, width: 110, height: 110)
+                self.img.frame = CGRect(x: cell.frame.width-115, y: cell.frame.maxY, width: 110, height: 110)
                 self.img.layer.cornerRadius = 60
             }, completion: nil)
             DispatchQueue.main.asyncAfter(deadline: .now()+0.25, execute:
@@ -292,16 +298,20 @@ class HomeViewController: UIViewController,UITableViewDelegate,UITableViewDataSo
                     cell.reSetTableViewCell()
                     self.img.removeFromSuperview()
                     //self.initImg()
-                    //if self.isVolumnOn == true {
+                    if self.isVolumnOn == true {
                         self.localMusic()
-                    //}
+                    }
             })
             cell.isfinished = true
         }
     }
     
     func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {
-        return true
+        if indexPath.section == 0 {
+            return false
+        } else {
+            return true
+        }
     }
     
     // 左滑按钮设置
@@ -321,6 +331,7 @@ class HomeViewController: UIViewController,UITableViewDelegate,UITableViewDataSo
             action, index in
             print("share button tapped")
             self.tasks.remove(at: indexPath.row)
+            print(self.tasks)
             tableView.deleteRows(at: [indexPath], with: UITableView.RowAnimation.automatic)
         }
         delete.backgroundColor = UIColor.init(red: 241/255, green: 107/255, blue: 104/255, alpha: 1)

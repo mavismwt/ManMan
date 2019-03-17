@@ -26,6 +26,7 @@ class FlagViewController: UIViewController,UITableViewDelegate,UITableViewDataSo
     var backButton = UIButton()
     var titleView = UILabel()
     var letterButton = UIButton()
+    
     //var commentView = CommentLineView()
     
     let coverView = UIView()
@@ -101,6 +102,8 @@ class FlagViewController: UIViewController,UITableViewDelegate,UITableViewDataSo
         coverView.frame = CGRect(x: 0, y: 0, width: 0, height: 0)
         self.view.addSubview(coverView)
         
+        self.sentAlert()
+        
     }
     
     @objc func back() {
@@ -165,6 +168,16 @@ class FlagViewController: UIViewController,UITableViewDelegate,UITableViewDataSo
             return false
         }
         return true
+    }
+    
+    func sentAlert() {
+        let alert = UIAlertController(title: "注意", message: "Flag功能仅在每月1-2号开放", preferredStyle: .alert)
+        let okAction = UIAlertAction(title: "确定", style: .default, handler: {
+            action in
+            print("点击了确定")
+        })
+        alert.addAction(okAction)
+        self.present(alert, animated: true, completion: nil)
     }
     
     @objc func comment() {

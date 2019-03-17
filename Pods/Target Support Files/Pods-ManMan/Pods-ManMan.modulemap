@@ -1,0 +1,6 @@
+module Pods_ManMan {
+  umbrella header "Pods-ManMan-umbrella.h"
+
+  export *
+  module * { export * }
+}

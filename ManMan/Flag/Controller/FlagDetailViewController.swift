@@ -144,6 +144,7 @@ class FlagDetailViewController: UIViewController,UITableViewDelegate,UITableView
             self.detailView.layoutIfNeeded()
         })
         self.commentView.inputText.text = ""
+//        self.commentView.frame = CGRect(x: 0, y: UIScreen.main.bounds.height-60-inset.bottom, width: UIScreen.main.bounds.width, height: 60)
         //})
         
     }
@@ -191,11 +192,20 @@ class FlagDetailViewController: UIViewController,UITableViewDelegate,UITableView
         let margin = UIScreen.main.bounds.height - y
         print(margin)
         // 更新约束,执行动画
-        commentView.snp.updateConstraints { (make) in
-            make.left.equalTo(0)
-            make.right.equalTo(0)
-            make.height.equalTo(60)
-            make.bottom.equalTo(-margin)
+        if margin != 0.0 {
+            commentView.snp.updateConstraints { (make) in
+                make.left.equalTo(0)
+                make.right.equalTo(0)
+                make.height.equalTo(60)
+                make.bottom.equalTo(-margin)
+            }
+        }else{
+            commentView.snp.updateConstraints { (make) in
+                make.left.equalTo(0)
+                make.right.equalTo(0)
+                make.height.equalTo(60)
+                make.bottom.equalTo(-inset.bottom)
+            }
         }
         UIView.animate(withDuration: duration) {
             self.view.layoutIfNeeded()

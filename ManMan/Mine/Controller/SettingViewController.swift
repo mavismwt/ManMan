@@ -71,8 +71,10 @@ class SettingViewController: UIViewController,UITableViewDelegate,UITableViewDat
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         var cell:SettingTableViewCell? = tableView.dequeueReusableCell(withIdentifier: identifier) as? SettingTableViewCell
         cell?.title.text = listDetail[indexPath.row]
+        cell?.setting.isOn = true
         cell?.selectionStyle = .none
         isVolumnOn[indexPath.row] = (cell?.setting.isOn)!
+        print(cell?.setting.isOn)
         return cell!
     }
     
@@ -87,5 +89,6 @@ class SettingViewController: UIViewController,UITableViewDelegate,UITableViewDat
     
     override func viewWillDisappear(_ animated: Bool) {
         UserDefaults.standard.set(self.isVolumnOn[0], forKey: "isVolumnOn")
+        print(UserDefaults.standard.value(forKey: "isVolumnOn"))
     }
 }

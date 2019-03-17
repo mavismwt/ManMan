@@ -66,7 +66,7 @@ class AddLogViewController: UIViewController,UITextViewDelegate {
         rightButton.addTarget(self, action: #selector(back), for: .touchUpInside)
         
         textView.snp.makeConstraints { (make) in
-            make.top.equalTo(86)
+            make.top.equalTo((navRect?.height)!+inset.top+16)
             make.left.equalTo(16)
             make.right.equalTo(-16)
             make.height.equalTo(SCREENSIZE.height/2)

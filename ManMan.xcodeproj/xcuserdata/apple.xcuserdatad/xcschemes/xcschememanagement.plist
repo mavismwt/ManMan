@@ -7,7 +7,25 @@
 		<key>ManMan.xcscheme_^#shared#^_</key>
 		<dict>
 			<key>orderHint</key>
-			<integer>2</integer>
+			<integer>4</integer>
+		</dict>
+	</dict>
+	<key>SuppressBuildableAutocreation</key>
+	<dict>
+		<key>18F972E421B7F8AE00FFAB90</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
+		<key>18F972F821B7F8B000FFAB90</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
+		<key>18F9730321B7F8B100FFAB90</key>
+		<dict>
+			<key>primary</key>
+			<true/>
 		</dict>
 	</dict>
 </dict>

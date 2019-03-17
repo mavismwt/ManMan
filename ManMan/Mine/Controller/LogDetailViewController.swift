@@ -17,6 +17,8 @@ class LogDetailViewController: UIViewController,CVCalendarViewDelegate,CVCalenda
     var titleView = UILabel()
     var textView = UIView()
     var inputText = UITextView()
+    var monthView = UILabel()
+    var cView = UIView()
     
     let inset = UIApplication.shared.delegate?.window??.safeAreaInsets ?? UIEdgeInsets.zero
     let SCREENSIZE = UIScreen.main.bounds.size
@@ -80,23 +82,52 @@ class LogDetailViewController: UIViewController,CVCalendarViewDelegate,CVCalenda
     }
     
     func setCalendarView() {
+//        currentCalendar = Calendar.init(identifier: .gregorian)
+//        //初始化星期菜单栏/日历
+//        let WidthOfCalendar = SCREENSIZE.width-28
+//        let navRect = self.navigationController?.navigationBar.frame
+//        menuView = CVCalendarMenuView(frame: CGRect(x:14, y:(navRect?.height)!+inset.top+16, width:WidthOfCalendar, height:15))
+//        calendarView = CVCalendarView(frame: CGRect(x:14, y:(navRect?.height)!+inset.top+16, width:WidthOfCalendar, height:WidthOfCalendar))
+//        calendarView.backgroundColor = UIColor.white
+//        calendarView.layer.cornerRadius = 8
+//        calendarView.layer.shadowColor = UIColor.black.cgColor
+//        calendarView.layer.shadowOffset = CGSize(width: 3, height: 6)
+//        //代理
+//        menuView.menuViewDelegate = self
+//        calendarView.calendarDelegate = self
+//        calendarView.calendarAppearanceDelegate = self
+//        //将菜单视图和日历视图添加到主视图上
+//        //self.view.addSubview(menuView)
+//        self.view.addSubview(calendarView)
         currentCalendar = Calendar.init(identifier: .gregorian)
         //初始化星期菜单栏/日历
         let WidthOfCalendar = SCREENSIZE.width-28
         let navRect = self.navigationController?.navigationBar.frame
-        menuView = CVCalendarMenuView(frame: CGRect(x:14, y:(navRect?.height)!+inset.top+16, width:WidthOfCalendar, height:15))
-        calendarView = CVCalendarView(frame: CGRect(x:14, y:(navRect?.height)!+inset.top+16, width:WidthOfCalendar, height:WidthOfCalendar))
-        calendarView.backgroundColor = UIColor.white
-        calendarView.layer.cornerRadius = 8
-        calendarView.layer.shadowColor = UIColor.black.cgColor
-        calendarView.layer.shadowOffset = CGSize(width: 3, height: 6)
+        cView.frame = CGRect(x:14, y:(navRect?.height)!+inset.top+16, width:WidthOfCalendar, height:WidthOfCalendar)
+        cView.backgroundColor = UIColor.white
+        cView.layer.cornerRadius = 8
+        cView.layer.shadowColor = UIColor.black.cgColor
+        cView.layer.shadowOffset = CGSize(width: 3, height: 6)
+        monthView.frame = CGRect(x:0, y:8, width:WidthOfCalendar, height:24)
+        monthView.textAlignment = .center
+        monthView.text = self.getNowMonth()
+        menuView = CVCalendarMenuView(frame: CGRect(x:0, y:50, width:WidthOfCalendar, height:24))
+        //        menuView.backgroundColor = UIColor.white
+        //        menuView.layer.cornerRadius = 8
+        calendarView = CVCalendarView(frame: CGRect(x:0, y:80, width:WidthOfCalendar, height:WidthOfCalendar-80))
+        //        calendarView.backgroundColor = UIColor.white
+        //        calendarView.layer.cornerRadius = 8
+        //        calendarView.layer.shadowColor = UIColor.black.cgColor
+        //        calendarView.layer.shadowOffset = CGSize(width: 3, height: 6)
         //代理
         menuView.menuViewDelegate = self
         calendarView.calendarDelegate = self
         calendarView.calendarAppearanceDelegate = self
         //将菜单视图和日历视图添加到主视图上
-        //self.view.addSubview(menuView)
-        self.view.addSubview(calendarView)
+        cView.addSubview(monthView)
+        cView.addSubview(calendarView)
+        cView.addSubview(menuView)
+        self.view.addSubview(cView)
         
     }
     
@@ -204,6 +235,60 @@ class LogDetailViewController: UIViewController,CVCalendarViewDelegate,CVCalenda
             self.view.layoutIfNeeded()
             break
         }
+    }
+    func getNowMonth() -> String {
+        let date = Date()
+        let timeFormatter = DateFormatter()
+        timeFormatter.dateFormat = "MMMM"
+        let strNowMonth = timeFormatter.string(from: date) as String
+        return strNowMonth
+    }
+    
+    func presentedDateUpdated(_ date: CVDate) {
+        //导航栏显示当前日历的年月
+        var month = String()
+        switch date.month {
+        case 1:
+            month = "January"
+            break
+        case 2:
+            month = "February"
+            break
+        case 3:
+            month = "March"
+            break
+        case 4:
+            month = "April"
+            break
+        case 5:
+            month = "May"
+            break
+        case 6:
+            month = "June"
+            break
+        case 7:
+            month = "July"
+            break
+        case 8:
+            month = "Augest"
+            break
+        case 9:
+            month = "September"
+            break
+        case 10:
+            month = "October"
+            break
+        case 11:
+            month = "November"
+            break
+        case 12:
+            month = "December"
+            break
+        default:
+            break
+        }
+        self.monthView.text = month
+        //date.globalDescription
     }
     
     

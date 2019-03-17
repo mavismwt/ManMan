@@ -112,7 +112,7 @@ class LogViewController: UIViewController,UIScrollViewDelegate,CVCalendarViewDel
         cView.layer.shadowOffset = CGSize(width: 3, height: 6)
         monthView.frame = CGRect(x:0, y:8, width:WidthOfCalendar, height:24)
         monthView.textAlignment = .center
-        monthView.text = "December"
+        monthView.text = self.getNowMonth()
         menuView = CVCalendarMenuView(frame: CGRect(x:0, y:50, width:WidthOfCalendar, height:24))
 //        menuView.backgroundColor = UIColor.white
 //        menuView.layer.cornerRadius = 8
@@ -290,6 +290,14 @@ class LogViewController: UIViewController,UIScrollViewDelegate,CVCalendarViewDel
     
     func didSelectDayView(_ dayView: DayView, animationDidFinish: Bool) {
         //print("selected")
+    }
+    
+    func getNowMonth() -> String {
+        let date = Date()
+        let timeFormatter = DateFormatter()
+        timeFormatter.dateFormat = "MMMM"
+        let strNowMonth = timeFormatter.string(from: date) as String
+        return strNowMonth
     }
     
     func presentedDateUpdated(_ date: CVDate) {

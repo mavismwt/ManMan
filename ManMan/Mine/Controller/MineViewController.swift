@@ -237,11 +237,6 @@ class MineViewController: UIViewController,UITableViewDelegate,UITableViewDataSo
     
     
     
-    
- 
-    
-    
-    
     override func viewWillAppear(_ animated: Bool) {
         self.tabBarController?.tabBar.addSubview(coverView)
         self.tabBarController?.tabBar.isHidden = false

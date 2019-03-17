@@ -7,9 +7,10 @@
 //
 
 import UIKit
+import Alamofire
 
 @UIApplicationMain
-class AppDelegate: UIResponder, UIApplicationDelegate {
+class AppDelegate: UIResponder, UIApplicationDelegate,WXApiDelegate {
 
     var window: UIWindow?
 
@@ -21,7 +22,12 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         let secondNavigationController = UINavigationController(rootViewController: mineViewController)
         let tabbarController = UITabBarController()
         tabbarController.viewControllers = [firstNavigationController,secondNavigationController]
-        window?.rootViewController = tabbarController
+        let testViewController = TestViewController()
+        window?.rootViewController = testViewController
+        //window?.rootViewController = tabbarController
+        //MARK: -注册微信
+        //let WXAppID = "wx7ef876fe1742f5df"
+        WXApi.registerApp("wx7ef876fe1742f5df")
         return true
     }
 
@@ -47,7 +53,56 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     func applicationWillTerminate(_ application: UIApplication) {
         // Called when the application is about to terminate. Save data if appropriate. See also applicationDidEnterBackground:.
     }
-
-
+    
+//    func application(_ app: UIApplication, open url: URL, options: [UIApplication.OpenURLOptionsKey : Any] = [:]) -> Bool {
+//        let urlKey: String = options[UIApplication.OpenURLOptionsKey.sourceApplication] as! String
+//        if urlKey == "com.tencent.xin" {
+//            // 微信的回调
+//            return WXApi.handleOpen(url, delegate: self)
+//        }
+//        return true
+//    }
+    
+    //  微信跳转回调
+    func application(_ app: UIApplication, open url: URL, options: [UIApplication.OpenURLOptionsKey : Any] = [:]) -> Bool {
+        WXApi.handleOpen(url, delegate: self)
+        return true
+    }
+    
+    //  微信回调
+    func onResp(_ resp: BaseResp){
+        //  微信登录回调
+        if resp.errCode == 0 && resp.type == 0{//授权成功
+            let response = resp as! SendAuthResp
+            //  微信登录成功通知
+            NotificationCenter.default.post(name: NSNotification.Name(rawValue: "WXLoginSuccessNotification"), object: response.code)
+            
+        }
+    }
+    
+    //  微信成功通知
+    func WXLoginSuccess(notification:Notification) {
+        let code = notification.object as! String
+        let AppID = "wx7ef876fe1742f5df"
+        let AppSecret = "7842d96f93d4116b247a6d38c8824c29"
+        let url = "https://api.weixin.qq.com/sns/oauth2/access_token?appid=\(AppID)&secret=\(AppSecret)&code=\(code)&grant_type=authorization_code"
+        //获取access_token
+        //Alamofire.request(url)
+//        request().responseJSON { response in
+//            print(response.request)  // original URL request
+//            print(response.response) // HTTP URL response
+//            print(response.data)     // server data
+//            print(response.result)   // result of response serialization
+//
+//            if let JSON = response.result.value {
+//                print("JSON: \(JSON)")
+//            }
+//        }
+//        RequestTool.GETRequestWith(url, success: { (task, data) in
+//            print(data)
+//        }) { (task, error) in
+//            print(error)
+//        }
+    }
 }
 

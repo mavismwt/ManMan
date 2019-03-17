@@ -173,7 +173,7 @@ class ShareViewController: UIViewController,UITableViewDelegate,UITableViewDataS
     func getNowDate() -> String {
         let date = Date()
         let timeFormatter = DateFormatter()
-        timeFormatter.dateFormat = "MM月d日"
+        timeFormatter.dateFormat = "M月d日"
         let strNowMonth = timeFormatter.string(from: date) as String
         return strNowMonth
     }
@@ -205,7 +205,7 @@ class ShareViewController: UIViewController,UITableViewDelegate,UITableViewDataS
     
     //UIView转UIImage
     func getImageFromView(view:UIView) ->UIImage{
-        UIGraphicsBeginImageContext(view.bounds.size)
+        UIGraphicsBeginImageContextWithOptions(view.bounds.size, false, 0.0)
         view.layer.render(in: UIGraphicsGetCurrentContext()!)
         let image = UIGraphicsGetImageFromCurrentImageContext()
         UIGraphicsEndImageContext()
