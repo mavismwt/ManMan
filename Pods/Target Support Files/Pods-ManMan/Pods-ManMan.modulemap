@@ -1,4 +1,4 @@
-module Pods_ManMan {
+framework module Pods_ManMan {
   umbrella header "Pods-ManMan-umbrella.h"
 
   export *

@@ -1,20 +1,24 @@
 PODS:
-  - Alamofire (5.0.0-beta.3)
+  - Alamofire (4.0.1)
+  - SwiftyJSON (4.2.0)
   - WechatOpenSDK (1.8.4)
 
 DEPENDENCIES:
-  - Alamofire (~> 5.0.0-beta.3)
+  - Alamofire (~> 4.0.1)
+  - SwiftyJSON (~> 4.0)
   - WechatOpenSDK
 
 SPEC REPOS:
   https://github.com/cocoapods/specs.git:
     - Alamofire
+    - SwiftyJSON
     - WechatOpenSDK
 
 SPEC CHECKSUMS:
-  Alamofire: 50d6fa7e8cbe7f84559e86ab641ffd029db655f8
+  Alamofire: 7682d43245de14874acd142ec137b144aa1dd335
+  SwiftyJSON: c4bcba26dd9ec7a027fc8eade48e2c911f229e96
   WechatOpenSDK: 9b721089507c895d05f997408c30bb6e6f5f9b60
 
-PODFILE CHECKSUM: 1931bed16a64436566f0f6aeeb6c1c178cdc466d
+PODFILE CHECKSUM: da238d27be1c2150811807dcb8eaf826462b2a61
 
 COCOAPODS: 1.6.1

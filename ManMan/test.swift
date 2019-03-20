@@ -12,6 +12,7 @@ import Alamofire
 class TestViewController: UIViewController {
     
     var bt = UIButton()
+    var text = UITextField()
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -19,10 +20,18 @@ class TestViewController: UIViewController {
         
         bt = UIButton(frame: CGRect(x: 100, y: 200, width: 200, height: 100))
         bt.backgroundColor = UIColor.green
+        print("ok")
         bt.addTarget(self, action: #selector(wxLoginBtnAction), for: .touchUpInside)
         
-        self.view.addSubview(bt)
         
+        text = UITextField(frame: CGRect(x: 50, y: 400, width: 300, height: 200))
+        text.text = "here"
+        text.backgroundColor = UIColor.blue
+        
+        
+        self.view.backgroundColor = UIColor.white
+        self.view.addSubview(bt)
+        //self.view.addSubview(text)
     }
     
     @objc func login() {
@@ -40,6 +49,7 @@ class TestViewController: UIViewController {
         }else{
             if #available(iOS 10.0, *) {
                 UIApplication.shared.open(URL.init(string: "http://weixin.qq.com/r/qUQVDfDEVK0rrbRu9xG7")!, options: [:], completionHandler: nil)
+                print("okokokkkkk")
             } else {
                 // Fallback on earlier versions
                 UIApplication.shared.openURL(URL.init(string: "http://weixin.qq.com/r/qUQVDfDEVK0rrbRu9xG7")!)
@@ -47,8 +57,16 @@ class TestViewController: UIViewController {
         }
     }
     
-    func test() {}
+    func test() {
+    }
     
-    
+//    override func viewWillAppear(_ animated: Bool) {
+//        print("lii")
+//        if let str = UserDefaults.standard.value(forKey: "user") {
+//            UIView.animate(withDuration: 0.5, animations: {
+//                self.text.text = str as! String
+//            })
+//        }
+//    }
 }
 
