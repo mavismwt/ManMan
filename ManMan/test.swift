@@ -12,32 +12,49 @@ import Alamofire
 class TestViewController: UIViewController {
     
     var bt = UIButton()
+    var bt2 = UIButton()
     var text = UITextField()
     
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view, typically from a nib.
         
-        bt = UIButton(frame: CGRect(x: 100, y: 200, width: 200, height: 100))
+        bt = UIButton(frame: CGRect(x: 100, y: 200, width: 200, height: 80))
         bt.backgroundColor = UIColor.green
-        print("ok")
         bt.addTarget(self, action: #selector(wxLoginBtnAction), for: .touchUpInside)
+        bt.setTitle("授权登录", for: .normal)
+
         
-        
-        text = UITextField(frame: CGRect(x: 50, y: 400, width: 300, height: 200))
-        text.text = "here"
-        text.backgroundColor = UIColor.blue
-        
+        bt2 = UIButton(frame: CGRect(x: 100, y: 400, width: 200, height: 80))
+        bt2.backgroundColor = UIColor.green
+        bt2.addTarget(self, action: #selector(req), for: .touchUpInside)
+        bt2.setTitle("获取信息", for: .normal)
         
         self.view.backgroundColor = UIColor.white
         self.view.addSubview(bt)
-        //self.view.addSubview(text)
+        self.view.addSubview(bt2)
+        
     }
     
-    @objc func login() {
-//        // 微信登录通知
-//        NotificationCenter.default.addObserver(self,selector: #selector(WXLoginSuccess(notification:)),name: NSNotification.Name(rawValue: "WXLoginSuccessNotification"),object: nil)
+    @objc func req() {
+        
+        if let token = UserDefaults.standard.value(forKey: "token") {
+            //let headers:HTTPHeaders = ["Authorization": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE1NTM4NTgzODUsImlkIjoib3ExNVU1OTdLTVNlNTV2d21aLUN3ZDZkSDFNMCIsIm9yaWdfaWF0IjoxNTUzMjUzNTg1fQ.dFn6oEWI-uE37n53rzMz2ZUOyH-uJi-7kAeHHFr-G_E"]
+            let URLStr = "https://slow.hustonline.net/api/v1/user"
+            let headers:HTTPHeaders = ["Authorization": "Bearer \(token)"]
+            //Alamofire.request(URLStr, method:.get, headers: headers).responseJSON
+            Alamofire.request(URLStr, method: .get, encoding: URLEncoding.default, headers: headers).responseJSON { response in
+                print(response)
+                print(response.request?.httpBody)
+                print(response.request?.httpBodyStream)
+                print(response.request?.allHTTPHeaderFields)
+            }
+        }
+        
     }
+    
+    
+    
     //调起微信
     @objc func wxLoginBtnAction() {
         let urlStr = "weixin://"
@@ -57,16 +74,25 @@ class TestViewController: UIViewController {
         }
     }
     
-    func test() {
-    }
-    
-//    override func viewWillAppear(_ animated: Bool) {
-//        print("lii")
-//        if let str = UserDefaults.standard.value(forKey: "user") {
-//            UIView.animate(withDuration: 0.5, animations: {
-//                self.text.text = str as! String
-//            })
+//    @objc func req() {
+//        let token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE1NTM2OTExNjcsImlkIjoiIiwib3JpZ19pYXQiOjE1NTMwODYzNjd9.yjBm75SsyUjq-fu3Kyi8p8Kqycq8ObvQogKPv96aRE0"
+//        let AppID = "wx7ef876fe1742f5df"
+//        let AppSecret = "7842d96f93d4116b247a6d38c8824c29"
+//        let urlStr = "https://slow.hustonline.net/api/v1/record/action/insert"
+//        let parameter:Parameters = ["code": code]
+//        //获取access_token
+//        print(token)
+//        Alamofire.request(urlStr,method: .post,parameters:["code": code]).responseJSON { response in
+//            let value = response.result.value
+//            print(value)
 //        }
 //    }
+    
+//    var milliStamp : String {
+//        let timeInterval: TimeInterval = self.timeIntervalSince1970
+//        let millisecond = CLongLong(round(timeInterval*1000))
+//        return "\(millisecond)"
+//    }
+    
 }
 
