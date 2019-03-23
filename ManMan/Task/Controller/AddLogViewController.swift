@@ -7,8 +7,6 @@
 //
 
 import UIKit
-import Alamofire
-import SwiftyJSON
 
 class AddLogViewController: UIViewController,UITextViewDelegate {
     
@@ -97,28 +95,6 @@ class AddLogViewController: UIViewController,UITextViewDelegate {
     @objc func back() {
         self.navigationController?.popViewController(animated: true)
         self.tabBarController?.tabBar.isHidden = false
-        //let token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE1NTM4NDg2ODQsImlkIjoib3ExNVU1OTdLTVNlNTV2d21aLUN3ZDZkSDFNMCIsIm9yaWdfaWF0IjoxNTUzMjQzODg0fQ.ytyaCePdOCkkffE3CdZs7OuyDY1diUA2f4Ga49gBgqo"
-        //let AppID = "wx7ef876fe1742f5df"
-        //let AppSecret = "7842d96f93d4116b247a6d38c8824c29"
-        //let urlStr = "https://slow.hustonline.net/api/v1/record/action/insert"
-        let userURLStr = "https://slow.hustonline.net/api/v1/user"
-        let json = JSON()
-        let parameter:Parameters = ["records": json]
-        //获取access_token
-        //print(token)
-//        Alamofire.request(urlStr,method: .post,parameters:["records": json],headers:["Authorization" :"Bearer \(token)"]).responseJSON { response in
-//            let value = response.result.value
-//            print(value)
-//        }
-        let token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE1NTM4NTE5NDEsImlkIjoib3ExNVU1OTdLTVNlNTV2d21aLUN3ZDZkSDFNMCIsIm9yaWdfaWF0IjoxNTUzMjQ3MTQxfQ.3sZqoGAZZ6ccQ7ODwu-vn7oaImObk3E2Vwaljv31v24"
-        Alamofire.request(userURLStr,method:.get,headers:["Authorization":"Bearer \(token)"]).responseJSON { response in
-            
-            let value = response.result.isSuccess
-            print(value)
-        }
-       
     }
-    
-    
 }
 
