@@ -75,45 +75,52 @@ class AppDelegate: UIResponder, UIApplicationDelegate,WXApiDelegate {
         //  微信登录回调
         if resp.errCode == 0 && resp.type == 0{//授权成功
             let response = resp as! SendAuthResp
-            
-            //  微信登录成功通知
-            NotificationCenter.default.post(name: NSNotification.Name(rawValue: "WXLoginSuccessNotification"), object: response.code)
-            let noti = Notification(name: Notification.Name(rawValue: "WXLoginSuccessNotification"))
-            WXLoginSuccess(code1: response.code!)
+            WXLoginSuccess(res: response.code!)
         }
     }
     
-    //  微信成功通知
-    func WXLoginSuccess(code1:String){
-        let code = code1
-//    func WXLoginSuccess(notification:Notification) {
-//        print(notification.object)
-//        if let code = notification.object {
-        let AppID = "wx7ef876fe1742f5df"
-        let AppSecret = "7842d96f93d4116b247a6d38c8824c29"
-        let url = "https://api.weixin.qq.com/sns/oauth2/access_token?appid=\(AppID)&secret=\(AppSecret)&code=\(code)&grant_type=authorization_code"
-        //获取access_token
-        Alamofire.request(url).responseJSON { response in
-            print(response.result.value)
-            //let JSON = response.result.value
-            //UserDefaults.standard.set(JSON, forKey: "user")
+    private func WXLoginSuccess(res:String){
+        let code = res
+//        let AppID = "wx7ef876fe1742f5df"
+//        let AppSecret = "7842d96f93d4116b247a6d38c8824c29"
+        let urlStr = "https://slow.hustonline.net/api/v1/user/login"
+        
+        var token = String()
+        //登录
+        Alamofire.request(urlStr,method: .post,parameters:["code": code]).responseJSON { response in
+            let value = response.result.value
+            print("value:\(value)")
+            let json = JSON(value)
+            if let token = json["token"].string {
+                print("token:\(token)")
+                UserDefaults.standard.set(token, forKey: "token")
             }
-            
-//        request().responseJSON { response in
-//            print(response.request)  // original URL request
-//            print(response.response) // HTTP URL response
-//            print(response.data)     // server data
-//            print(response.result)   // result of response serialization
+        }
+        //获取用户信息
 //
-//            if let JSON = response.result.value {
-//                print("JSON: \(JSON)")
+        
+        
+//
+//        Alamofire.request(url).responseJSON { response in
+//            switch response.result.isSuccess {
+//            case true:
+//                if let value = response.result.value {
+//                    print(response.result.value as Any)
+//                    let json = JSON(value)
+//                    let accessToken = json[0]["access_token"].string
+//                    let openID = json[0]["openid"].string
+//                    if ((accessToken != nil) && (openID != nil)){
+//                        print("assessToken:\(accessToken)")
+//                        print("openID:\(openID)")
+//                        self.requestUserInfo(accessToken!,openID: openID!)
+//                    }
+//                }
+//            case false:
+//                print(response.result.error)
 //            }
+//
 //        }
-//        RequestTool.GETRequestWith(url, success: { (task, data) in
-//            print(data)
-//        }) { (task, error) in
-//            print(error)
-//        }
+
     }
 }
 
