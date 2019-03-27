@@ -38,16 +38,23 @@ class TestViewController: UIViewController {
     
     @objc func req() {
         
+        let urlRequst = ()
+        
+        
         if let token = UserDefaults.standard.value(forKey: "token") {
-            //let headers:HTTPHeaders = ["Authorization": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE1NTM4NTgzODUsImlkIjoib3ExNVU1OTdLTVNlNTV2d21aLUN3ZDZkSDFNMCIsIm9yaWdfaWF0IjoxNTUzMjUzNTg1fQ.dFn6oEWI-uE37n53rzMz2ZUOyH-uJi-7kAeHHFr-G_E"]
+            //let headers:HTTPHeaders = ["Authorization": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE1NTQwMDA4MTgsImlkIjoib3ExNVU1OTdLTVNlNTV2d21aLUN3ZDZkSDFNMCIsIm9yaWdfaWF0IjoxNTUzMzk2MDE4fQ.m_mjQURafkbSVKGCeuRn79dTY7Gbb0uYmdot1-w_Lek"]
             let URLStr = "https://slow.hustonline.net/api/v1/user"
-            let headers:HTTPHeaders = ["Authorization": "Bearer \(token)"]
-            //Alamofire.request(URLStr, method:.get, headers: headers).responseJSON
-            Alamofire.request(URLStr, method: .get, encoding: URLEncoding.default, headers: headers).responseJSON { response in
+            let headers:HTTPHeaders = ["auth": "Bearer \(token)"]
+            Alamofire.request("https://slow.hustonline.net/api/v1/user", method: .get, encoding: URLEncoding.default,headers: headers).responseJSON { response in
+                //print(request)
                 print(response)
                 print(response.request?.httpBody)
-                print(response.request?.httpBodyStream)
                 print(response.request?.allHTTPHeaderFields)
+            }
+                .validate { request, response, data in
+                    print(request?.allHTTPHeaderFields)
+                    // Custom evaluation closure (no access to server data)
+                    return .success
             }
         }
         
