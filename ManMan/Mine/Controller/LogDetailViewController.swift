@@ -45,7 +45,7 @@ class LogDetailViewController: UIViewController,CVCalendarViewDelegate,CVCalenda
     
     func setTopLineView() {
         topLineView.addSubview(leftButton)
-        topLineView.addSubview(rightButton)
+        //topLineView.addSubview(rightButton)
         topLineView.addSubview(titleView)
         
         self.view.addSubview(topLineView)
@@ -72,13 +72,13 @@ class LogDetailViewController: UIViewController,CVCalendarViewDelegate,CVCalenda
         leftButton.setImage(UIImage(named: "back"), for: .normal)
         leftButton.addTarget(self, action: #selector(back), for: .touchUpInside)
         
-        rightButton.snp.makeConstraints { (make) in
-            make.centerY.equalToSuperview().offset(10)
-            make.right.equalTo(-16)
-            make.width.height.equalTo(20)
-        }
-        rightButton.setTitle("Done", for: .normal)
-        rightButton.addTarget(self, action: #selector(back), for: .touchUpInside)
+//        rightButton.snp.makeConstraints { (make) in
+//            make.centerY.equalToSuperview().offset(10)
+//            make.right.equalTo(-16)
+//            make.height.equalTo(20)
+//        }
+//        rightButton.setTitle("Done", for: .normal)
+//        rightButton.addTarget(self, action: #selector(back), for: .touchUpInside)
     }
     
     func setCalendarView() {

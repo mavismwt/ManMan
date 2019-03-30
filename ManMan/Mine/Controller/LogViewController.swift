@@ -213,7 +213,7 @@ class LogViewController: UIViewController,UIScrollViewDelegate,CVCalendarViewDel
         showMoreView.share.addTarget(self, action: #selector(shareView), for: .touchUpInside)
         let tapGestureRecognizer = UITapGestureRecognizer()
         tapGestureRecognizer.addTarget(self, action: #selector(cancel))
-        showMoreView.addGestureRecognizer(tapGestureRecognizer)
+        showMoreView.self.addGestureRecognizer(tapGestureRecognizer)
     }
     
     @objc func showDetail() {
