@@ -8,6 +8,8 @@
 
 import UIKit
 import MessageUI
+import Alamofire
+import SwiftyJSON
 
 class MineViewController: UIViewController,UITableViewDelegate,UITableViewDataSource,UITextFieldDelegate,UIGestureRecognizerDelegate,MFMailComposeViewControllerDelegate {
     
@@ -19,11 +21,14 @@ class MineViewController: UIViewController,UITableViewDelegate,UITableViewDataSo
     var coverView = UIView()
     var endEditView = UIView()
     
-   
+    let function = RequestFunction()
     let inset = UIApplication.shared.delegate?.window??.safeAreaInsets ?? UIEdgeInsets.zero
     let SCREENSIZE = UIScreen.main.bounds.size
     let identifier = "reusedCell"
     let listDetail:[String] = ["我的flag","我的时间轴","设置","问题反馈"]
+    //var userInfo = JSON()
+    
+    
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -32,6 +37,12 @@ class MineViewController: UIViewController,UITableViewDelegate,UITableViewDataSo
         self.navigationController?.isNavigationBarHidden = true
         self.view.backgroundColor = UIColor.init(red: 238/255, green: 238/255, blue: 238/255, alpha: 1)
         
+        self.showUserInfo(name: "ME")
+        
+    }
+    
+    func showUserInfo(name: String) {
+        print(name)
         topLineView.addSubview(profileView)
         topLineView.addSubview(nickname)
         topLineView.addSubview(editButton)
@@ -51,12 +62,15 @@ class MineViewController: UIViewController,UITableViewDelegate,UITableViewDataSo
             make.centerX.equalToSuperview()
             make.width.height.equalTo(72)
         }
+        //let url: URL = URL.init(string: userInfo[0]["data"][0]["img_url"].string as! String)!
+        //let imgData: NSData! =  NSData(contentsOf: url) //NSData(contentsOf: url) //转为data类型
+        //profileView.image = UIImage.init(data: imgData as Data)
         profileView.image = UIImage(named: "MyProfile")
         profileView.layer.cornerRadius = 36
         profileView.clipsToBounds = true
-//        let TapGestureRecognizer = UITapGestureRecognizer()
-//        TapGestureRecognizer.addTarget(self, action: #selector(login))
-//        profileView.addGestureRecognizer(TapGestureRecognizer)
+        //        let TapGestureRecognizer = UITapGestureRecognizer()
+        //        TapGestureRecognizer.addTarget(self, action: #selector(login))
+        //        profileView.addGestureRecognizer(TapGestureRecognizer)
         
         
         nickname.snp.makeConstraints { (make) in
@@ -64,7 +78,7 @@ class MineViewController: UIViewController,UITableViewDelegate,UITableViewDataSo
             make.centerX.equalToSuperview()
             make.height.equalTo(18)
         }
-        nickname.text = "mavismwt"
+        nickname.text = name
         nickname.textColor = UIColor.init(red: 1, green: 1, blue: 1, alpha: 1)
         nickname.font = UIFont.boldSystemFont(ofSize: 18)
         nickname.returnKeyType = .done
@@ -124,7 +138,6 @@ class MineViewController: UIViewController,UITableViewDelegate,UITableViewDataSo
         //更新数据
         return true
     }
-    
     func textFieldDidBeginEditing(_ textField: UITextField) {
         self.view.addSubview(endEditView)
     }
@@ -135,7 +148,6 @@ class MineViewController: UIViewController,UITableViewDelegate,UITableViewDataSo
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return 4
     }
-    
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         var cell: ListTableViewCell? = tableView.dequeueReusableCell(withIdentifier: identifier) as? ListTableViewCell
         let item = listDetail[indexPath.row]
@@ -143,12 +155,9 @@ class MineViewController: UIViewController,UITableViewDelegate,UITableViewDataSo
         cell?.title.text = item
         return cell!
     }
-    
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        return 72
+    return 72
     }
-    
-    
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         let cell:ListTableViewCell = tableView.cellForRow(at: indexPath) as! ListTableViewCell
         let listStr = listDetail[indexPath.row]
@@ -237,9 +246,11 @@ class MineViewController: UIViewController,UITableViewDelegate,UITableViewDataSo
     
     
     
+    
     override func viewWillAppear(_ animated: Bool) {
         self.tabBarController?.tabBar.addSubview(coverView)
         self.tabBarController?.tabBar.isHidden = false
+        function.getUserInfo(token: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE1NTQwMDA4MTgsImlkIjoib3ExNVU1OTdLTVNlNTV2d21aLUN3ZDZkSDFNMCIsIm9yaWdfaWF0IjoxNTUzMzk2MDE4fQ.m_mjQURafkbSVKGCeuRn79dTY7Gbb0uYmdot1-w_Lek")
     }
     
     override func viewWillDisappear(_ animated: Bool) {

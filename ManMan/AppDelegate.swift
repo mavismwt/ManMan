@@ -24,8 +24,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate,WXApiDelegate {
         let tabbarController = UITabBarController()
         tabbarController.viewControllers = [firstNavigationController,secondNavigationController]
         let testViewController = TestViewController()
-        window?.rootViewController = testViewController
-        //window?.rootViewController = tabbarController
+        //window?.rootViewController = testViewController
+        window?.rootViewController = tabbarController
         //MARK: -注册微信
         //let WXAppID = "wx7ef876fe1742f5df"
         WXApi.registerApp("wx7ef876fe1742f5df")
@@ -58,69 +58,35 @@ class AppDelegate: UIResponder, UIApplicationDelegate,WXApiDelegate {
     func application(_ app: UIApplication, open url: URL, options: [UIApplication.OpenURLOptionsKey : Any] = [:]) -> Bool {
         let urlKey: String = options[UIApplication.OpenURLOptionsKey.sourceApplication] as! String
         if urlKey == "com.tencent.xin" {
-            // 微信的回调
             return WXApi.handleOpen(url, delegate: self)
         }
         return true
     }
     
-//    //  微信跳转回调
-//    func application(_ app: UIApplication, open url: URL, options: [UIApplication.OpenURLOptionsKey : Any] = [:]) -> Bool {
-//        WXApi.handleOpen(url, delegate: self)
-//        return true
-//    }
-    
-    //  微信回调
+    //微信回调
     func onResp(_ resp: BaseResp){
-        //  微信登录回调
         if resp.errCode == 0 && resp.type == 0{//授权成功
             let response = resp as! SendAuthResp
             WXLoginSuccess(res: response.code!)
         }
     }
     
+    //用code获取token
     private func WXLoginSuccess(res:String){
-        let code = res
 //        let AppID = "wx7ef876fe1742f5df"
 //        let AppSecret = "7842d96f93d4116b247a6d38c8824c29"
+        
+        let code = res
         let urlStr = "https://slow.hustonline.net/api/v1/user/login"
         
-        var token = String()
-        //登录
         Alamofire.request(urlStr,method: .post,parameters:["code": code]).responseJSON { response in
             let value = response.result.value
-            print("value:\(value)")
             let json = JSON(value)
             if let token = json["token"].string {
-                print("token:\(token)")
                 UserDefaults.standard.set(token, forKey: "token")
             }
         }
-        //获取用户信息
-//
-        
-        
-//
-//        Alamofire.request(url).responseJSON { response in
-//            switch response.result.isSuccess {
-//            case true:
-//                if let value = response.result.value {
-//                    print(response.result.value as Any)
-//                    let json = JSON(value)
-//                    let accessToken = json[0]["access_token"].string
-//                    let openID = json[0]["openid"].string
-//                    if ((accessToken != nil) && (openID != nil)){
-//                        print("assessToken:\(accessToken)")
-//                        print("openID:\(openID)")
-//                        self.requestUserInfo(accessToken!,openID: openID!)
-//                    }
-//                }
-//            case false:
-//                print(response.result.error)
-//            }
-//
-//        }
-
     }
+    
 }
 

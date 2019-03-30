@@ -9,8 +9,9 @@
 import UIKit
 import Alamofire
 
+
 class TestViewController: UIViewController {
-    
+    let function = RequestFunction()
     var bt = UIButton()
     var bt2 = UIButton()
     var text = UITextField()
@@ -36,31 +37,33 @@ class TestViewController: UIViewController {
         
     }
     
+//    @objc func req() {
+//
+//        let urlRequst = ()
+//
+//
+//        if let token = UserDefaults.standard.value(forKey: "token") {
+//            //let headers:HTTPHeaders = ["Authorization": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE1NTQwMDA4MTgsImlkIjoib3ExNVU1OTdLTVNlNTV2d21aLUN3ZDZkSDFNMCIsIm9yaWdfaWF0IjoxNTUzMzk2MDE4fQ.m_mjQURafkbSVKGCeuRn79dTY7Gbb0uYmdot1-w_Lek"]
+//            let URLStr = "https://slow.hustonline.net/api/v1/user"
+//            let headers:HTTPHeaders = ["auth": "Bearer \(token)"]
+//            Alamofire.request("https://slow.hustonline.net/api/v1/user", method: .get, encoding: URLEncoding.default,headers: headers).responseJSON { response in
+//                //print(request)
+//                print(response)
+//                print(response.request?.httpBody)
+//                print(response.request?.allHTTPHeaderFields)
+//            }
+//                .validate { request, response, data in
+//                    print(request?.allHTTPHeaderFields)
+//                    // Custom evaluation closure (no access to server data)
+//                    return .success
+//            }
+//       }
+//
+//    }
+    
     @objc func req() {
-        
-        let urlRequst = ()
-        
-        
-        if let token = UserDefaults.standard.value(forKey: "token") {
-            //let headers:HTTPHeaders = ["Authorization": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE1NTQwMDA4MTgsImlkIjoib3ExNVU1OTdLTVNlNTV2d21aLUN3ZDZkSDFNMCIsIm9yaWdfaWF0IjoxNTUzMzk2MDE4fQ.m_mjQURafkbSVKGCeuRn79dTY7Gbb0uYmdot1-w_Lek"]
-            let URLStr = "https://slow.hustonline.net/api/v1/user"
-            let headers:HTTPHeaders = ["auth": "Bearer \(token)"]
-            Alamofire.request("https://slow.hustonline.net/api/v1/user", method: .get, encoding: URLEncoding.default,headers: headers).responseJSON { response in
-                //print(request)
-                print(response)
-                print(response.request?.httpBody)
-                print(response.request?.allHTTPHeaderFields)
-            }
-                .validate { request, response, data in
-                    print(request?.allHTTPHeaderFields)
-                    // Custom evaluation closure (no access to server data)
-                    return .success
-            }
-        }
-        
+        function.postRecord(content:"whatever", token: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE1NTQwMDA4MTgsImlkIjoib3ExNVU1OTdLTVNlNTV2d21aLUN3ZDZkSDFNMCIsIm9yaWdfaWF0IjoxNTUzMzk2MDE4fQ.m_mjQURafkbSVKGCeuRn79dTY7Gbb0uYmdot1-w_Lek")
     }
-    
-    
     
     //调起微信
     @objc func wxLoginBtnAction() {
@@ -80,26 +83,6 @@ class TestViewController: UIViewController {
             }
         }
     }
-    
-//    @objc func req() {
-//        let token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE1NTM2OTExNjcsImlkIjoiIiwib3JpZ19pYXQiOjE1NTMwODYzNjd9.yjBm75SsyUjq-fu3Kyi8p8Kqycq8ObvQogKPv96aRE0"
-//        let AppID = "wx7ef876fe1742f5df"
-//        let AppSecret = "7842d96f93d4116b247a6d38c8824c29"
-//        let urlStr = "https://slow.hustonline.net/api/v1/record/action/insert"
-//        let parameter:Parameters = ["code": code]
-//        //获取access_token
-//        print(token)
-//        Alamofire.request(urlStr,method: .post,parameters:["code": code]).responseJSON { response in
-//            let value = response.result.value
-//            print(value)
-//        }
-//    }
-    
-//    var milliStamp : String {
-//        let timeInterval: TimeInterval = self.timeIntervalSince1970
-//        let millisecond = CLongLong(round(timeInterval*1000))
-//        return "\(millisecond)"
-//    }
     
 }
 

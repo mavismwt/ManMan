@@ -86,10 +86,11 @@ class ShareViewController: UIViewController,UITableViewDelegate,UITableViewDataS
         rightButton.snp.makeConstraints { (make) in
             make.centerY.equalToSuperview().offset(inset.top/2)
             make.right.equalTo(-16)
-            make.width.equalTo(20)
-            make.height.equalTo(20)
+            make.width.equalTo(60)
+            make.height.equalTo(24)
         }
-        rightButton.setImage(UIImage(named: "more"), for: .normal)
+        rightButton.setTitle("Save", for: .normal)
+        //rightButton.setImage(UIImage(named: "download"), for: .normal)
         rightButton.addTarget(self, action: #selector(tap), for: .touchUpInside)
         
     }

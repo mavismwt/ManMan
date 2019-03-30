@@ -85,9 +85,10 @@ class FlagViewController: UIViewController,UITableViewDelegate,UITableViewDataSo
         letterButton.snp.makeConstraints { (make) in
             make.centerY.equalToSuperview().offset(inset.top/2)
             make.right.equalTo(-16)
-            make.width.height.equalTo(20)
+            make.height.equalTo(20)
         }
-        letterButton.setImage(UIImage(named: "editWhite"), for: .normal)
+        letterButton.setTitle("Edit", for: .normal)
+        //letterButton.setImage(UIImage(named: "editWhite"), for: .normal)
         letterButton.addTarget(self, action: #selector(setMyFlag), for: .touchUpInside)
         
         tableView.frame = CGRect(x: 0, y: (navRect?.height)!+inset.top+8, width: SCREENSIZE.width, height: SCREENSIZE.height-8-(navRect?.height)!-inset.top-inset.bottom)

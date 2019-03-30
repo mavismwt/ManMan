@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		18231EF2224CC13C00558C86 /* RequestFunction.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18231EF1224CC13C00558C86 /* RequestFunction.swift */; };
 		1860F5C521D13BA500BD221F /* LogDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1860F5C421D13BA500BD221F /* LogDetailView.swift */; };
 		1860F5C821D4705C00BD221F /* flagCardTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1860F5C721D4705C00BD221F /* flagCardTableViewCell.swift */; };
 		1860F5CA21D48B2000BD221F /* MailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1860F5C921D48B2000BD221F /* MailViewController.swift */; };
@@ -132,6 +133,7 @@
 /* Begin PBXFileReference section */
 		04FF2F6A77DC3D4DE55EEB2B /* Pods-ManMan.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ManMan.release.xcconfig"; path = "Target Support Files/Pods-ManMan/Pods-ManMan.release.xcconfig"; sourceTree = "<group>"; };
 		089009E7227B791C8B910559 /* Pods_ManMan.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_ManMan.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		18231EF1224CC13C00558C86 /* RequestFunction.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RequestFunction.swift; sourceTree = "<group>"; };
 		1860F5C421D13BA500BD221F /* LogDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LogDetailView.swift; sourceTree = "<group>"; };
 		1860F5C721D4705C00BD221F /* flagCardTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = flagCardTableViewCell.swift; sourceTree = "<group>"; };
 		1860F5C921D48B2000BD221F /* MailViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MailViewController.swift; sourceTree = "<group>"; };
@@ -254,6 +256,7 @@
 		18632AFD21C2963D00A0CA47 /* Home */ = {
 			isa = PBXGroup;
 			children = (
+				18632BEE21CCD61C00A0CA47 /* LoginViewController.swift */,
 				18F9395121B8381C00306EB0 /* HomeViewController.swift */,
 				18632B0221C296C300A0CA47 /* View */,
 			);
@@ -371,7 +374,6 @@
 		18F9396B21BC47CE00306EB0 /* Controller */ = {
 			isa = PBXGroup;
 			children = (
-				18632BEE21CCD61C00A0CA47 /* LoginViewController.swift */,
 				18F9398721BCE3D100306EB0 /* ExampleViewController.swift */,
 				18F9398521BCE36D00306EB0 /* LetterViewController.swift */,
 			);
@@ -404,6 +406,7 @@
 		18F972E721B7F8AE00FFAB90 /* ManMan */ = {
 			isa = PBXGroup;
 			children = (
+				18231EF1224CC13C00558C86 /* RequestFunction.swift */,
 				18C88E25223C82C7004FB741 /* test.swift */,
 				188C22A821CF6D6000E2546A /* check.wav */,
 				18632BF621CF3B8C00A0CA47 /* AlertView.swift */,
@@ -707,6 +710,7 @@
 				1860F5CA21D48B2000BD221F /* MailViewController.swift in Sources */,
 				18632B0721C2996500A0CA47 /* FangCustomizeUICollectionViewCell.swift in Sources */,
 				18632BF721CF3B8D00A0CA47 /* AlertView.swift in Sources */,
+				18231EF2224CC13C00558C86 /* RequestFunction.swift in Sources */,
 				18632BF121CCF62200A0CA47 /* LoadView.swift in Sources */,
 				1860F5C821D4705C00BD221F /* flagCardTableViewCell.swift in Sources */,
 				18632AFA21C26D5000A0CA47 /* LogViewController.swift in Sources */,
