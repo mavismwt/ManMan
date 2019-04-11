@@ -11,6 +11,28 @@ import MessageUI
 import Alamofire
 import SwiftyJSON
 
+extension UIImageView {
+    func downloadedFrom(url: URL, contentMode mode: UIView.ContentMode = .scaleAspectFit) {
+        contentMode = mode
+        URLSession.shared.dataTask(with: url) { data, response, error in
+            guard
+                let httpURLResponse = response as? HTTPURLResponse, httpURLResponse.statusCode == 200,
+                let mimeType = response?.mimeType, mimeType.hasPrefix("image"),
+                let data = data, error == nil,
+                let image = UIImage(data: data)
+                else { return }
+            DispatchQueue.main.async() {
+                self.image = image
+            }
+            }.resume()
+    }
+    func downloadedFrom(link: String, contentMode mode: UIView.ContentMode = .scaleAspectFit) {
+        guard let url = URL(string: link) else { return }
+        downloadedFrom(url: url, contentMode: mode)
+    }
+}
+
+
 class MineViewController: UIViewController,UITableViewDelegate,UITableViewDataSource,UITextFieldDelegate,UIGestureRecognizerDelegate,MFMailComposeViewControllerDelegate {
     
     var topLineView = UIView()
@@ -21,12 +43,13 @@ class MineViewController: UIViewController,UITableViewDelegate,UITableViewDataSo
     var coverView = UIView()
     var endEditView = UIView()
     
+    
     let function = RequestFunction()
     let inset = UIApplication.shared.delegate?.window??.safeAreaInsets ?? UIEdgeInsets.zero
     let SCREENSIZE = UIScreen.main.bounds.size
     let identifier = "reusedCell"
     let listDetail:[String] = ["我的flag","我的时间轴","设置","问题反馈"]
-    //var userInfo = JSON()
+    var userInfo = JSON()
     
     
     
@@ -37,12 +60,34 @@ class MineViewController: UIViewController,UITableViewDelegate,UITableViewDataSo
         self.navigationController?.isNavigationBarHidden = true
         self.view.backgroundColor = UIColor.init(red: 238/255, green: 238/255, blue: 238/255, alpha: 1)
         
-        self.showUserInfo(name: "ME")
+        let URLStr = "https://slow.hustonline.net/api/v1"
+        var token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE1NTUyNDc1NzMsImlkIjoib3ExNVU1OTdLTVNlNTV2d21aLUN3ZDZkSDFNMCIsIm9yaWdfaWF0IjoxNTU0NjQyNzczfQ.m6i6TH7mK34cA0oc6P9Dc_xKxQWwOoch8VdgGPrwt2k"
+        let urlStr = "\(URLStr)/user"
+        let headers:HTTPHeaders = ["auth": "Bearer \(token)"]
+        Alamofire.request(urlStr, method: .get, encoding: URLEncoding.default,headers: headers).responseJSON { response in
+            let value = JSON(response.result.value)
+            print(URL(string: value["data"]["img_url"].string!))
+            response.result.ifSuccess {
+                self.userInfo = JSON(response.result.value)
+                self.showUserInfo(name: self.userInfo["data"]["name"].string!,imgURL: self.userInfo["data"]["img_url"].string!)
+                }
+                .ifFailure {
+                    print("Cannot get Record")
+            }
+            
+        }
+        
+//        userInfo = UserDefaults.standard.value(forKey: "userInfo") as! JSON
+//        if userInfo != nil {
+//            let name = userInfo[0]["data"][0]["name"].string
+//            self.showUserInfo(name: name!)
+//        }
+        
         
     }
     
-    func showUserInfo(name: String) {
-        print(name)
+    func showUserInfo(name: String, imgURL: String) {
+        function.getUserInfo(token: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE1NTUyNDc1NzMsImlkIjoib3ExNVU1OTdLTVNlNTV2d21aLUN3ZDZkSDFNMCIsIm9yaWdfaWF0IjoxNTU0NjQyNzczfQ.m6i6TH7mK34cA0oc6P9Dc_xKxQWwOoch8VdgGPrwt2k")
         topLineView.addSubview(profileView)
         topLineView.addSubview(nickname)
         topLineView.addSubview(editButton)
@@ -62,16 +107,16 @@ class MineViewController: UIViewController,UITableViewDelegate,UITableViewDataSo
             make.centerX.equalToSuperview()
             make.width.height.equalTo(72)
         }
-        //let url: URL = URL.init(string: userInfo[0]["data"][0]["img_url"].string as! String)!
-        //let imgData: NSData! =  NSData(contentsOf: url) //NSData(contentsOf: url) //转为data类型
-        //profileView.image = UIImage.init(data: imgData as Data)
-        profileView.image = UIImage(named: "MyProfile")
+    Alamofire.request("http://thirdwx.qlogo.cn/mmopen/vi_32/xcB6mPP8PaMlRdXElwZal9UZQfg8PthMNDlT5mSDnPqQZiartxq5k8UwrFvuF6ItUNUfexXp70ibSK9Zp6Rrw83w/132").responseData { response in
+            guard let data = response.result.value else { return }
+            let image = UIImage(data: data)
+            self.profileView.image = image
+        }
         profileView.layer.cornerRadius = 36
         profileView.clipsToBounds = true
-        //        let TapGestureRecognizer = UITapGestureRecognizer()
-        //        TapGestureRecognizer.addTarget(self, action: #selector(login))
-        //        profileView.addGestureRecognizer(TapGestureRecognizer)
-        
+//        let TapGestureRecognizer = UITapGestureRecognizer()
+//        TapGestureRecognizer.addTarget(self, action: #selector(login))
+//        profileView.addGestureRecognizer(TapGestureRecognizer)
         
         nickname.snp.makeConstraints { (make) in
             make.top.equalTo(profileView.snp.bottom).offset(8)
@@ -117,6 +162,7 @@ class MineViewController: UIViewController,UITableViewDelegate,UITableViewDataSo
         endEditView.backgroundColor = UIColor.init(red: 1, green: 1, blue: 1, alpha: 0)
         endEditView.addGestureRecognizer(tapGestureRecognizer)
     }
+    
     
     @objc func login() {
         let loginViewController = LoginViewController()
@@ -234,6 +280,7 @@ class MineViewController: UIViewController,UITableViewDelegate,UITableViewDataSo
         }
         self.dismiss(animated: true, completion: nil)
     }
+    
     func sendEmail() {
         if MFMailComposeViewController.canSendMail() {
             //注意这个实例要写在if block里，否则无法发送邮件时会出现两次提示弹窗（一次是系统的）
@@ -245,12 +292,10 @@ class MineViewController: UIViewController,UITableViewDelegate,UITableViewDataSo
     }
     
     
-    
-    
     override func viewWillAppear(_ animated: Bool) {
         self.tabBarController?.tabBar.addSubview(coverView)
         self.tabBarController?.tabBar.isHidden = false
-        function.getUserInfo(token: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE1NTQwMDA4MTgsImlkIjoib3ExNVU1OTdLTVNlNTV2d21aLUN3ZDZkSDFNMCIsIm9yaWdfaWF0IjoxNTUzMzk2MDE4fQ.m_mjQURafkbSVKGCeuRn79dTY7Gbb0uYmdot1-w_Lek")
+        //function.getUserInfo(token: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE1NTQwMDA4MTgsImlkIjoib3ExNVU1OTdLTVNlNTV2d21aLUN3ZDZkSDFNMCIsIm9yaWdfaWF0IjoxNTUzMzk2MDE4fQ.m_mjQURafkbSVKGCeuRn79dTY7Gbb0uYmdot1-w_Lek")
     }
     
     override func viewWillDisappear(_ animated: Bool) {

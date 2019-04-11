@@ -31,6 +31,8 @@ class AddUserDefinedCheckViewController: UIViewController,UICollectionViewDelega
     let SCREENSIZE = UIScreen.main.bounds.size
     let imageName = ["fruit","word","drink","breakfast","makeup","sleep","read","sport","medicine"]
     
+    let request = RequestFunction()
+    
     override func viewDidLoad() {
         
         self.view.backgroundColor = UIColor.init(red: 238/255, green: 238/255, blue: 238/255, alpha: 1)
@@ -243,6 +245,12 @@ class AddUserDefinedCheckViewController: UIViewController,UICollectionViewDelega
     }
     
     @objc func backToHome() {
+        
+        if (self.selectedTaskNumber != nil) && (self.taskName.text != nil) {
+            print(imageName[self.selectedTaskNumber],self.taskName.text)
+            request.postRoutine(title: self.taskName.text!, icon: imageName[self.selectedTaskNumber], token: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE1NTUyNDc1NzMsImlkIjoib3ExNVU1OTdLTVNlNTV2d21aLUN3ZDZkSDFNMCIsIm9yaWdfaWF0IjoxNTU0NjQyNzczfQ.m6i6TH7mK34cA0oc6P9Dc_xKxQWwOoch8VdgGPrwt2k")
+        }
+        
         let alertView = AlertView()
         UIView.animate(withDuration: 1, animations: {
             self.view.addSubview(alertView)

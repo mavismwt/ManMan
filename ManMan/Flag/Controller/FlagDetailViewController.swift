@@ -7,22 +7,25 @@
 //
 
 import UIKit
+import Alamofire
+import SwiftyJSON
 
 class FlagDetailViewController: UIViewController,UITableViewDelegate,UITableViewDataSource,UITextFieldDelegate,UIGestureRecognizerDelegate {
     
     struct flagData {
-        var profileURL = "UIImageView()"
-        var nicknameText = "UILabel()"
-        var detailText = "UITextView()"
-//        var comment = [{
-//            var userName = ""
-//            var userComment = ""
-//            }]
-        var commentNumText = "UILabel()"
-        var likeNumText = "UILabel()"
+        var profileURL: String?
+        var nickname: String?
+        var time: Int64?
+        var detail: String?
+        var comment = [commentDetail]()
+        var commentNum: Int?
+        var likeNum: Int?
+        var id: String?
     }
-    
-    var str = ["好棒啊！","flag就是拿来倒的"]
+    struct commentDetail {
+        var userName: String?
+        var userComment: String?
+    }
     
     var topLineView = UIView()
     var backButton = UIButton()
@@ -37,13 +40,19 @@ class FlagDetailViewController: UIViewController,UITableViewDelegate,UITableView
     let SCREENSIZE = UIScreen.main.bounds.size
     let identifier = "reusedCell"
     var HeightOfKeyboard:CGFloat? = 0
-    var dTime:TimeInterval? = 0
+    var dTime: TimeInterval? = 0
     var height:[CGFloat] = [0,0,0]
-    var flagDatas = [flagData]()
+    //var data:flagData?
+    
+    var request: RequestFunction?
+    
+    override func viewWillAppear(_ animated: Bool) {
+    }
     
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view, typically from a nib.
+        
         
         self.view.backgroundColor = UIColor.init(red: 238/255, green: 238/255, blue: 238/255, alpha: 1)
         
@@ -53,6 +62,7 @@ class FlagDetailViewController: UIViewController,UITableViewDelegate,UITableView
         detailView.addSubview(tableView)
         
         self.view.addSubview(topLineView)
+        
         self.view.addSubview(detailView)
         self.view.addSubview(commentView)
         
@@ -68,9 +78,26 @@ class FlagDetailViewController: UIViewController,UITableViewDelegate,UITableView
         let tapGestureRecognizer = UITapGestureRecognizer()
         tapGestureRecognizer.addTarget(self, action: #selector(beginEdit))
         detailView.commentView.addGestureRecognizer(tapGestureRecognizer)
-        if let detail:String = UserDefaults.standard.value(forKey: "detail") as? String {
-            detailView.detail.text = detail
-        }
+//        if let detail:String = self.data?.detail {
+//            detailView.detail.text = detail
+//        }
+//        detailView.detail.text = data?.detail
+//        detailView.nickname.text = data?.nickname
+//        if let timeInterval = data?.time {
+//            let timeFormatter = DateFormatter()
+//            timeFormatter.dateFormat = "yyyy年MM月dd日 HH:mm"
+//            let date = Date(timeIntervalSince1970: TimeInterval(timeInterval/1000))
+//            let timeStr = timeFormatter.string(from: date)
+//            detailView.time.text = timeStr
+//        }
+//
+//        detailView.commentNumLabel.text = "\(data?.commentNum)"
+//        detailView.likeNumLabel.text = "\(data?.likeNum)"
+//        Alamofire.request((data?.profileURL!)!).responseData { response in
+//            guard let data = response.result.value else { return }
+//            let image = UIImage(data: data)
+//            self.detailView.profile.image = image
+//        }
         
         let navRect = self.navigationController?.navigationBar.frame
         tableView.snp.makeConstraints { (make) in
@@ -136,11 +163,12 @@ class FlagDetailViewController: UIViewController,UITableViewDelegate,UITableView
     @objc func send() {
         //UIView.animate(withDuration: 0.3, animations: {
         self.commentView.inputText.resignFirstResponder()
-        self.str.append(self.commentView.inputText.text!)
+        //self.data!.comment.append(commentDetail.init(userName: "Mavismwt", userComment: self.commentView.inputText.text!))
+        //self.str.append(self.commentView.inputText.text!)
         self.height.append(0)
         self.tableView.reloadData()
         UIView.animate(withDuration: 0.5, animations: {
-            self.detailView.commentNumber = self.str.count
+            //self.detailView.commentNumber =  self.data!.comment.count
             self.detailView.layoutIfNeeded()
         })
         self.commentView.inputText.text = ""
@@ -225,7 +253,13 @@ class FlagDetailViewController: UIViewController,UITableViewDelegate,UITableView
     
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return str.count
+//        if self.data?.comment.count != nil {
+//            return (self.data?.comment.count)!
+//        } else {
+//            return 0
+//        }
+        return 0
+        
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
@@ -235,7 +269,8 @@ class FlagDetailViewController: UIViewController,UITableViewDelegate,UITableView
         {
             let cell = CommentTableViewCell.init(style: .default, reuseIdentifier: identifier)
         }
-        cell?.detail.text = str[indexPath.row]
+        //cell?.nickname.text = self.data?.comment[indexPath.row].userName
+        //cell?.detail.text = self.data?.comment[indexPath.row].userComment
         height[indexPath.row] = FlagDetail.heightForTextView(textView: (cell?.detail)!, fixedWidth: (cell?.detail.frame.width)!) + 32
         return cell!
     }

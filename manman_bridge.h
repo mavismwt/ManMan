@@ -12,5 +12,6 @@
 #import "WXApi.h"
 #import "WXApiObject.h"
 #import <CommonCrypto/CommonCrypto.h>
+#import "MJRefresh.h"
 
 #endif /* manman_bridge_h */

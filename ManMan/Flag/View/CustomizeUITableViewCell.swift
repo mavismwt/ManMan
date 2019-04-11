@@ -14,15 +14,17 @@ class CustomizeUITableViewCell: UITableViewCell {
     let SCREENRECT = UIScreen.main.bounds
     
     struct flagData {
-        var profileURL = "UIImageView()"
-        var nicknameText = "UILabel()"
-        var detailText = "UITextView()"
-        var comment = [{
-            var userName = ""
-            var userComment = ""
-        }]
-        var commentNumText = "UILabel()"
-        var likeNumText = "UILabel()"
+        var profileURL: String?
+        var nickname: String?
+        var time: Int64?
+        var detail: String?
+        var comment = [commentDetail]()
+        var commentNum: Int?
+        var likeNum: Int?
+    }
+    struct commentDetail {
+        var userName: String?
+        var userComment: String?
     }
 
     var cell = UIView()
@@ -40,6 +42,8 @@ class CustomizeUITableViewCell: UITableViewCell {
     var likeNumLabel = UILabel()
     var likeNumber:Int = 0
     var isliked = false
+    
+    var id = String()
     
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         

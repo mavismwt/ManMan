@@ -23,8 +23,9 @@ class AddCheckViewController: UIViewController,UICollectionViewDelegate,UICollec
     let SCREENSIZE = UIScreen.main.bounds.size
     
     let imageName = ["fruit","word","drink","breakfast","makeup","sleep","read","sport","medicine"]
-    let titleStr = ["吃水果","背单词","喝水","早餐","化妆","早睡","读书","运动","吃药"]
+    let titleStr:[String] = ["吃水果","背单词","喝水","早餐","化妆","早睡","读书","运动","吃药"]
     var selectedTaskNumber:Int?
+    var request = RequestFunction()
     
     override func viewDidLoad() {
         
@@ -143,6 +144,12 @@ class AddCheckViewController: UIViewController,UICollectionViewDelegate,UICollec
         self.tabBarController?.tabBar.isHidden = false
     }
     @objc func backTo() {
+        
+        if let number = self.selectedTaskNumber {
+            let token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE1NTUyNDc1NzMsImlkIjoib3ExNVU1OTdLTVNlNTV2d21aLUN3ZDZkSDFNMCIsIm9yaWdfaWF0IjoxNTU0NjQyNzczfQ.m6i6TH7mK34cA0oc6P9Dc_xKxQWwOoch8VdgGPrwt2k"
+            request.postRoutine(title: titleStr[number], icon: imageName[number], token: token)
+        }
+        
         let alertView = AlertView()
         UIView.animate(withDuration: 1, animations: {
             self.view.addSubview(alertView)
@@ -151,8 +158,6 @@ class AddCheckViewController: UIViewController,UICollectionViewDelegate,UICollec
             {
                 self.navigationController?.popViewController(animated: true)
         })
-        UserDefaults.standard.set(self.selectedTaskNumber, forKey: "taskNumber")
-        
     }
     
     @objc func UserDefined() {

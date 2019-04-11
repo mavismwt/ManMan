@@ -300,6 +300,40 @@ class LogViewController: UIViewController,UIScrollViewDelegate,CVCalendarViewDel
         return strNowMonth
     }
     
+    func dotMarker(shouldShowOnDayView dayView: DayView) -> Bool {
+        if !dayView.isHidden && dayView.date != nil {
+            //获取该日期视图的年月日
+            let year = dayView.date.year
+            let month = dayView.date.month
+            let day = dayView.date.day
+            //判断日期是否符合要求
+            if year == 2019 && month == 3 && day >= 28 && day <= 30 {
+                return true
+            }
+        }
+        return false
+    }
+    
+    func dotMarker(colorOnDayView dayView: DayView) -> [UIColor] {
+//        switch dayView.date.day {
+//        case 1:
+//            return [UIColor.orange]
+//        case 2:
+//            return [UIColor.orange, UIColor.green]
+//        default:
+//            return [UIColor.orange, UIColor.green, UIColor.blue]
+//        }
+        return [UIColor.init(red: 255/255, green: 193/255, blue: 7/255, alpha: 1)]
+    }
+    
+    func dotMarker(moveOffsetOnDayView dayView: DayView) -> CGFloat {
+        return 25
+    }
+    
+    func dotMarker(sizeOnDayView dayView: DayView) -> CGFloat {
+        return 4
+    }
+    
     func presentedDateUpdated(_ date: CVDate) {
         //导航栏显示当前日历的年月
         var month = String()

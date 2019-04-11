@@ -7,19 +7,25 @@
 //
 
 import UIKit
+import MJRefresh
+import Alamofire
+import SwiftyJSON
 
 class FlagViewController: UIViewController,UITableViewDelegate,UITableViewDataSource,UITextFieldDelegate,UIGestureRecognizerDelegate {
     
-    struct flagData {
-        var profileURL = "UIImageView()"
-        var nicknameText = "UILabel()"
-        var detailText = "UITextView()"
-        var comment = [{
-            var userName = ""
-            var userComment = ""
-            }]
-        var commentNumText = "UILabel()"
-        var likeNumText = "UILabel()"
+    public struct flagData {
+        var profileURL: String?
+        var nickname: String?
+        var time: Int64?
+        var detail: String?
+        var comment = [commentDetail]()
+        var commentNum: Int?
+        var likeNum: Int?
+        var id: String?
+    }
+    public struct commentDetail {
+        var userName: String?
+        var userComment: String?
     }
     
     var topLineView = UIView()
@@ -31,6 +37,8 @@ class FlagViewController: UIViewController,UITableViewDelegate,UITableViewDataSo
     
     let coverView = UIView()
     let tableView = UITableView()
+    let header = MJRefreshNormalHeader()
+    let footer = MJRefreshAutoNormalFooter()
     
     let inset = UIApplication.shared.delegate?.window??.safeAreaInsets ?? UIEdgeInsets.zero
     let SCREENSIZE = UIScreen.main.bounds.size
@@ -39,17 +47,52 @@ class FlagViewController: UIViewController,UITableViewDelegate,UITableViewDataSo
     var dTime:TimeInterval? = 0
     var flagDatas = [flagData]()
     
-    var datas = ["1.跟朋友出去旅游一次\n2.周末在家做饭","回家胖五斤以内","学编程"]
+    var datas = ["出去旅游"]
     
     
     override func viewWillAppear(_ animated: Bool) {
-        self.tableView.reloadData()
+        let URLStr = "https://slow.hustonline.net/api/v1"
+        var token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE1NTUyNDc1NzMsImlkIjoib3ExNVU1OTdLTVNlNTV2d21aLUN3ZDZkSDFNMCIsIm9yaWdfaWF0IjoxNTU0NjQyNzczfQ.m6i6TH7mK34cA0oc6P9Dc_xKxQWwOoch8VdgGPrwt2k"
+        let urlStr = "\(URLStr)/flag/flags"
+        let headers:HTTPHeaders = ["auth": "Bearer \(token)"]
+        Alamofire.request(urlStr, method: .get, parameters: ["num": 0], encoding: URLEncoding.default,headers: headers).responseJSON { response in
+            //print(response)
+            let json = JSON(response.result.value)
+            for k in 0..<json["data"]["flags"].count {
+                let value = json["data"]["flags"][k]
+                var comments = [commentDetail]()
+                for i in 0..<value["flags"]["comments"].count {
+                    comments.append(commentDetail.init(userName: value["flag"]["comments"][i]["name"].string, userComment: value["flag"]["comments"][i]["content"].string))
+                }
+                self.flagDatas.append(flagData.init(profileURL: value["img_url"].string, nickname: value["name"].string, time: value["flags"]["time"].int64, detail: value["flags"]["content"].string, comment: comments, commentNum: value["flags"]["comments"].count, likeNum: value["flags"]["likes"].count, id: value["flags"]["id"].string))
+                
+                self.tableView.reloadData()
+                self.view.layoutIfNeeded()
+            }
+            
+        }
+        //self.tableView.reloadData()
     }
     
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view, typically from a nib.
         
+        // 下拉刷新
+        header.setRefreshingTarget(self, refreshingAction: #selector(headerRefresh))
+        // 现在的版本要用mj_header
+        tableView.mj_header = header
+        
+        // 上拉刷新
+        footer.setRefreshingTarget(self, refreshingAction: #selector(footerRefresh))
+        tableView.mj_footer = footer
+        
+        self.setView()
+        self.sentAlert()
+        
+    }
+    
+    func setView() {
         self.view.backgroundColor = UIColor.init(red: 238/255, green: 238/255, blue: 238/255, alpha: 1)
         
         topLineView.addSubview(backButton)
@@ -102,9 +145,25 @@ class FlagViewController: UIViewController,UITableViewDelegate,UITableViewDataSo
         coverView.backgroundColor = UIColor.init(red: 0, green: 0, blue: 0, alpha: 0.4)
         coverView.frame = CGRect(x: 0, y: 0, width: 0, height: 0)
         self.view.addSubview(coverView)
-        
-        self.sentAlert()
-        
+    }
+    
+    // 顶部刷新
+    @objc func headerRefresh(){
+        //print("下拉刷新")
+        // 结束刷新
+        self.tableView.mj_header.endRefreshing()
+    }
+    
+    // 底部刷新
+    var index = 0
+    @objc func footerRefresh(){
+        //print("上拉刷新")
+        self.tableView.mj_footer.endRefreshing()
+        // 2次后模拟没有更多数据
+        index = index + 1
+        if index > 2 {
+            footer.endRefreshingWithNoMoreData()
+        }
     }
     
     @objc func back() {
@@ -119,7 +178,7 @@ class FlagViewController: UIViewController,UITableViewDelegate,UITableViewDataSo
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return 3
+        return flagDatas.count + 1
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
@@ -149,8 +208,23 @@ class FlagViewController: UIViewController,UITableViewDelegate,UITableViewDataSo
                 make.left.equalTo((cell?.nickname.snp.right)!).offset(8)
                 make.width.height.equalTo(14)
             }
-        }else{
-            cell?.detail.text = datas[indexPath.row]
+        }else if indexPath.row >= 1 && indexPath.row <= flagDatas.count{
+            cell?.id = flagDatas[indexPath.row-1].id!
+            cell?.detail.text = flagDatas[indexPath.row-1].detail
+            Alamofire.request(flagDatas[indexPath.row-1].profileURL!).responseData { response in
+                guard let data = response.result.value else { return }
+                let image = UIImage(data: data)
+                cell?.profile.image = image
+            }
+            cell?.nickname.text = flagDatas[indexPath.row-1].nickname
+            let timeInterval = flagDatas[indexPath.row-1].time
+            let timeFormatter = DateFormatter()
+            timeFormatter.dateFormat = "yyyy年MM月dd日 HH:mm"
+            let date = Date(timeIntervalSince1970: TimeInterval(timeInterval!/1000))
+            let timeStr = timeFormatter.string(from: date)
+            cell?.time.text = timeStr
+            cell?.likeNumber = flagDatas[indexPath.row-1].likeNum!
+            cell?.commentNumber = flagDatas[indexPath.row-1].commentNum!
         }
         return cell!
     }
@@ -160,7 +234,17 @@ class FlagViewController: UIViewController,UITableViewDelegate,UITableViewDataSo
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         let cell:CustomizeUITableViewCell = tableView.cellForRow(at: indexPath) as! CustomizeUITableViewCell
-        UserDefaults.standard.set(cell.detail.text, forKey: "detail")
+        let flagDetailViewController = FlagDetailViewController()
+        print(cell.id)
+//        for i in 0..<flagDatas.count {
+//            if flagDatas[i].id == id {
+//                print(flagDatas[i])
+//                UserDefaults.standard.set(flagDatas[i], forKey: "flagData")
+//
+//            }
+//        }
+//        //UserDefaults.standard.set(id, forKey: "id")
+        self.navigationController?.pushViewController(flagDetailViewController, animated: true)
         
     }
     

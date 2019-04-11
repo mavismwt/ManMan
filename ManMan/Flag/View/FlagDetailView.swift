@@ -14,16 +14,20 @@ class FlagDetail: UIView {
     let SCREENRECT = UIScreen.main.bounds
     
     struct flagData {
-        var profileURL = "UIImageView()"
-        var nicknameText = "UILabel()"
-        var detailText = "UITextView()"
-//        var comment = [{
-//            var userName = ""
-//            var userComment = ""
-//            }]
-        var commentNumText = "UILabel()"
-        var likeNumText = "UILabel()"
+        var profileURL: String?
+        var nickname: String?
+        var time: Int64?
+        var detail: String?
+        var comment = [commentDetail]()
+        var commentNum: Int?
+        var likeNum: Int?
+        var id: String?
     }
+    struct commentDetail {
+        var userName: String?
+        var userComment: String?
+    }
+    //var data = flagData()
     
     var basicInfo = UIView()
     var commentView = UIView()
@@ -107,7 +111,7 @@ class FlagDetail: UIView {
         time.textColor = UIColor.init(red: 0/255, green: 0/255, blue: 0/255, alpha: 0.54)
         time.text = "2018年12月31日 13:00"
         
-        detail.text = "1.跟朋友出去旅游一次\n2.周末在家做饭"
+        //detail.text = data.detail
         let height = FlagDetail.heightForTextView(textView: detail, fixedWidth: UIScreen.main.bounds.size.width-72)
         detail.snp.makeConstraints{(make) in
             make.top.equalToSuperview().offset(64)
@@ -188,8 +192,8 @@ class FlagDetail: UIView {
         //profile.image = UIImage(named: flag.profileURL)
         //nickname.text = flag.nicknameText
         //detail.text = flag.detailText
-        commentNumLabel.text = flag.commentNumText
-        likeNumLabel.text = flag.likeNumText
+        commentNumLabel.text = "0"
+        likeNumLabel.text = "0"
     }
     
     internal class func heightForTextView(textView: UITextView, fixedWidth: CGFloat) -> CGFloat {

@@ -10,6 +10,8 @@ import UIKit
 import AVFoundation
 import MediaPlayer
 import AVKit
+import Alamofire
+import SwiftyJSON
 
 extension UIImage {
     /**
@@ -75,7 +77,6 @@ extension UITabBar
 
 class HomeViewController: UIViewController,UITableViewDelegate,UITableViewDataSource,UIGestureRecognizerDelegate {
     
-    //初始化音频播放对象
     var audioPlayer:AVAudioPlayer = AVAudioPlayer()
     
     var topLineView = UIView()
@@ -100,32 +101,37 @@ class HomeViewController: UIViewController,UITableViewDelegate,UITableViewDataSo
     let titleStr = ["吃水果","背单词","喝水","早餐","化妆","早睡","读书","运动","吃药"]
     var isVolumnOn = true
     
+    var function = RequestFunction()
+    
     struct taskDetail {
+        var id:String?
         var name:String?
         var icon:String?
-        var day:Int?
-        var isfinished:Bool?
+        var days:Int?
+        var isFinished:Bool?
     }
     
     var tasks = [taskDetail]()
+    var request = RequestFunction()
+    var token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE1NTUyNDc1NzMsImlkIjoib3ExNVU1OTdLTVNlNTV2d21aLUN3ZDZkSDFNMCIsIm9yaWdfaWF0IjoxNTU0NjQyNzczfQ.m6i6TH7mK34cA0oc6P9Dc_xKxQWwOoch8VdgGPrwt2k"
     
     override func viewWillAppear(_ animated: Bool) {
         self.tabBarController?.tabBar.isHidden = false
-        if let taskNumber:Int = UserDefaults.standard.value(forKey: "taskNumber") as? Int {
-            tasks.append(taskDetail.init(name: titleStr[taskNumber], icon: imageName[taskNumber], day: 0, isfinished: false))
-            UserDefaults.standard.set(nil, forKey: "taskNumber")
-            print(self.tasks)
-            self.tableView.reloadData()
-            self.view.layoutIfNeeded()
-        }
-        if let userDefinedTaskNumber:Int = UserDefaults.standard.value(forKey: "userDefinedTaskNumber") as? Int {
-            let userDefinedTaskName:String =
-                UserDefaults.standard.value(forKey: "taskName") as! String
-            tasks.append(taskDetail.init(name: userDefinedTaskName, icon: imageName[userDefinedTaskNumber], day: 0, isfinished: false))
-            self.tableView.reloadData()
-            UserDefaults.standard.set(nil, forKey: "taskName")
-            UserDefaults.standard.set(nil, forKey: "userDefinedTaskNumber")
-        }
+//        if let taskNumber:Int = UserDefaults.standard.value(forKey: "taskNumber") as? Int {
+//            tasks.append(taskDetail.init(name: titleStr[taskNumber], icon: imageName[taskNumber], day: 0, isfinished: false))
+//            UserDefaults.standard.set(nil, forKey: "taskNumber")
+//            print(self.tasks)
+//            self.tableView.reloadData()
+//            self.view.layoutIfNeeded()
+//        }
+//        if let userDefinedTaskNumber:Int = UserDefaults.standard.value(forKey: "userDefinedTaskNumber") as? Int {
+//            let userDefinedTaskName:String =
+//                UserDefaults.standard.value(forKey: "taskName") as! String
+//            tasks.append(taskDetail.init(name: userDefinedTaskName, icon: imageName[userDefinedTaskNumber], day: 0, isfinished: false))
+//            self.tableView.reloadData()
+//            UserDefaults.standard.set(nil, forKey: "taskName")
+//            UserDefaults.standard.set(nil, forKey: "userDefinedTaskNumber")
+//        }
         if let isOn:Int =  UserDefaults.standard.value(forKey: "isVolumnOn") as? Int {
             if isOn == 1 {
                 self.isVolumnOn = true
@@ -133,6 +139,29 @@ class HomeViewController: UIViewController,UITableViewDelegate,UITableViewDataSo
                 self.isVolumnOn = false
             }
             UserDefaults.standard.set(nil, forKey: "isVolumnOn")
+        }
+        let URLStr = "https://slow.hustonline.net/api/v1"
+        
+        let urlStr = "\(URLStr)/routine"
+        let headers:HTTPHeaders = ["auth": "Bearer \(token)"]
+        Alamofire.request(urlStr, method: .get, encoding: URLEncoding.default,headers: headers).responseJSON { response in
+            //print(response)
+            self.tasks = [taskDetail]()
+            let json = JSON(response.result.value)
+            for k in 0..<json["data"]["routines"].count {
+                var isFinished = false
+                let routine = json["data"]["routines"][k]
+                let dayCount = routine["sign_in"].count
+                if dayCount != 0 {
+                    let lastSign = routine["sign_in"][dayCount-1].int64
+                    let timeInterval:TimeInterval = TimeInterval(Int(lastSign!/1000))
+                    let date = Date(timeIntervalSince1970: timeInterval)
+                    isFinished = date.isToday()
+                }
+                self.tasks.append(taskDetail.init(id: routine["id"].string, name:  routine["title"].string, icon:  routine["icon_id"].string, days: routine["sign_in"].count, isFinished: isFinished))
+                self.tableView.reloadData()
+                self.view.layoutIfNeeded()
+            }
         }
     }
     
@@ -174,7 +203,7 @@ class HomeViewController: UIViewController,UITableViewDelegate,UITableViewDataSo
         monthLabel.textColor = UIColor.white
         monthLabel.font = UIFont.boldSystemFont(ofSize: 20)
         
-        tableView.frame =  CGRect(x: 0, y: inset.top+(navRect?.height)!, width: SCREENSIZE.width, height: SCREENSIZE.height-166-inset.top-inset.bottom)
+        tableView.frame =  CGRect(x: 0, y: inset.top+(navRect?.height)!, width: SCREENSIZE.width, height: SCREENSIZE.height-112-inset.top-inset.bottom)
         tableView.backgroundColor = UIColor.init(red: 238/255, green: 238/255, blue: 238/255, alpha: 1)
         tableView.separatorStyle = .none
         tableView.delegate = self
@@ -246,8 +275,9 @@ class HomeViewController: UIViewController,UITableViewDelegate,UITableViewDataSo
             if (cell == nil)
             {
                 cell = CheckCardCell(style: UITableViewCell.CellStyle.default, reuseIdentifier: identifier)
+                cell?.days = tasks[indexPath.row].days!
                 cell?.taskName.text = tasks[indexPath.row].name
-                cell?.taskIcon.image = UIImage(named: tasks[indexPath.row].icon!)
+                cell?.taskIcon.image = UIImage(named: "\(tasks[indexPath.row].icon!)")
             }
             return cell!
         }
@@ -274,7 +304,9 @@ class HomeViewController: UIViewController,UITableViewDelegate,UITableViewDataSo
         }
     }
     //songshlan@bingyn.net
+    //点击卡片动画
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        self.request.putRoutineSign(id: "d023a60c-9afe-4a02-a5d4-2471a4c54e39", token: self.token)
         let cell:CheckCardCell = tableView.cellForRow(at: indexPath) as! CheckCardCell
 //        let tapGestureRecognizer = UITapGestureRecognizer()
 //        tapGestureRecognizer.addTarget(self, action: #selector(check))
@@ -301,7 +333,9 @@ class HomeViewController: UIViewController,UITableViewDelegate,UITableViewDataSo
                     if self.isVolumnOn == true {
                         self.localMusic()
                     }
+                    
             })
+            
             cell.isfinished = true
         }
     }
@@ -329,18 +363,18 @@ class HomeViewController: UIViewController,UITableViewDelegate,UITableViewDataSo
         
         let delete = UITableViewRowAction(style: .normal, title: "删除") {
             action, index in
-            print("share button tapped")
+            self.request.deleteRoutine(id: self.tasks[indexPath.row].id!, token: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE1NTUyNDc1NzMsImlkIjoib3ExNVU1OTdLTVNlNTV2d21aLUN3ZDZkSDFNMCIsIm9yaWdfaWF0IjoxNTU0NjQyNzczfQ.m6i6TH7mK34cA0oc6P9Dc_xKxQWwOoch8VdgGPrwt2k")
             self.tasks.remove(at: indexPath.row)
             print(self.tasks)
             tableView.deleteRows(at: [indexPath], with: UITableView.RowAnimation.automatic)
+            
         }
         delete.backgroundColor = UIColor.init(red: 241/255, green: 107/255, blue: 104/255, alpha: 1)
         
         return [delete,detail]
     }
     
-    // MARK: - alert
-    
+    //alert
     func alertShow(title:String)
     {
         let alertView = UIAlertView(title: nil, message: title, delegate: nil, cancelButtonTitle: "确定")
@@ -349,7 +383,7 @@ class HomeViewController: UIViewController,UITableViewDelegate,UITableViewDataSo
     }
     
 
-    
+    //获取现在时间
     func getNowDate() -> String {
         let date = Date()
         let timeFormatter = DateFormatter()
@@ -423,3 +457,4 @@ class HomeViewController: UIViewController,UITableViewDelegate,UITableViewDataSo
         //self.tabBarController?.tabBar.isHidden = true
     }
 }
+

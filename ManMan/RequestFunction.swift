@@ -10,10 +10,17 @@ import UIKit
 import Alamofire
 import SwiftyJSON
 
+enum MethodType {
+    case get
+    case post
+    case put
+    case delete
+}
+
 class RequestFunction {
     
     let URLStr = "https://slow.hustonline.net/api/v1"
-    var token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE1NTQwMDA4MTgsImlkIjoib3ExNVU1OTdLTVNlNTV2d21aLUN3ZDZkSDFNMCIsIm9yaWdfaWF0IjoxNTUzMzk2MDE4fQ.m_mjQURafkbSVKGCeuRn79dTY7Gbb0uYmdot1-w_Lek"
+    var token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE1NTUyNDc1NzMsImlkIjoib3ExNVU1OTdLTVNlNTV2d21aLUN3ZDZkSDFNMCIsIm9yaWdfaWF0IjoxNTU0NjQyNzczfQ.m6i6TH7mK34cA0oc6P9Dc_xKxQWwOoch8VdgGPrwt2k"
     //let token = UserDefaults.standard.value(forKey: "token")
     var userInfo = JSON()
     var record = JSON()
@@ -40,15 +47,19 @@ class RequestFunction {
         let urlStr = "\(URLStr)/user"
         let headers:HTTPHeaders = ["auth": "Bearer \(token)"]
         Alamofire.request(urlStr, method: .get, encoding: URLEncoding.default,headers: headers).responseJSON { response in
+            let jsonValue = JSON(response.result.value).string
+            UserDefaults.standard.set(jsonValue, forKey: "userInfo")
+            //print(jsonValue)
             response.result.ifSuccess {
                 self.userInfo = JSON(response.result.value)
                 }
                 .ifFailure {
-                    print("Cannot get UserInfo")
+                    print("Cannot get Record")
             }
-            let value = JSON(response.result.value)
-            let info = value.dictionaryObject
-            UserDefaults.standard.set(info, forKey: "info")
+//            if let value = response.result.value {
+//                let json = JSON(value)
+//                //UserDefaults.standard.set(json, forKey: "userInfo")
+//            }
             
         }
     }
@@ -156,7 +167,7 @@ class RequestFunction {
     }
     
     func postFlag(content:String, token: String) {
-        let flag = "{\"id\":\"\",\"time\":0,\"content\":\"\(content)\",\"likes\":[],\"comments\":[],\"sign_in\":0}"
+        let flag = "{\"id\":\"\",\"time\":0,\"content\":\"\(content)\",\"likes\":[],\"comments\":[],\"sign_in\":[]}"
         let flagData = flag.data(using: String.Encoding.utf8)
         
         let urlStr = "\(URLStr)/flag"
@@ -177,7 +188,7 @@ class RequestFunction {
     }
     
     func deleteFlag(id:String, token: String) {
-        let flag = "{\"id\":\"\(id)\",\"time\":0,\"content\":\"\",\"likes\":[],\"comments\":[],\"sign_in\":0}"
+        let flag = "{\"id\":\"\(id)\",\"time\":0,\"content\":\"\",\"likes\":[],\"comments\":[],\"sign_in\":[]}"
         let flagData = flag.data(using: String.Encoding.utf8)
         
         let urlStr = "\(URLStr)/flag"
@@ -198,7 +209,7 @@ class RequestFunction {
     }
     
     func putFlag(id:String, content:String, token: String) {
-        let flag = "{\"id\":\"\(id)\",\"time\":0,\"content\":\"\(content)\",\"likes\":[],\"comments\":[],\"sign_in\":0}"
+        let flag = "{\"id\":\"\(id)\",\"time\":0,\"content\":\"\(content)\",\"likes\":[],\"comments\":[],\"sign_in\":[]}"
         let flagData = flag.data(using: String.Encoding.utf8)
         
         let urlStr = "\(URLStr)/flag"
@@ -219,7 +230,7 @@ class RequestFunction {
     }
     
     func postFlagSign(id: String, token: String) {
-        let flag = "{\"id\":\"\(id)\",\"time\":0,\"content\":\"\",\"likes\":[],\"comments\":[],\"sign_in\":0}"
+        let flag = "{\"id\":\"\(id)\",\"time\":0,\"content\":\"\",\"likes\":[],\"comments\":[],\"sign_in\":[]}"
         let flagData = flag.data(using: String.Encoding.utf8)
         
         let urlStr = "\(URLStr)/flag/sign"
@@ -231,7 +242,7 @@ class RequestFunction {
         
         Alamofire.request(request).responseJSON { response in
             response.result.ifSuccess {
-                print(response)
+                print("response\(response)")
                 }
                 .ifFailure {
                     print("Cannot Post Flag Sign")
@@ -239,11 +250,9 @@ class RequestFunction {
         }
     }
     
-    func postRoutine(title:String, token: String) {
-        
-        let routine = "{\"id\":\"\",\"time\":0,\"title\":\"\(title)\",\"icon_id\":\"\",\"sign_in\":0}"
+    func postRoutine(title:String, icon:String, token: String){
+        let routine = "{\"id\":\"\",\"time\":0,\"title\":\"\(title)\",\"icon_id\":\"\(icon)\",\"sign_in\":[]}"
         let routineData = routine.data(using: String.Encoding.utf8)
-        
         let urlStr = "\(URLStr)/routine"
         let url = URL(string: urlStr)!
         var request = URLRequest(url: url)
@@ -256,16 +265,17 @@ class RequestFunction {
                 print(response)
                 }
                 .ifFailure {
-                    print("Cannot Post Flag Sign")
+                    print("Cannot Post Routine")
             }
         }
+        
     }
     
-    func putRoutine(id:String, token: String) {
-        let routine = "{\"id\":\"\(id)\",\"time\":0,\"title\":\"\",\"icon_id\":\"\",\"sign_in\":0}"
+    func putRoutineTitle(id:String, title:String, token: String) {
+        let routine = "{\"id\":\"\(id)\",\"time\":0,\"title\":\"\(title)\",\"icon_id\":\"\",\"sign_in\":[]}"
         let routineData = routine.data(using: String.Encoding.utf8)
         
-        let urlStr = "\(URLStr)/routine"
+        let urlStr = "\(URLStr)/routine/title"
         let url = URL(string: urlStr)!
         var request = URLRequest(url: url)
         request.httpMethod = HTTPMethod.put.rawValue
@@ -277,13 +287,34 @@ class RequestFunction {
                 print(response)
                 }
                 .ifFailure {
-                    print("Cannot Post Flag Sign")
+                    print("Cannot Put Routine Title")
+            }
+        }
+    }
+    
+    func putRoutineIcon(id:String, icon:String, token: String) {
+        let routine = "{\"id\":\"\(id)\",\"time\":0,\"title\":\"\",\"icon_id\":\"\(icon)\",\"sign_in\":[]}"
+        let routineData = routine.data(using: String.Encoding.utf8)
+        
+        let urlStr = "\(URLStr)/routine/icon"
+        let url = URL(string: urlStr)!
+        var request = URLRequest(url: url)
+        request.httpMethod = HTTPMethod.put.rawValue
+        request.addValue("Bearer \(token)", forHTTPHeaderField: "auth")
+        request.httpBody = routineData
+        
+        Alamofire.request(request).responseJSON { response in
+            response.result.ifSuccess {
+                print(response)
+                }
+                .ifFailure {
+                    print("Cannot Put Routine Icon")
             }
         }
     }
     
     func deleteRoutine(id:String, token: String) {
-        let routine = "{\"id\":\"\(id)\",\"time\":0,\"title\":\"\",\"icon_id\":\"\",\"sign_in\":0}"
+        let routine = "{\"id\":\"\(id)\",\"time\":0,\"title\":\"\",\"icon_id\":\"\",\"sign_in\":[]}"
         let routineData = routine.data(using: String.Encoding.utf8)
         
         let urlStr = "\(URLStr)/routine"
@@ -298,13 +329,13 @@ class RequestFunction {
                 print(response)
                 }
                 .ifFailure {
-                    print("Cannot Post Flag Sign")
+                    print("Cannot Delete Routine")
             }
         }
     }
     
     func putRoutineSign(id:String, token: String) {
-        let routine = "{\"id\":\"\(id)\",\"time\":0,\"title\":\"\",\"icon_id\":\"\",\"sign_in\":0}"
+        let routine = "{\"id\":\"\(id)\",\"time\":0,\"title\":\"\",\"icon_id\":\"\",\"sign_in\":[]}"
         let routineData = routine.data(using: String.Encoding.utf8)
         
         let urlStr = "\(URLStr)/routine/sign"
@@ -315,11 +346,12 @@ class RequestFunction {
         request.httpBody = routineData
         
         Alamofire.request(request).responseJSON { response in
+            print(response)
             response.result.ifSuccess {
                 print(response)
                 }
                 .ifFailure {
-                    print("Cannot Post Flag Sign")
+                    print("Cannot Post Routine Sign")
             }
         }
     }
@@ -328,18 +360,31 @@ class RequestFunction {
 
 extension Date {
     
-    /// 获取当前 秒级 时间戳 - 10位
+    // 获取当前 秒级 时间戳 - 10位
     var timeStamp : String {
         let timeInterval: TimeInterval = self.timeIntervalSince1970
         let timeStamp = Int(timeInterval)
         return "\(timeStamp)"
     }
     
-    /// 获取当前 毫秒级 时间戳 - 13位
+    // 获取当前 毫秒级 时间戳 - 13位
     var milliStamp : Int64 {
         let timeInterval: TimeInterval = self.timeIntervalSince1970
         let millisecond = CLongLong(round(timeInterval*1000))
         return millisecond
+    }
+    
+    // 是否为今天
+    func isToday() -> Bool{
+        let calendar = Calendar.current
+        let unit: Set<Calendar.Component> = [.day,.month,.year]
+        let nowComps = calendar.dateComponents(unit, from: Date())
+        let selfCmps = calendar.dateComponents(unit, from: self)
+        
+        return (selfCmps.year == nowComps.year) &&
+            (selfCmps.month == nowComps.month) &&
+            (selfCmps.day == nowComps.day)
+        
     }
 }
 

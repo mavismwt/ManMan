@@ -22,6 +22,8 @@ class AddLogViewController: UIViewController,UITextViewDelegate {
     let inset = UIApplication.shared.delegate?.window??.safeAreaInsets ?? UIEdgeInsets.zero
     let SCREENSIZE = UIScreen.main.bounds.size
     
+    var request = RequestFunction()
+    
     override func viewDidLoad() {
         
         self.view.backgroundColor = UIColor.init(red: 238/255, green: 238/255, blue: 238/255, alpha: 1)
@@ -97,25 +99,9 @@ class AddLogViewController: UIViewController,UITextViewDelegate {
     @objc func back() {
         self.navigationController?.popViewController(animated: true)
         self.tabBarController?.tabBar.isHidden = false
-        //let token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE1NTM4NDg2ODQsImlkIjoib3ExNVU1OTdLTVNlNTV2d21aLUN3ZDZkSDFNMCIsIm9yaWdfaWF0IjoxNTUzMjQzODg0fQ.ytyaCePdOCkkffE3CdZs7OuyDY1diUA2f4Ga49gBgqo"
-        //let AppID = "wx7ef876fe1742f5df"
-        //let AppSecret = "7842d96f93d4116b247a6d38c8824c29"
-        //let urlStr = "https://slow.hustonline.net/api/v1/record/action/insert"
-        let userURLStr = "https://slow.hustonline.net/api/v1/user"
-        let json = JSON()
-        let parameter:Parameters = ["records": json]
-        //获取access_token
-        //print(token)
-//        Alamofire.request(urlStr,method: .post,parameters:["records": json],headers:["Authorization" :"Bearer \(token)"]).responseJSON { response in
-//            let value = response.result.value
-//            print(value)
-//        }
-        let token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE1NTM4NTE5NDEsImlkIjoib3ExNVU1OTdLTVNlNTV2d21aLUN3ZDZkSDFNMCIsIm9yaWdfaWF0IjoxNTUzMjQ3MTQxfQ.3sZqoGAZZ6ccQ7ODwu-vn7oaImObk3E2Vwaljv31v24"
-        Alamofire.request(userURLStr,method:.get,headers:["Authorization":"Bearer \(token)"]).responseJSON { response in
-            
-            let value = response.result.isSuccess
-            print(value)
-        }
+        
+        let token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE1NTUyNDc1NzMsImlkIjoib3ExNVU1OTdLTVNlNTV2d21aLUN3ZDZkSDFNMCIsIm9yaWdfaWF0IjoxNTU0NjQyNzczfQ.m6i6TH7mK34cA0oc6P9Dc_xKxQWwOoch8VdgGPrwt2k"
+        request.postRecord(content: self.inputText.text, token: token)
        
     }
     

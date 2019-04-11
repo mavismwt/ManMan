@@ -62,7 +62,8 @@ class TestViewController: UIViewController {
 //    }
     
     @objc func req() {
-        function.postRecord(content:"whatever", token: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE1NTQwMDA4MTgsImlkIjoib3ExNVU1OTdLTVNlNTV2d21aLUN3ZDZkSDFNMCIsIm9yaWdfaWF0IjoxNTUzMzk2MDE4fQ.m_mjQURafkbSVKGCeuRn79dTY7Gbb0uYmdot1-w_Lek")
+        function.getUserInfo(token: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE1NTQ2MjIwMzQsImlkIjoib3ExNVU1OTdLTVNlNTV2d21aLUN3ZDZkSDFNMCIsIm9yaWdfaWF0IjoxNTU0MDE3MjM0fQ.5QRNwSvgTWdwv1ONNsmKId93aJAHpprXvQlBpqUO_pA")
+        //function.postRecord(content:"whatever", token: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE1NTQ2MjIwMzQsImlkIjoib3ExNVU1OTdLTVNlNTV2d21aLUN3ZDZkSDFNMCIsIm9yaWdfaWF0IjoxNTU0MDE3MjM0fQ.5QRNwSvgTWdwv1ONNsmKId93aJAHpprXvQlBpqUO_pA")
     }
     
     //调起微信

@@ -7,6 +7,8 @@
 //
 
 import UIKit
+import Alamofire
+import SwiftyJSON
 
 class AddFlagViewController: UIViewController {
     
@@ -16,6 +18,9 @@ class AddFlagViewController: UIViewController {
     var textView = UIView()
     var inputText = UITextView()
     var confirmButton = UIButton()
+    
+    var request = RequestFunction()
+    
     let inset = UIApplication.shared.delegate?.window??.safeAreaInsets ?? UIEdgeInsets.zero
     let SCREENSIZE = UIScreen.main.bounds.size
     
@@ -87,6 +92,10 @@ class AddFlagViewController: UIViewController {
     
     @objc func confirm() {
         let alertView = AlertView()
+        
+        let token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE1NTUyNDc1NzMsImlkIjoib3ExNVU1OTdLTVNlNTV2d21aLUN3ZDZkSDFNMCIsIm9yaWdfaWF0IjoxNTU0NjQyNzczfQ.m6i6TH7mK34cA0oc6P9Dc_xKxQWwOoch8VdgGPrwt2k"
+        request.postFlag(content: inputText.text, token: token)
+        
         UIView.animate(withDuration: 1, animations: {
             self.view.addSubview(alertView)
         })

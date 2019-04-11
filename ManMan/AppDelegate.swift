@@ -14,6 +14,7 @@ import SwiftyJSON
 class AppDelegate: UIResponder, UIApplicationDelegate,WXApiDelegate {
 
     var window: UIWindow?
+    var function: RequestFunction?
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
         // Override point for customization after application launch.
@@ -23,17 +24,21 @@ class AppDelegate: UIResponder, UIApplicationDelegate,WXApiDelegate {
         let secondNavigationController = UINavigationController(rootViewController: mineViewController)
         let tabbarController = UITabBarController()
         tabbarController.viewControllers = [firstNavigationController,secondNavigationController]
+        let loginViewController = LoginViewController()
         let testViewController = TestViewController()
-        //window?.rootViewController = testViewController
+        let token = UserDefaults.standard.value(forKey: "token")
+        //if token != nil {
+        
         window?.rootViewController = tabbarController
-        //MARK: -注册微信
-        //let WXAppID = "wx7ef876fe1742f5df"
+        
+//        }else {
+        //window?.rootViewController = loginViewController
+//        }
         WXApi.registerApp("wx7ef876fe1742f5df")
         return true
     }
 
     func applicationWillResignActive(_ application: UIApplication) {
-        
         // Sent when the application is about to move from active to inactive state. This can occur for certain types of temporary interruptions (such as an incoming phone call or SMS message) or when the user quits the application and it begins the transition to the background state.
         // Use this method to pause ongoing tasks, disable timers, and invalidate graphics rendering callbacks. Games should use this method to pause the game.
     }
@@ -84,6 +89,17 @@ class AppDelegate: UIResponder, UIApplicationDelegate,WXApiDelegate {
             let json = JSON(value)
             if let token = json["token"].string {
                 UserDefaults.standard.set(token, forKey: "token")
+                self.function?.getUserInfo(token: token)
+                print(token)
+            }
+            response.result.ifSuccess {
+                let homeViewController = HomeViewController()
+                let mineViewController = MineViewController()
+                let firstNavigationController = UINavigationController(rootViewController: homeViewController)
+                let secondNavigationController = UINavigationController(rootViewController: mineViewController)
+                let tabbarController = UITabBarController()
+                tabbarController.viewControllers = [firstNavigationController,secondNavigationController]
+                self.window?.rootViewController = tabbarController
             }
         }
     }

@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		181DC808225F4939002C8000 /* CommonView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 181DC807225F4939002C8000 /* CommonView.swift */; };
 		18231EF2224CC13C00558C86 /* RequestFunction.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18231EF1224CC13C00558C86 /* RequestFunction.swift */; };
 		1860F5C521D13BA500BD221F /* LogDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1860F5C421D13BA500BD221F /* LogDetailView.swift */; };
 		1860F5C821D4705C00BD221F /* flagCardTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1860F5C721D4705C00BD221F /* flagCardTableViewCell.swift */; };
@@ -15,8 +16,6 @@
 		1860F5EB21D692CD00BD221F /* ShowMoreView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1860F5EA21D692CD00BD221F /* ShowMoreView.swift */; };
 		1860F5ED21D696CE00BD221F /* LogDetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1860F5EC21D696CE00BD221F /* LogDetailViewController.swift */; };
 		1860F5EF21D6A00700BD221F /* ShareTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1860F5EE21D6A00700BD221F /* ShareTableViewCell.swift */; };
-		1860F60521D74B4400BD221F /* SnapKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1860F60221D74B3A00BD221F /* SnapKit.framework */; };
-		1860F60621D74B4400BD221F /* SnapKit.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 1860F60221D74B3A00BD221F /* SnapKit.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		1860F60921D74B4900BD221F /* CVCalendar.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1860F5FB21D74B3300BD221F /* CVCalendar.framework */; };
 		1860F60A21D74B4900BD221F /* CVCalendar.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 1860F5FB21D74B3300BD221F /* CVCalendar.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		18632AF621C24C8000A0CA47 /* AddUserDefinedCheckViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18632AF521C24C8000A0CA47 /* AddUserDefinedCheckViewController.swift */; };
@@ -71,27 +70,6 @@
 			remoteGlobalIDString = 45D9D8B31C5006AA006673B2;
 			remoteInfo = CVCalendar;
 		};
-		1860F60121D74B3A00BD221F /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 1860F5FC21D74B3A00BD221F /* SnapKit.xcodeproj */;
-			proxyType = 2;
-			remoteGlobalIDString = EEBCC9D819CC627D0083B827;
-			remoteInfo = SnapKit;
-		};
-		1860F60321D74B3A00BD221F /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 1860F5FC21D74B3A00BD221F /* SnapKit.xcodeproj */;
-			proxyType = 2;
-			remoteGlobalIDString = EEBCC9E219CC627E0083B827;
-			remoteInfo = "SnapKit Tests";
-		};
-		1860F60721D74B4400BD221F /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 1860F5FC21D74B3A00BD221F /* SnapKit.xcodeproj */;
-			proxyType = 1;
-			remoteGlobalIDString = EEBCC9D719CC627D0083B827;
-			remoteInfo = SnapKit;
-		};
 		1860F60B21D74B4900BD221F /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 1860F5F621D74B3300BD221F /* CVCalendar.xcodeproj */;
@@ -122,7 +100,6 @@
 			dstPath = "";
 			dstSubfolderSpec = 10;
 			files = (
-				1860F60621D74B4400BD221F /* SnapKit.framework in Embed Frameworks */,
 				1860F60A21D74B4900BD221F /* CVCalendar.framework in Embed Frameworks */,
 			);
 			name = "Embed Frameworks";
@@ -133,6 +110,7 @@
 /* Begin PBXFileReference section */
 		04FF2F6A77DC3D4DE55EEB2B /* Pods-ManMan.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ManMan.release.xcconfig"; path = "Target Support Files/Pods-ManMan/Pods-ManMan.release.xcconfig"; sourceTree = "<group>"; };
 		089009E7227B791C8B910559 /* Pods_ManMan.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_ManMan.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		181DC807225F4939002C8000 /* CommonView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommonView.swift; sourceTree = "<group>"; };
 		18231EF1224CC13C00558C86 /* RequestFunction.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RequestFunction.swift; sourceTree = "<group>"; };
 		1860F5C421D13BA500BD221F /* LogDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LogDetailView.swift; sourceTree = "<group>"; };
 		1860F5C721D4705C00BD221F /* flagCardTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = flagCardTableViewCell.swift; sourceTree = "<group>"; };
@@ -142,7 +120,6 @@
 		1860F5EC21D696CE00BD221F /* LogDetailViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LogDetailViewController.swift; sourceTree = "<group>"; };
 		1860F5EE21D6A00700BD221F /* ShareTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShareTableViewCell.swift; sourceTree = "<group>"; };
 		1860F5F621D74B3300BD221F /* CVCalendar.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = CVCalendar.xcodeproj; path = "CVCalendar-master的副本/CVCalendar.xcodeproj"; sourceTree = "<group>"; };
-		1860F5FC21D74B3A00BD221F /* SnapKit.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = SnapKit.xcodeproj; path = "SnapKit-develop的副本/SnapKit.xcodeproj"; sourceTree = "<group>"; };
 		18632AF521C24C8000A0CA47 /* AddUserDefinedCheckViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddUserDefinedCheckViewController.swift; sourceTree = "<group>"; };
 		18632AF921C26D5000A0CA47 /* LogViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LogViewController.swift; sourceTree = "<group>"; };
 		18632B0621C2996500A0CA47 /* FangCustomizeUICollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FangCustomizeUICollectionViewCell.swift; sourceTree = "<group>"; };
@@ -201,7 +178,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				1860F5CD21D5E53600BD221F /* MessageUI.framework in Frameworks */,
-				1860F60521D74B4400BD221F /* SnapKit.framework in Frameworks */,
 				1860F60921D74B4900BD221F /* CVCalendar.framework in Frameworks */,
 				C46031618781FD2FFF13D8EF /* Pods_ManMan.framework in Frameworks */,
 			);
@@ -228,7 +204,6 @@
 			isa = PBXGroup;
 			children = (
 				18C88E23223C8223004FB741 /* project.xcworkspace */,
-				1860F5FC21D74B3A00BD221F /* SnapKit.xcodeproj */,
 				1860F5F621D74B3300BD221F /* CVCalendar.xcodeproj */,
 				1860F5CC21D5E53600BD221F /* MessageUI.framework */,
 				089009E7227B791C8B910559 /* Pods_ManMan.framework */,
@@ -240,15 +215,6 @@
 			isa = PBXGroup;
 			children = (
 				1860F5FB21D74B3300BD221F /* CVCalendar.framework */,
-			);
-			name = Products;
-			sourceTree = "<group>";
-		};
-		1860F5FD21D74B3A00BD221F /* Products */ = {
-			isa = PBXGroup;
-			children = (
-				1860F60221D74B3A00BD221F /* SnapKit.framework */,
-				1860F60421D74B3A00BD221F /* SnapKit Tests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -422,6 +388,7 @@
 				18F972F121B7F8B000FFAB90 /* LaunchScreen.storyboard */,
 				18F972F421B7F8B000FFAB90 /* Info.plist */,
 				1860F5C921D48B2000BD221F /* MailViewController.swift */,
+				181DC807225F4939002C8000 /* CommonView.swift */,
 			);
 			path = ManMan;
 			sourceTree = "<group>";
@@ -470,7 +437,6 @@
 			buildRules = (
 			);
 			dependencies = (
-				1860F60821D74B4400BD221F /* PBXTargetDependency */,
 				1860F60C21D74B4900BD221F /* PBXTargetDependency */,
 			);
 			name = ManMan;
@@ -553,10 +519,6 @@
 					ProductGroup = 1860F5F721D74B3300BD221F /* Products */;
 					ProjectRef = 1860F5F621D74B3300BD221F /* CVCalendar.xcodeproj */;
 				},
-				{
-					ProductGroup = 1860F5FD21D74B3A00BD221F /* Products */;
-					ProjectRef = 1860F5FC21D74B3A00BD221F /* SnapKit.xcodeproj */;
-				},
 			);
 			projectRoot = "";
 			targets = (
@@ -573,20 +535,6 @@
 			fileType = wrapper.framework;
 			path = CVCalendar.framework;
 			remoteRef = 1860F5FA21D74B3300BD221F /* PBXContainerItemProxy */;
-			sourceTree = BUILT_PRODUCTS_DIR;
-		};
-		1860F60221D74B3A00BD221F /* SnapKit.framework */ = {
-			isa = PBXReferenceProxy;
-			fileType = wrapper.framework;
-			path = SnapKit.framework;
-			remoteRef = 1860F60121D74B3A00BD221F /* PBXContainerItemProxy */;
-			sourceTree = BUILT_PRODUCTS_DIR;
-		};
-		1860F60421D74B3A00BD221F /* SnapKit Tests.xctest */ = {
-			isa = PBXReferenceProxy;
-			fileType = wrapper.cfbundle;
-			path = "SnapKit Tests.xctest";
-			remoteRef = 1860F60321D74B3A00BD221F /* PBXContainerItemProxy */;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
 /* End PBXReferenceProxy section */
@@ -630,6 +578,8 @@
 			inputPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-ManMan/Pods-ManMan-frameworks.sh",
 				"${BUILT_PRODUCTS_DIR}/Alamofire/Alamofire.framework",
+				"${BUILT_PRODUCTS_DIR}/MJRefresh/MJRefresh.framework",
+				"${BUILT_PRODUCTS_DIR}/SnapKit/SnapKit.framework",
 				"${BUILT_PRODUCTS_DIR}/SwiftyJSON/SwiftyJSON.framework",
 			);
 			name = "[CP] Embed Pods Frameworks";
@@ -637,6 +587,8 @@
 			);
 			outputPaths = (
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Alamofire.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/MJRefresh.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/SnapKit.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/SwiftyJSON.framework",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -674,6 +626,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				18632B0D21C49E5500A0CA47 /* AddFlagViewController.swift in Sources */,
+				181DC808225F4939002C8000 /* CommonView.swift in Sources */,
 				18F9398821BCE3D200306EB0 /* ExampleViewController.swift in Sources */,
 				18C88E26223C82C7004FB741 /* test.swift in Sources */,
 				18F9399021BD27AC00306EB0 /* AddLogViewController.swift in Sources */,
@@ -737,11 +690,6 @@
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
-		1860F60821D74B4400BD221F /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			name = SnapKit;
-			targetProxy = 1860F60721D74B4400BD221F /* PBXContainerItemProxy */;
-		};
 		1860F60C21D74B4900BD221F /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			name = CVCalendar;
