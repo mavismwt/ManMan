@@ -20,8 +20,8 @@ enum MethodType {
 class RequestFunction {
     
     let URLStr = "https://slow.hustonline.net/api/v1"
-    var token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE1NTUyNDc1NzMsImlkIjoib3ExNVU1OTdLTVNlNTV2d21aLUN3ZDZkSDFNMCIsIm9yaWdfaWF0IjoxNTU0NjQyNzczfQ.m6i6TH7mK34cA0oc6P9Dc_xKxQWwOoch8VdgGPrwt2k"
-    //let token = UserDefaults.standard.value(forKey: "token")
+    var token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE1NTYxNTcyODEsImlkIjoib3ExNVU1OTdLTVNlNTV2d21aLUN3ZDZkSDFNMCIsIm9yaWdfaWF0IjoxNTU1NTUyNDgxfQ.UB5ASV9pM4SO1WP1le1ZyLQtlOjzcOtl8tq3gyOW1rU"
+    //var token = UserDefaults.standard.value(forKey: "token")
     var userInfo = JSON()
     var record = JSON()
     var flag = JSON()
@@ -77,7 +77,7 @@ class RequestFunction {
         }
     }
     
-    private func getFlag(token: String) {
+    func getFlag(token: String) {
         let urlStr = "\(URLStr)/flag"
         let headers:HTTPHeaders = ["auth": "Bearer \(token)"]
         Alamofire.request(urlStr, method: .get, encoding: URLEncoding.default,headers: headers).responseJSON { response in
@@ -106,7 +106,6 @@ class RequestFunction {
     func postRecord(content:String, token: String) {
         let record = "{\"id\":\"\",\"time\":0,\"content\":\"\(content)\"}"
         let recordData = record.data(using: String.Encoding.utf8)
-        
         let urlStr = "\(URLStr)/record"
         let url = URL(string: urlStr)!
         var request = URLRequest(url: url)
@@ -242,7 +241,7 @@ class RequestFunction {
         
         Alamofire.request(request).responseJSON { response in
             response.result.ifSuccess {
-                print("response\(response)")
+                print("\(response)")
                 }
                 .ifFailure {
                     print("Cannot Post Flag Sign")
@@ -253,20 +252,16 @@ class RequestFunction {
     func postRoutine(title:String, icon:String, token: String){
         let routine = "{\"id\":\"\",\"time\":0,\"title\":\"\(title)\",\"icon_id\":\"\(icon)\",\"sign_in\":[]}"
         let routineData = routine.data(using: String.Encoding.utf8)
-        let urlStr = "\(URLStr)/routine"
+        let urlStr = "\(URLStr)/routine/"
         let url = URL(string: urlStr)!
         var request = URLRequest(url: url)
         request.httpMethod = HTTPMethod.post.rawValue
-        request.addValue("Bearer \(token)", forHTTPHeaderField: "auth")
+        request.addValue("Bearer \(self.token)", forHTTPHeaderField: "auth")
         request.httpBody = routineData
         
         Alamofire.request(request).responseJSON { response in
-            response.result.ifSuccess {
-                print(response)
-                }
-                .ifFailure {
-                    print("Cannot Post Routine")
-            }
+            
+            print("post routine \(response)")
         }
         
     }
@@ -321,7 +316,7 @@ class RequestFunction {
         let url = URL(string: urlStr)!
         var request = URLRequest(url: url)
         request.httpMethod = HTTPMethod.delete.rawValue
-        request.addValue("Bearer \(token)", forHTTPHeaderField: "auth")
+        request.addValue("Bearer \(self.token)", forHTTPHeaderField: "auth")
         request.httpBody = routineData
         
         Alamofire.request(request).responseJSON { response in

@@ -13,27 +13,12 @@ import SwiftyJSON
 
 class FlagViewController: UIViewController,UITableViewDelegate,UITableViewDataSource,UITextFieldDelegate,UIGestureRecognizerDelegate {
     
-    public struct flagData {
-        var profileURL: String?
-        var nickname: String?
-        var time: Int64?
-        var detail: String?
-        var comment = [commentDetail]()
-        var commentNum: Int?
-        var likeNum: Int?
-        var id: String?
-    }
-    public struct commentDetail {
-        var userName: String?
-        var userComment: String?
-    }
+
     
     var topLineView = UIView()
     var backButton = UIButton()
     var titleView = UILabel()
     var letterButton = UIButton()
-    
-    //var commentView = CommentLineView()
     
     let coverView = UIView()
     let tableView = UITableView()
@@ -45,33 +30,38 @@ class FlagViewController: UIViewController,UITableViewDelegate,UITableViewDataSo
     let identifier = "reusedCell"
     var HeightOfKeyboard:CGFloat? = 0
     var dTime:TimeInterval? = 0
-    var flagDatas = [flagData]()
+    var flagDatas = [FlagData]()
     
-    var datas = ["出去旅游"]
-    
+    var MyID = ""
+    var index = 0
+    var selectedCellId = ""
     
     override func viewWillAppear(_ animated: Bool) {
+        
+        if let ID = UserDefaults.standard.value(forKey: "userID") {
+            MyID = ID as! String
+        }
+        
         let URLStr = "https://slow.hustonline.net/api/v1"
         var token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE1NTUyNDc1NzMsImlkIjoib3ExNVU1OTdLTVNlNTV2d21aLUN3ZDZkSDFNMCIsIm9yaWdfaWF0IjoxNTU0NjQyNzczfQ.m6i6TH7mK34cA0oc6P9Dc_xKxQWwOoch8VdgGPrwt2k"
         let urlStr = "\(URLStr)/flag/flags"
         let headers:HTTPHeaders = ["auth": "Bearer \(token)"]
-        Alamofire.request(urlStr, method: .get, parameters: ["num": 0], encoding: URLEncoding.default,headers: headers).responseJSON { response in
+        Alamofire.request(urlStr, method: .get, parameters: ["num": index], encoding: URLEncoding.default,headers: headers).responseJSON { response in
             //print(response)
             let json = JSON(response.result.value)
             for k in 0..<json["data"]["flags"].count {
                 let value = json["data"]["flags"][k]
-                var comments = [commentDetail]()
+                var comments = [CommentDetail]()
                 for i in 0..<value["flags"]["comments"].count {
-                    comments.append(commentDetail.init(userName: value["flag"]["comments"][i]["name"].string, userComment: value["flag"]["comments"][i]["content"].string))
+                    comments.append(CommentDetail.init(userName: value["flag"]["comments"][i]["name"].string, userComment: value["flag"]["comments"][i]["content"].string))
                 }
-                self.flagDatas.append(flagData.init(profileURL: value["img_url"].string, nickname: value["name"].string, time: value["flags"]["time"].int64, detail: value["flags"]["content"].string, comment: comments, commentNum: value["flags"]["comments"].count, likeNum: value["flags"]["likes"].count, id: value["flags"]["id"].string))
+                self.flagDatas.append(FlagData.init(userId: value["wx_id"].string, profileURL: value["img_url"].string, nickname: value["name"].string, time: value["flags"]["time"].int64, detail: value["flags"]["content"].string, comment: comments, commentNum: value["flags"]["comments"].count, likeNum: value["flags"]["likes"].count, id: value["flags"]["id"].string))
                 
                 self.tableView.reloadData()
                 self.view.layoutIfNeeded()
             }
             
         }
-        //self.tableView.reloadData()
     }
     
     override func viewDidLoad() {
@@ -80,7 +70,6 @@ class FlagViewController: UIViewController,UITableViewDelegate,UITableViewDataSo
         
         // 下拉刷新
         header.setRefreshingTarget(self, refreshingAction: #selector(headerRefresh))
-        // 现在的版本要用mj_header
         tableView.mj_header = header
         
         // 上拉刷新
@@ -101,7 +90,6 @@ class FlagViewController: UIViewController,UITableViewDelegate,UITableViewDataSo
         
         self.view.addSubview(topLineView)
         self.view.addSubview(tableView)
-        //self.view.addSubview(commentView)
         
         let navRect = self.navigationController?.navigationBar.frame
         topLineView.frame = CGRect(x: 0, y: 0, width: (navRect?.width)!, height: (navRect?.height)!+inset.top)
@@ -131,7 +119,6 @@ class FlagViewController: UIViewController,UITableViewDelegate,UITableViewDataSo
             make.height.equalTo(20)
         }
         letterButton.setTitle("Edit", for: .normal)
-        //letterButton.setImage(UIImage(named: "editWhite"), for: .normal)
         letterButton.addTarget(self, action: #selector(setMyFlag), for: .touchUpInside)
         
         tableView.frame = CGRect(x: 0, y: (navRect?.height)!+inset.top+8, width: SCREENSIZE.width, height: SCREENSIZE.height-8-(navRect?.height)!-inset.top-inset.bottom)
@@ -149,15 +136,12 @@ class FlagViewController: UIViewController,UITableViewDelegate,UITableViewDataSo
     
     // 顶部刷新
     @objc func headerRefresh(){
-        //print("下拉刷新")
         // 结束刷新
         self.tableView.mj_header.endRefreshing()
     }
     
     // 底部刷新
-    var index = 0
     @objc func footerRefresh(){
-        //print("上拉刷新")
         self.tableView.mj_footer.endRefreshing()
         // 2次后模拟没有更多数据
         index = index + 1
@@ -178,7 +162,7 @@ class FlagViewController: UIViewController,UITableViewDelegate,UITableViewDataSo
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return flagDatas.count + 1
+        return flagDatas.count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
@@ -188,14 +172,11 @@ class FlagViewController: UIViewController,UITableViewDelegate,UITableViewDataSo
         tapGestureRecognizer.addTarget(self, action: #selector(comment))
         tapGestureRecognizer.delegate = self
         cell?.commentView.addGestureRecognizer(tapGestureRecognizer)
-        if indexPath.row == 0 {
+        
+        if flagDatas[indexPath.row].userId == MyID {
             let tag = UILabel()
             cell?.addSubview(tag)
-            cell?.detail.text = datas[indexPath.row]
-            if let myFlagDetail:String = UserDefaults.standard.value(forKey: "flagDetail") as? String {
-                cell?.detail.text = myFlagDetail
-                UserDefaults.standard.set(nil, forKey: "flagDetail")
-            }
+            
             tag.text = "我"
             tag.font = UIFont.systemFont(ofSize: 12)
             tag.textAlignment = .center
@@ -208,24 +189,24 @@ class FlagViewController: UIViewController,UITableViewDelegate,UITableViewDataSo
                 make.left.equalTo((cell?.nickname.snp.right)!).offset(8)
                 make.width.height.equalTo(14)
             }
-        }else if indexPath.row >= 1 && indexPath.row <= flagDatas.count{
-            cell?.id = flagDatas[indexPath.row-1].id!
-            cell?.detail.text = flagDatas[indexPath.row-1].detail
-            Alamofire.request(flagDatas[indexPath.row-1].profileURL!).responseData { response in
-                guard let data = response.result.value else { return }
-                let image = UIImage(data: data)
-                cell?.profile.image = image
-            }
-            cell?.nickname.text = flagDatas[indexPath.row-1].nickname
-            let timeInterval = flagDatas[indexPath.row-1].time
-            let timeFormatter = DateFormatter()
-            timeFormatter.dateFormat = "yyyy年MM月dd日 HH:mm"
-            let date = Date(timeIntervalSince1970: TimeInterval(timeInterval!/1000))
-            let timeStr = timeFormatter.string(from: date)
-            cell?.time.text = timeStr
-            cell?.likeNumber = flagDatas[indexPath.row-1].likeNum!
-            cell?.commentNumber = flagDatas[indexPath.row-1].commentNum!
         }
+        cell?.id = flagDatas[indexPath.row].id!
+        cell?.detail.text = flagDatas[indexPath.row].detail
+        Alamofire.request(flagDatas[indexPath.row].profileURL!).responseData { response in
+            guard let data = response.result.value else { return }
+            let image = UIImage(data: data)
+            cell?.profile.image = image
+        }
+        cell?.nickname.text = flagDatas[indexPath.row].nickname
+        let timeInterval = flagDatas[indexPath.row].time
+        let timeFormatter = DateFormatter()
+        timeFormatter.dateFormat = "yyyy年MM月dd日 HH:mm"
+        let date = Date(timeIntervalSince1970: TimeInterval(timeInterval!/1000))
+        let timeStr = timeFormatter.string(from: date)
+        cell?.time.text = timeStr
+        cell?.likeNumber = flagDatas[indexPath.row].likeNum!
+        cell?.commentNumber = flagDatas[indexPath.row].commentNum!
+        
         return cell!
     }
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
@@ -235,15 +216,20 @@ class FlagViewController: UIViewController,UITableViewDelegate,UITableViewDataSo
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         let cell:CustomizeUITableViewCell = tableView.cellForRow(at: indexPath) as! CustomizeUITableViewCell
         let flagDetailViewController = FlagDetailViewController()
-        print(cell.id)
-//        for i in 0..<flagDatas.count {
-//            if flagDatas[i].id == id {
-//                print(flagDatas[i])
-//                UserDefaults.standard.set(flagDatas[i], forKey: "flagData")
-//
-//            }
-//        }
-//        //UserDefaults.standard.set(id, forKey: "id")
+        let id = cell.id
+        var detail = FlagData()
+        for i in 0..<flagDatas.count {
+            if flagDatas[i].id == id {
+                //print(flagDatas[i])
+                detail = flagDatas[i]
+            }
+        }
+        let encoder = JSONEncoder()
+        let data = try? encoder.encode(detail)
+        //let data: Data = Data.init(bytes: &detail, count: MemoryLayout<FlagData>.size)
+        UserDefaults.standard.set(data, forKey: "flagData")
+        
+        //UserDefaults.standard.set(id, forKey: "id")
         self.navigationController?.pushViewController(flagDetailViewController, animated: true)
         
     }
@@ -259,7 +245,7 @@ class FlagViewController: UIViewController,UITableViewDelegate,UITableViewDataSo
         let alert = UIAlertController(title: "注意", message: "Flag功能仅在每月1-2号开放", preferredStyle: .alert)
         let okAction = UIAlertAction(title: "确定", style: .default, handler: {
             action in
-            print("点击了确定")
+            //点击事件
         })
         alert.addAction(okAction)
         self.present(alert, animated: true, completion: nil)

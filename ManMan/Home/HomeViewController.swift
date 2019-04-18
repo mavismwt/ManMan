@@ -113,25 +113,10 @@ class HomeViewController: UIViewController,UITableViewDelegate,UITableViewDataSo
     
     var tasks = [taskDetail]()
     var request = RequestFunction()
-    var token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE1NTUyNDc1NzMsImlkIjoib3ExNVU1OTdLTVNlNTV2d21aLUN3ZDZkSDFNMCIsIm9yaWdfaWF0IjoxNTU0NjQyNzczfQ.m6i6TH7mK34cA0oc6P9Dc_xKxQWwOoch8VdgGPrwt2k"
+    var token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE1NTYxNTcyODEsImlkIjoib3ExNVU1OTdLTVNlNTV2d21aLUN3ZDZkSDFNMCIsIm9yaWdfaWF0IjoxNTU1NTUyNDgxfQ.UB5ASV9pM4SO1WP1le1ZyLQtlOjzcOtl8tq3gyOW1rU"
     
     override func viewWillAppear(_ animated: Bool) {
         self.tabBarController?.tabBar.isHidden = false
-//        if let taskNumber:Int = UserDefaults.standard.value(forKey: "taskNumber") as? Int {
-//            tasks.append(taskDetail.init(name: titleStr[taskNumber], icon: imageName[taskNumber], day: 0, isfinished: false))
-//            UserDefaults.standard.set(nil, forKey: "taskNumber")
-//            print(self.tasks)
-//            self.tableView.reloadData()
-//            self.view.layoutIfNeeded()
-//        }
-//        if let userDefinedTaskNumber:Int = UserDefaults.standard.value(forKey: "userDefinedTaskNumber") as? Int {
-//            let userDefinedTaskName:String =
-//                UserDefaults.standard.value(forKey: "taskName") as! String
-//            tasks.append(taskDetail.init(name: userDefinedTaskName, icon: imageName[userDefinedTaskNumber], day: 0, isfinished: false))
-//            self.tableView.reloadData()
-//            UserDefaults.standard.set(nil, forKey: "taskName")
-//            UserDefaults.standard.set(nil, forKey: "userDefinedTaskNumber")
-//        }
         if let isOn:Int =  UserDefaults.standard.value(forKey: "isVolumnOn") as? Int {
             if isOn == 1 {
                 self.isVolumnOn = true
@@ -143,9 +128,16 @@ class HomeViewController: UIViewController,UITableViewDelegate,UITableViewDataSo
         let URLStr = "https://slow.hustonline.net/api/v1"
         
         let urlStr = "\(URLStr)/routine"
+        let urlStr2 = "\(URLStr)/user"
         let headers:HTTPHeaders = ["auth": "Bearer \(token)"]
+        Alamofire.request(urlStr2, method: .get, headers: headers).responseJSON { response in
+            let json = JSON(response.result.value)
+            //print(json["data"]["wx_id"].string)
+            if let ID = json["data"]["wx_id"].string {
+                UserDefaults.standard.set(ID, forKey: "userID")
+            }
+        }
         Alamofire.request(urlStr, method: .get, encoding: URLEncoding.default,headers: headers).responseJSON { response in
-            //print(response)
             self.tasks = [taskDetail]()
             let json = JSON(response.result.value)
             for k in 0..<json["data"]["routines"].count {
@@ -159,9 +151,10 @@ class HomeViewController: UIViewController,UITableViewDelegate,UITableViewDataSo
                     isFinished = date.isToday()
                 }
                 self.tasks.append(taskDetail.init(id: routine["id"].string, name:  routine["title"].string, icon:  routine["icon_id"].string, days: routine["sign_in"].count, isFinished: isFinished))
-                self.tableView.reloadData()
-                self.view.layoutIfNeeded()
+                
             }
+            self.tableView.reloadData()
+            self.view.layoutIfNeeded()
         }
     }
     
@@ -303,7 +296,7 @@ class HomeViewController: UIViewController,UITableViewDelegate,UITableViewDataSo
             return 95
         }
     }
-    //songshlan@bingyn.net
+    
     //点击卡片动画
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         self.request.putRoutineSign(id: "d023a60c-9afe-4a02-a5d4-2471a4c54e39", token: self.token)
@@ -312,7 +305,6 @@ class HomeViewController: UIViewController,UITableViewDelegate,UITableViewDataSo
 //        tapGestureRecognizer.addTarget(self, action: #selector(check))
 //        cell.cell.addGestureRecognizer(tapGestureRecognizer)
         cell.selectionStyle = .none
-        //self.img.frame = CGRect(x: cell.frame.width-115, y: cell.frame.maxY-20, width: 150, height: 150)
         self.img.frame = CGRect(x: cell.frame.width-115, y: cell.frame.maxY, width: 150, height: 150)
         if cell.isfinished == false {
             UIView.animate(withDuration: 0.25, delay: 0, options: .curveEaseIn, animations: {
@@ -323,13 +315,10 @@ class HomeViewController: UIViewController,UITableViewDelegate,UITableViewDataSo
             }, completion: nil)
             DispatchQueue.main.asyncAfter(deadline: .now()+0.25, execute:
                 {
-//                    cell.background.removeFromSuperview()
-//                    cell.checkButton.removeFromSuperview()
                     cell.days += 1
                     cell.isfinished = true
                     cell.reSetTableViewCell()
                     self.img.removeFromSuperview()
-                    //self.initImg()
                     if self.isVolumnOn == true {
                         self.localMusic()
                     }
@@ -364,10 +353,10 @@ class HomeViewController: UIViewController,UITableViewDelegate,UITableViewDataSo
         let delete = UITableViewRowAction(style: .normal, title: "删除") {
             action, index in
             self.request.deleteRoutine(id: self.tasks[indexPath.row].id!, token: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE1NTUyNDc1NzMsImlkIjoib3ExNVU1OTdLTVNlNTV2d21aLUN3ZDZkSDFNMCIsIm9yaWdfaWF0IjoxNTU0NjQyNzczfQ.m6i6TH7mK34cA0oc6P9Dc_xKxQWwOoch8VdgGPrwt2k")
-            self.tasks.remove(at: indexPath.row)
-            print(self.tasks)
-            tableView.deleteRows(at: [indexPath], with: UITableView.RowAnimation.automatic)
             
+            self.tasks.remove(at: indexPath.row)
+            tableView.deleteRows(at: [indexPath], with: UITableView.RowAnimation.automatic)
+            print(self.tasks)
         }
         delete.backgroundColor = UIColor.init(red: 241/255, green: 107/255, blue: 104/255, alpha: 1)
         

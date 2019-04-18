@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		181DC808225F4939002C8000 /* CommonView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 181DC807225F4939002C8000 /* CommonView.swift */; };
+		181DC80A225F5ADE002C8000 /* FlagData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 181DC809225F5ADE002C8000 /* FlagData.swift */; };
 		18231EF2224CC13C00558C86 /* RequestFunction.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18231EF1224CC13C00558C86 /* RequestFunction.swift */; };
 		1860F5C521D13BA500BD221F /* LogDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1860F5C421D13BA500BD221F /* LogDetailView.swift */; };
 		1860F5C821D4705C00BD221F /* flagCardTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1860F5C721D4705C00BD221F /* flagCardTableViewCell.swift */; };
@@ -111,6 +112,7 @@
 		04FF2F6A77DC3D4DE55EEB2B /* Pods-ManMan.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ManMan.release.xcconfig"; path = "Target Support Files/Pods-ManMan/Pods-ManMan.release.xcconfig"; sourceTree = "<group>"; };
 		089009E7227B791C8B910559 /* Pods_ManMan.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_ManMan.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		181DC807225F4939002C8000 /* CommonView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommonView.swift; sourceTree = "<group>"; };
+		181DC809225F5ADE002C8000 /* FlagData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FlagData.swift; sourceTree = "<group>"; };
 		18231EF1224CC13C00558C86 /* RequestFunction.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RequestFunction.swift; sourceTree = "<group>"; };
 		1860F5C421D13BA500BD221F /* LogDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LogDetailView.swift; sourceTree = "<group>"; };
 		1860F5C721D4705C00BD221F /* flagCardTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = flagCardTableViewCell.swift; sourceTree = "<group>"; };
@@ -389,6 +391,7 @@
 				18F972F421B7F8B000FFAB90 /* Info.plist */,
 				1860F5C921D48B2000BD221F /* MailViewController.swift */,
 				181DC807225F4939002C8000 /* CommonView.swift */,
+				181DC809225F5ADE002C8000 /* FlagData.swift */,
 			);
 			path = ManMan;
 			sourceTree = "<group>";
@@ -630,6 +633,7 @@
 				18F9398821BCE3D200306EB0 /* ExampleViewController.swift in Sources */,
 				18C88E26223C82C7004FB741 /* test.swift in Sources */,
 				18F9399021BD27AC00306EB0 /* AddLogViewController.swift in Sources */,
+				181DC80A225F5ADE002C8000 /* FlagData.swift in Sources */,
 				18F9398E21BD279A00306EB0 /* AddCheckViewController.swift in Sources */,
 				18632B0921C2A79A00A0CA47 /* FeedbackViewController.swift in Sources */,
 				18632BF321CCFC6A00A0CA47 /* ShareViewController.swift in Sources */,

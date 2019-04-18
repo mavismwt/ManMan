@@ -62,8 +62,10 @@ class TestViewController: UIViewController {
 //    }
     
     @objc func req() {
-        function.getUserInfo(token: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE1NTQ2MjIwMzQsImlkIjoib3ExNVU1OTdLTVNlNTV2d21aLUN3ZDZkSDFNMCIsIm9yaWdfaWF0IjoxNTU0MDE3MjM0fQ.5QRNwSvgTWdwv1ONNsmKId93aJAHpprXvQlBpqUO_pA")
-        //function.postRecord(content:"whatever", token: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE1NTQ2MjIwMzQsImlkIjoib3ExNVU1OTdLTVNlNTV2d21aLUN3ZDZkSDFNMCIsIm9yaWdfaWF0IjoxNTU0MDE3MjM0fQ.5QRNwSvgTWdwv1ONNsmKId93aJAHpprXvQlBpqUO_pA")
+        //function.getUserInfo(token: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE1NTQ2MjIwMzQsImlkIjoib3ExNVU1OTdLTVNlNTV2d21aLUN3ZDZkSDFNMCIsIm9yaWdfaWF0IjoxNTU0MDE3MjM0fQ.5QRNwSvgTWdwv1ONNsmKId93aJAHpprXvQlBpqUO_pA")
+        function.postRoutine(title: "喝水", icon: "drink", token: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE1NTYxNTcyODEsImlkIjoib3ExNVU1OTdLTVNlNTV2d21aLUN3ZDZkSDFNMCIsIm9yaWdfaWF0IjoxNTU1NTUyNDgxfQ.UB5ASV9pM4SO1WP1le1ZyLQtlOjzcOtl8tq3gyOW1rU")
+        //function.postRecord(content: "just", token: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE1NTYxNTcyODEsImlkIjoib3ExNVU1OTdLTVNlNTV2d21aLUN3ZDZkSDFNMCIsIm9yaWdfaWF0IjoxNTU1NTUyNDgxfQ.UB5ASV9pM4SO1WP1le1ZyLQtlOjzcOtl8tq3gyOW1rU")
+        
     }
     
     //调起微信

@@ -12,21 +12,6 @@ import SwiftyJSON
 
 class FlagDetailViewController: UIViewController,UITableViewDelegate,UITableViewDataSource,UITextFieldDelegate,UIGestureRecognizerDelegate {
     
-    struct flagData {
-        var profileURL: String?
-        var nickname: String?
-        var time: Int64?
-        var detail: String?
-        var comment = [commentDetail]()
-        var commentNum: Int?
-        var likeNum: Int?
-        var id: String?
-    }
-    struct commentDetail {
-        var userName: String?
-        var userComment: String?
-    }
-    
     var topLineView = UIView()
     var backButton = UIButton()
     var titleView = UILabel()
@@ -42,79 +27,67 @@ class FlagDetailViewController: UIViewController,UITableViewDelegate,UITableView
     var HeightOfKeyboard:CGFloat? = 0
     var dTime: TimeInterval? = 0
     var height:[CGFloat] = [0,0,0]
-    //var data:flagData?
-    
+    var detail:FlagData?
     var request: RequestFunction?
+    var nickname: String?
+    var profileURl: String?
     
     override func viewWillAppear(_ animated: Bool) {
+        if let nickname = UserDefaults.standard.value(forKey: "nickname"), let profileURL = UserDefaults.standard.value(forKey: "profileURL") {
+            self.nickname = nickname as! String
+            self.profileURl = profileURL as! String
+        }
     }
     
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view, typically from a nib.
         
+        if let data = UserDefaults.standard.value(forKey: "flagData") {
+            let decoder = JSONDecoder()
+            let obj = try? decoder.decode(FlagData.self, from: data as! Data)
+            detail = obj
+            self.setDetailView()
+            self.setCommentLineView()
+            self.view.layoutIfNeeded()
+            UserDefaults.standard.set(nil, forKey: "flagData")
+        } else if let userId = UserDefaults.standard.value(forKey: "userID") {
+            let URLStr = "https://slow.hustonline.net/api/v1"
+            var token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE1NTUyNDc1NzMsImlkIjoib3ExNVU1OTdLTVNlNTV2d21aLUN3ZDZkSDFNMCIsIm9yaWdfaWF0IjoxNTU0NjQyNzczfQ.m6i6TH7mK34cA0oc6P9Dc_xKxQWwOoch8VdgGPrwt2k"
+            let urlStr = "\(URLStr)/flag"
+            let headers:HTTPHeaders = ["auth": "Bearer \(token)"]
+            Alamofire.request(urlStr, method: .get, encoding: URLEncoding.default,headers: headers).responseJSON { response in
+                let json = JSON(response.result.value)
+                let num = json["data"]["flags"].count - 1
+                if num >= 0 {
+                    let value = json["data"]["flags"][num]
+                    var comDetails = [CommentDetail]()
+                    for i in 0..<value["comments"].count {
+                        let comDetail = CommentDetail.init(userName: value["comments"][i]["from_id"].string, userComment: value["comments"][i]["content"].string)
+                    }
+                    self.detail = FlagData(userId: value["id"].string, profileURL: self.profileURl, nickname: self.nickname, time: value["time"].int64, detail: value["content"].string, comment: comDetails, commentNum: value["comments"].count, likeNum: value["likes"].count, id: value["id"].string)
+                    self.setDetailView()
+                    self.setCommentLineView()
+                    self.view.layoutIfNeeded()
+                }
+            }
+            
+        }
         
         self.view.backgroundColor = UIColor.init(red: 238/255, green: 238/255, blue: 238/255, alpha: 1)
         
         topLineView.addSubview(backButton)
         topLineView.addSubview(titleView)
         
-        detailView.addSubview(tableView)
-        
         self.view.addSubview(topLineView)
         
+        detailView.addSubview(tableView)
         self.view.addSubview(detailView)
         self.view.addSubview(commentView)
         
         self.setTopLineView()
-        self.setCommentLineView()
         
-        detailView.snp.makeConstraints { (make) in
-            make.top.equalTo(topLineView.snp.bottom).offset(16)
-            make.left.equalToSuperview().offset(16)
-            make.right.equalTo(-16)
-            make.bottom.equalTo(commentView.snp.top).offset(-16)
-        }
-        let tapGestureRecognizer = UITapGestureRecognizer()
-        tapGestureRecognizer.addTarget(self, action: #selector(beginEdit))
-        detailView.commentView.addGestureRecognizer(tapGestureRecognizer)
-//        if let detail:String = self.data?.detail {
-//            detailView.detail.text = detail
-//        }
-//        detailView.detail.text = data?.detail
-//        detailView.nickname.text = data?.nickname
-//        if let timeInterval = data?.time {
-//            let timeFormatter = DateFormatter()
-//            timeFormatter.dateFormat = "yyyy年MM月dd日 HH:mm"
-//            let date = Date(timeIntervalSince1970: TimeInterval(timeInterval/1000))
-//            let timeStr = timeFormatter.string(from: date)
-//            detailView.time.text = timeStr
-//        }
-//
-//        detailView.commentNumLabel.text = "\(data?.commentNum)"
-//        detailView.likeNumLabel.text = "\(data?.likeNum)"
-//        Alamofire.request((data?.profileURL!)!).responseData { response in
-//            guard let data = response.result.value else { return }
-//            let image = UIImage(data: data)
-//            self.detailView.profile.image = image
-//        }
         
-        let navRect = self.navigationController?.navigationBar.frame
-        tableView.snp.makeConstraints { (make) in
-            make.top.equalTo(detailView.commentView.snp.bottom).offset(8)
-            make.bottom.equalToSuperview().offset(-16)
-            make.left.equalToSuperview().offset(16)
-            make.right.equalToSuperview().offset(-16)
-        }
-        tableView.layer.cornerRadius = 8
-        tableView.clipsToBounds = true
-        tableView.backgroundColor = UIColor.init(red: 238/255, green: 238/255, blue: 238/255, alpha: 1)
-        tableView.separatorStyle = .none
-        tableView.register(CommentTableViewCell.self, forCellReuseIdentifier: identifier)
-        tableView.dataSource = self
-        tableView.delegate = self
-        tableView.rowHeight = UITableView.automaticDimension
-        tableView.estimatedRowHeight = 300
     }
     
     func setTopLineView() {
@@ -139,6 +112,57 @@ class FlagDetailViewController: UIViewController,UITableViewDelegate,UITableView
         }
         backButton.setImage(UIImage(named: "back"), for: .normal)
         backButton.addTarget(self, action: #selector(back), for: .touchUpInside)
+    }
+    
+    func setDetailView() {
+        detailView.snp.makeConstraints { (make) in
+            make.top.equalTo(topLineView.snp.bottom).offset(16)
+            make.left.equalToSuperview().offset(16)
+            make.right.equalTo(-16)
+            make.bottom.equalTo(commentView.snp.top).offset(-16)
+        }
+        let tapGestureRecognizer = UITapGestureRecognizer()
+        tapGestureRecognizer.addTarget(self, action: #selector(beginEdit))
+        detailView.commentView.addGestureRecognizer(tapGestureRecognizer)
+        if let detail:String = self.detail?.detail {
+            detailView.detail.text = detail
+        }
+        detailView.detail.text = detail?.detail
+        detailView.nickname.text = detail?.nickname
+        if let timeInterval = detail?.time {
+            let timeFormatter = DateFormatter()
+            timeFormatter.dateFormat = "yyyy年MM月dd日 HH:mm"
+            let date = Date(timeIntervalSince1970: TimeInterval(timeInterval/1000))
+            let timeStr = timeFormatter.string(from: date)
+            detailView.time.text = timeStr
+        }
+        if let cNum:Int = detail?.commentNum, let lNum:Int = detail?.likeNum {
+            detailView.commentNumLabel.text = "\(cNum)"
+            detailView.likeNumLabel.text = "\(lNum)"
+        }
+        
+        Alamofire.request((detail?.profileURL!)!).responseData { response in
+            guard let data = response.result.value else { return }
+            let image = UIImage(data: data)
+            self.detailView.profile.image = image
+        }
+        
+        let navRect = self.navigationController?.navigationBar.frame
+        tableView.snp.makeConstraints { (make) in
+            make.top.equalTo(detailView.commentView.snp.bottom).offset(8)
+            make.bottom.equalToSuperview().offset(-16)
+            make.left.equalToSuperview().offset(16)
+            make.right.equalToSuperview().offset(-16)
+        }
+        tableView.layer.cornerRadius = 8
+        tableView.clipsToBounds = true
+        tableView.backgroundColor = UIColor.init(red: 238/255, green: 238/255, blue: 238/255, alpha: 1)
+        tableView.separatorStyle = .none
+        tableView.register(CommentTableViewCell.self, forCellReuseIdentifier: identifier)
+        tableView.dataSource = self
+        tableView.delegate = self
+        tableView.rowHeight = UITableView.automaticDimension
+        tableView.estimatedRowHeight = 300
     }
     
     func setCommentLineView() {
@@ -269,8 +293,8 @@ class FlagDetailViewController: UIViewController,UITableViewDelegate,UITableView
         {
             let cell = CommentTableViewCell.init(style: .default, reuseIdentifier: identifier)
         }
-        //cell?.nickname.text = self.data?.comment[indexPath.row].userName
-        //cell?.detail.text = self.data?.comment[indexPath.row].userComment
+        cell?.nickname.text = self.detail?.comment[indexPath.row].userName
+        cell?.detail.text = self.detail?.comment[indexPath.row].userComment
         height[indexPath.row] = FlagDetail.heightForTextView(textView: (cell?.detail)!, fixedWidth: (cell?.detail.frame.width)!) + 32
         return cell!
     }

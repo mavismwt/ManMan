@@ -61,15 +61,17 @@ class MineViewController: UIViewController,UITableViewDelegate,UITableViewDataSo
         self.view.backgroundColor = UIColor.init(red: 238/255, green: 238/255, blue: 238/255, alpha: 1)
         
         let URLStr = "https://slow.hustonline.net/api/v1"
-        var token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE1NTUyNDc1NzMsImlkIjoib3ExNVU1OTdLTVNlNTV2d21aLUN3ZDZkSDFNMCIsIm9yaWdfaWF0IjoxNTU0NjQyNzczfQ.m6i6TH7mK34cA0oc6P9Dc_xKxQWwOoch8VdgGPrwt2k"
+        var token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE1NTYxNTcyODEsImlkIjoib3ExNVU1OTdLTVNlNTV2d21aLUN3ZDZkSDFNMCIsIm9yaWdfaWF0IjoxNTU1NTUyNDgxfQ.UB5ASV9pM4SO1WP1le1ZyLQtlOjzcOtl8tq3gyOW1rU"
         let urlStr = "\(URLStr)/user"
         let headers:HTTPHeaders = ["auth": "Bearer \(token)"]
         Alamofire.request(urlStr, method: .get, encoding: URLEncoding.default,headers: headers).responseJSON { response in
             let value = JSON(response.result.value)
-            print(URL(string: value["data"]["img_url"].string!))
+            //print(URL(string: value["data"]["wx_id"].string!))
             response.result.ifSuccess {
                 self.userInfo = JSON(response.result.value)
                 self.showUserInfo(name: self.userInfo["data"]["name"].string!,imgURL: self.userInfo["data"]["img_url"].string!)
+                UserDefaults.standard.set(self.userInfo["data"]["img_url"].string!, forKey: "profileURL")
+                UserDefaults.standard.set(self.userInfo["data"]["name"].string!, forKey: "nickname")
                 }
                 .ifFailure {
                     print("Cannot get Record")
@@ -107,7 +109,7 @@ class MineViewController: UIViewController,UITableViewDelegate,UITableViewDataSo
             make.centerX.equalToSuperview()
             make.width.height.equalTo(72)
         }
-    Alamofire.request("http://thirdwx.qlogo.cn/mmopen/vi_32/xcB6mPP8PaMlRdXElwZal9UZQfg8PthMNDlT5mSDnPqQZiartxq5k8UwrFvuF6ItUNUfexXp70ibSK9Zp6Rrw83w/132").responseData { response in
+    Alamofire.request(imgURL).responseData { response in
             guard let data = response.result.value else { return }
             let image = UIImage(data: data)
             self.profileView.image = image
