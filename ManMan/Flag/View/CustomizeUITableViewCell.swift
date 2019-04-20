@@ -8,24 +8,11 @@
 
 import UIKit
 import SnapKit
+import Alamofire
 
 class CustomizeUITableViewCell: UITableViewCell {
     
     let SCREENRECT = UIScreen.main.bounds
-    
-    struct flagData {
-        var profileURL: String?
-        var nickname: String?
-        var time: Int64?
-        var detail: String?
-        var comment = [commentDetail]()
-        var commentNum: Int?
-        var likeNum: Int?
-    }
-    struct commentDetail {
-        var userName: String?
-        var userComment: String?
-    }
 
     var cell = UIView()
     var basicInfo = UIView()
@@ -43,7 +30,9 @@ class CustomizeUITableViewCell: UITableViewCell {
     var likeNumber:Int = 0
     var isliked = false
     
+    var request = RequestFunction()
     var id = String()
+    var userid = String()
     
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         
@@ -123,7 +112,7 @@ class CustomizeUITableViewCell: UITableViewCell {
         detail.isSelectable = false
         detail.isOpaque = false
         detail.isScrollEnabled = false
-        detail.text = "这是我的flag这是我的flag这是我的flag这是我的flag这是我的flag"
+        detail.text = ""
         
         commentView.snp.makeConstraints { (make) in
             make.right.equalTo(likeView.snp.left).offset(-16)
@@ -138,6 +127,9 @@ class CustomizeUITableViewCell: UITableViewCell {
             make.width.height.equalTo(15)
         }
         commentImg.image = UIImage(named: "comment")
+        //        let commentTapGestureRecognizer = UITapGestureRecognizer()
+        //        commentTapGestureRecognizer.addTarget(self, action: #selector(comment))
+        //        likeView.addGestureRecognizer(commentTapGestureRecognizer)
         
         commentNumLabel.snp.makeConstraints { (make) in
             make.left.equalTo(commentImg.snp.right).offset(5)
@@ -147,7 +139,7 @@ class CustomizeUITableViewCell: UITableViewCell {
         }
         commentNumLabel.font = UIFont(name: "PingFang SC", size: 12)
         commentNumLabel.textColor = UIColor.init(red: 0/255, green: 0/255, blue: 0/255, alpha: 0.54)
-        commentNumLabel.text = "\(commentNumber)"
+        
         
         likeView.snp.makeConstraints { (make) in
             make.right.equalTo(-32)
@@ -155,6 +147,7 @@ class CustomizeUITableViewCell: UITableViewCell {
             make.height.equalTo(40)
             make.width.equalTo(40)
         }
+        
         let tapGestureRecognizer = UITapGestureRecognizer()
         tapGestureRecognizer.addTarget(self, action: #selector(like))
         likeView.addGestureRecognizer(tapGestureRecognizer)
@@ -179,6 +172,7 @@ class CustomizeUITableViewCell: UITableViewCell {
     
     @objc func like() {
         if isliked == false {
+            request.postFlagLike(openid: userid, flagid: id, token: "")
             isliked = true
             UIView.transition(with: self.likeImg, duration: 0.5 , options: .transitionFlipFromLeft , animations: {
                 self.likeImg.image = UIImage(named: "likeSelected")
@@ -188,7 +182,13 @@ class CustomizeUITableViewCell: UITableViewCell {
                     self.likeNumber += 1
                     self.likeNumLabel.text = "\(self.likeNumber)"
             })
+        } else {
+            
         }
+    }
+    
+    @objc func comment() {
+        
     }
     
 //    func textView(_ textView: UITextView, shouldChangeTextIn range: NSRange, replacementText text: String) -> Bool {
@@ -205,7 +205,10 @@ class CustomizeUITableViewCell: UITableViewCell {
 //
 //        }
     
-    
+    override func layoutSubviews() {
+        self.commentNumLabel.text = "\(commentNumber)"
+        self.likeNumLabel.text = "\(likeNumber)"
+    }
     required init(coder aDecoder: NSCoder) {
         fatalError("init(code:)has not brrn implomented");
     }

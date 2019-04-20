@@ -21,20 +21,12 @@ class DateLogCell: UIView {
         
         self.frame = frame
         
-        self.addSubview(line)
         self.addSubview(dot)
         self.addSubview(title)
-        
-        line.snp.makeConstraints { (make) in
-            make.top.equalToSuperview()
-            make.left.equalTo(32)
-            make.bottom.equalToSuperview()
-            make.width.equalTo(2)
-        }
-        line.backgroundColor = UIColor.init(red: 213/255, green: 213/255, blue: 213/255, alpha: 1)
+        self.addSubview(line)
         
         dot.snp.makeConstraints { (make) in
-            make.centerX.equalTo(line.snp.centerX)
+            make.centerX.equalTo(32)
             make.centerY.equalToSuperview()
             make.height.width.equalTo(12)
         }
@@ -44,12 +36,20 @@ class DateLogCell: UIView {
         
         title.snp.makeConstraints { (make) in
             make.centerY.equalToSuperview()
-            make.left.equalTo(line.snp.right).offset(16)
+            make.left.equalTo(dot.snp.centerX).offset(32)
             make.height.equalTo(24)
         }
         title.font = UIFont.systemFont(ofSize: 24)
         title.text = "喝水"
         title.textColor = UIColor.init(red: 213/255, green: 213/255, blue: 213/255, alpha: 1)
+        
+        line.snp.makeConstraints { (make) in
+            make.top.equalToSuperview()
+            make.centerX.equalTo(dot.snp.centerX)
+            make.bottom.equalToSuperview()
+            make.width.equalTo(2)
+        }
+        line.backgroundColor = UIColor.init(red: 213/255, green: 213/255, blue: 213/255, alpha: 1)
         
         let tapGestureRecognizer = UITapGestureRecognizer()
         tapGestureRecognizer.addTarget(self, action: #selector(check))

@@ -43,6 +43,19 @@ class FlagDetailViewController: UIViewController,UITableViewDelegate,UITableView
         super.viewDidLoad()
         // Do any additional setup after loading the view, typically from a nib.
         
+        self.view.backgroundColor = UIColor.init(red: 238/255, green: 238/255, blue: 238/255, alpha: 1)
+        
+        topLineView.addSubview(backButton)
+        topLineView.addSubview(titleView)
+        
+        self.view.addSubview(topLineView)
+        
+        detailView.addSubview(tableView)
+        self.view.addSubview(detailView)
+        self.view.addSubview(commentView)
+        
+        self.setTopLineView()
+        
         if let data = UserDefaults.standard.value(forKey: "flagData") {
             let decoder = JSONDecoder()
             let obj = try? decoder.decode(FlagData.self, from: data as! Data)
@@ -64,6 +77,7 @@ class FlagDetailViewController: UIViewController,UITableViewDelegate,UITableView
                     var comDetails = [CommentDetail]()
                     for i in 0..<value["comments"].count {
                         let comDetail = CommentDetail.init(userName: value["comments"][i]["from_id"].string, userComment: value["comments"][i]["content"].string)
+                        comDetails.append(comDetail)
                     }
                     self.detail = FlagData(userId: value["id"].string, profileURL: self.profileURl, nickname: self.nickname, time: value["time"].int64, detail: value["content"].string, comment: comDetails, commentNum: value["comments"].count, likeNum: value["likes"].count, id: value["id"].string)
                     self.setDetailView()
@@ -74,18 +88,6 @@ class FlagDetailViewController: UIViewController,UITableViewDelegate,UITableView
             
         }
         
-        self.view.backgroundColor = UIColor.init(red: 238/255, green: 238/255, blue: 238/255, alpha: 1)
-        
-        topLineView.addSubview(backButton)
-        topLineView.addSubview(titleView)
-        
-        self.view.addSubview(topLineView)
-        
-        detailView.addSubview(tableView)
-        self.view.addSubview(detailView)
-        self.view.addSubview(commentView)
-        
-        self.setTopLineView()
         
         
     }
@@ -184,20 +186,16 @@ class FlagDetailViewController: UIViewController,UITableViewDelegate,UITableView
     @objc func comment() {
         self.commentView.inputText.becomeFirstResponder()
     }
+    //发送评论
     @objc func send() {
-        //UIView.animate(withDuration: 0.3, animations: {
         self.commentView.inputText.resignFirstResponder()
-        //self.data!.comment.append(commentDetail.init(userName: "Mavismwt", userComment: self.commentView.inputText.text!))
-        //self.str.append(self.commentView.inputText.text!)
-        self.height.append(0)
+        self.request?.postFlagComment(openid: self.detail!.userId!, flagid: self.detail!.id!, comment: self.commentView.inputText.text!)
         self.tableView.reloadData()
         UIView.animate(withDuration: 0.5, animations: {
-            //self.detailView.commentNumber =  self.data!.comment.count
             self.detailView.layoutIfNeeded()
+            
         })
         self.commentView.inputText.text = ""
-//        self.commentView.frame = CGRect(x: 0, y: UIScreen.main.bounds.height-60-inset.bottom, width: UIScreen.main.bounds.width, height: 60)
-        //})
         
     }
     @objc func beginEdit() {
@@ -242,7 +240,6 @@ class FlagDetailViewController: UIViewController,UITableViewDelegate,UITableView
         HeightOfKeyboard = endFrame.origin.y
         //计算工具栏距离底部的间距
         let margin = UIScreen.main.bounds.height - y
-        print(margin)
         // 更新约束,执行动画
         if margin != 0.0 {
             commentView.snp.updateConstraints { (make) in
@@ -267,7 +264,6 @@ class FlagDetailViewController: UIViewController,UITableViewDelegate,UITableView
     @objc func back() {
         self.navigationController?.popViewController(animated: true)
         self.navigationController?.isNavigationBarHidden = true
-        //self.tabBarController?.tabBar.isHidden = false
     }
     
     @objc func setMyFlag() {
@@ -277,13 +273,7 @@ class FlagDetailViewController: UIViewController,UITableViewDelegate,UITableView
     
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-//        if self.data?.comment.count != nil {
-//            return (self.data?.comment.count)!
-//        } else {
-//            return 0
-//        }
-        return 0
-        
+        return (self.detail?.comment.count)!
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {

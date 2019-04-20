@@ -249,6 +249,44 @@ class RequestFunction {
         }
     }
     
+    func postFlagLike(openid: String, flagid: String, token: String) {
+        let like = "{\"openid\":\"\(openid)\", \"flag_id\":\"\(flagid)\"}"
+        let likeData = like.data(using: String.Encoding.utf8)
+        
+        let urlStr = "\(URLStr)/flag/like"
+        let url = URL(string: urlStr)!
+        var request = URLRequest(url: url)
+        request.httpMethod = HTTPMethod.post.rawValue
+        request.addValue("Bearer \(self.token)", forHTTPHeaderField: "auth")
+        request.httpBody = likeData
+        
+        Alamofire.request(request).responseJSON { response in
+             print("\(response)")
+            response.result.ifSuccess {
+                }
+                .ifFailure {
+                    print("Cannot Post Flag Like")
+            }
+        }
+    }
+    
+    func postFlagComment(openid: String, flagid:String , comment: String) {
+        let comment = "{\"openid\":\"\(openid)\",\"flag_id\":\"\(flagid)\",\"comment\":{\"id\":\"\",\"from_id\":\"\",\"content\":\"\(comment)\",\"time\":0,}}"
+        print(comment)
+        let commentData = comment.data(using: String.Encoding.utf8)
+        
+        let urlStr = "\(URLStr)/flag/comment"
+        let url = URL(string: urlStr)!
+        var request = URLRequest(url: url)
+        request.httpMethod = HTTPMethod.post.rawValue
+        request.addValue("Bearer \(self.token)", forHTTPHeaderField: "auth")
+        request.httpBody = commentData
+        
+        Alamofire.request(request).responseJSON { response in
+            print("\(response)")
+        }
+    }
+    
     func postRoutine(title:String, icon:String, token: String){
         let routine = "{\"id\":\"\",\"time\":0,\"title\":\"\(title)\",\"icon_id\":\"\(icon)\",\"sign_in\":[]}"
         let routineData = routine.data(using: String.Encoding.utf8)
@@ -329,25 +367,20 @@ class RequestFunction {
         }
     }
     
-    func putRoutineSign(id:String, token: String) {
+    func postRoutineSign(id:String, token: String) {
+        print(id)
         let routine = "{\"id\":\"\(id)\",\"time\":0,\"title\":\"\",\"icon_id\":\"\",\"sign_in\":[]}"
         let routineData = routine.data(using: String.Encoding.utf8)
         
         let urlStr = "\(URLStr)/routine/sign"
         let url = URL(string: urlStr)!
         var request = URLRequest(url: url)
-        request.httpMethod = HTTPMethod.put.rawValue
+        request.httpMethod = HTTPMethod.post.rawValue
         request.addValue("Bearer \(token)", forHTTPHeaderField: "auth")
         request.httpBody = routineData
         
         Alamofire.request(request).responseJSON { response in
             print(response)
-            response.result.ifSuccess {
-                print(response)
-                }
-                .ifFailure {
-                    print("Cannot Post Routine Sign")
-            }
         }
     }
     
@@ -370,7 +403,7 @@ extension Date {
     }
     
     // 是否为今天
-    func isToday() -> Bool{
+    func isToday() -> Bool {
         let calendar = Calendar.current
         let unit: Set<Calendar.Component> = [.day,.month,.year]
         let nowComps = calendar.dateComponents(unit, from: Date())
@@ -380,6 +413,19 @@ extension Date {
             (selfCmps.month == nowComps.month) &&
             (selfCmps.day == nowComps.day)
         
+    }
+    
+    //是否在同一天
+    func isSameDay(day: Date) -> Bool {
+        
+        let calendar = Calendar.current
+        let unit: Set<Calendar.Component> = [.day,.month,.year]
+        let dayComps = calendar.dateComponents(unit, from: day)
+        let selfComps = calendar.dateComponents(unit, from: self)
+        
+        return (selfComps.year == dayComps.year) &&
+            (selfComps.month == dayComps.month) &&
+            (selfComps.day == dayComps.day)
     }
 }
 

@@ -108,6 +108,14 @@ class CheckCardCell: UITableViewCell {
         checkButton.removeFromSuperview()
     }
     
+    override func layoutSubviews() {
+        if isfinished == true {
+            taskProcess.text = "已坚持\(days)天"
+            background.removeFromSuperview()
+            checkButton.removeFromSuperview()
+        }
+    }
+    
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }

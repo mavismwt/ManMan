@@ -271,6 +271,11 @@ class HomeViewController: UIViewController,UITableViewDelegate,UITableViewDataSo
                 cell?.days = tasks[indexPath.row].days!
                 cell?.taskName.text = tasks[indexPath.row].name
                 cell?.taskIcon.image = UIImage(named: "\(tasks[indexPath.row].icon!)")
+                cell?.isfinished = tasks[indexPath.row].isFinished!
+                if cell?.isfinished == true {
+                    cell!.reSetTableViewCell()
+                    self.img.removeFromSuperview()
+                }
             }
             return cell!
         }
@@ -299,7 +304,7 @@ class HomeViewController: UIViewController,UITableViewDelegate,UITableViewDataSo
     
     //点击卡片动画
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        self.request.putRoutineSign(id: "d023a60c-9afe-4a02-a5d4-2471a4c54e39", token: self.token)
+        
         let cell:CheckCardCell = tableView.cellForRow(at: indexPath) as! CheckCardCell
 //        let tapGestureRecognizer = UITapGestureRecognizer()
 //        tapGestureRecognizer.addTarget(self, action: #selector(check))
@@ -307,6 +312,7 @@ class HomeViewController: UIViewController,UITableViewDelegate,UITableViewDataSo
         cell.selectionStyle = .none
         self.img.frame = CGRect(x: cell.frame.width-115, y: cell.frame.maxY, width: 150, height: 150)
         if cell.isfinished == false {
+            self.request.postRoutineSign(id: self.tasks[indexPath.row].id!, token: self.token)
             UIView.animate(withDuration: 0.25, delay: 0, options: .curveEaseIn, animations: {
                 cell.checkButton.removeFromSuperview()
                 self.view.addSubview(self.img)

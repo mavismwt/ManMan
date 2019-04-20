@@ -60,7 +60,6 @@ class FlagViewController: UIViewController,UITableViewDelegate,UITableViewDataSo
                 self.tableView.reloadData()
                 self.view.layoutIfNeeded()
             }
-            
         }
     }
     
@@ -174,9 +173,8 @@ class FlagViewController: UIViewController,UITableViewDelegate,UITableViewDataSo
         cell?.commentView.addGestureRecognizer(tapGestureRecognizer)
         
         if flagDatas[indexPath.row].userId == MyID {
+            print(indexPath.row,flagDatas[indexPath.row].userId,MyID)
             let tag = UILabel()
-            cell?.addSubview(tag)
-            
             tag.text = "我"
             tag.font = UIFont.systemFont(ofSize: 12)
             tag.textAlignment = .center
@@ -188,9 +186,11 @@ class FlagViewController: UIViewController,UITableViewDelegate,UITableViewDataSo
                 make.centerY.equalTo((cell?.nickname.snp.centerY)!)
                 make.left.equalTo((cell?.nickname.snp.right)!).offset(8)
                 make.width.height.equalTo(14)
+            cell?.addSubview(tag)
             }
         }
         cell?.id = flagDatas[indexPath.row].id!
+        cell?.userid = flagDatas[indexPath.row].userId!
         cell?.detail.text = flagDatas[indexPath.row].detail
         Alamofire.request(flagDatas[indexPath.row].profileURL!).responseData { response in
             guard let data = response.result.value else { return }
@@ -206,7 +206,6 @@ class FlagViewController: UIViewController,UITableViewDelegate,UITableViewDataSo
         cell?.time.text = timeStr
         cell?.likeNumber = flagDatas[indexPath.row].likeNum!
         cell?.commentNumber = flagDatas[indexPath.row].commentNum!
-        
         return cell!
     }
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
@@ -220,16 +219,12 @@ class FlagViewController: UIViewController,UITableViewDelegate,UITableViewDataSo
         var detail = FlagData()
         for i in 0..<flagDatas.count {
             if flagDatas[i].id == id {
-                //print(flagDatas[i])
                 detail = flagDatas[i]
             }
         }
         let encoder = JSONEncoder()
         let data = try? encoder.encode(detail)
-        //let data: Data = Data.init(bytes: &detail, count: MemoryLayout<FlagData>.size)
         UserDefaults.standard.set(data, forKey: "flagData")
-        
-        //UserDefaults.standard.set(id, forKey: "id")
         self.navigationController?.pushViewController(flagDetailViewController, animated: true)
         
     }
@@ -252,8 +247,9 @@ class FlagViewController: UIViewController,UITableViewDelegate,UITableViewDataSo
     }
     
     @objc func comment() {
-        let flagDetailViewController = FlagDetailViewController()
-        self.navigationController?.pushViewController(flagDetailViewController, animated: true)
+        
+        //let flagDetailViewController = FlagDetailViewController()
+        //self.navigationController?.pushViewController(flagDetailViewController, animated: true)
     }
     
 }

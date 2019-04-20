@@ -8,6 +8,8 @@
 
 import UIKit
 import CVCalendar
+import Alamofire
+import SwiftyJSON
 
 class LogViewController: UIViewController,UIScrollViewDelegate,CVCalendarViewDelegate,CVCalendarMenuViewDelegate,CVCalendarViewAppearanceDelegate {
     
@@ -31,29 +33,80 @@ class LogViewController: UIViewController,UIScrollViewDelegate,CVCalendarViewDel
     let SCREENSIZE = UIScreen.main.bounds.size
     
     struct data {
+        var id: String?
         var title:String?
         var icon:String?
         var isDate:Bool?
     }
-    var datas:[data] = [data.init(title: "Dec.29", icon: "", isDate: true),data.init(title: "早睡", icon: "sleep", isDate: false),data.init(title: "日志", icon: "log", isDate: false)]
+    var datas = [data]()
+    var allDate = [Date]()
+    var selDate = Date()
     
     override func viewDidLoad() {
         super.viewDidLoad()
+//
+//        let date = getDateStr(date: Date())
+//        datas = [data.init(title: date, icon: "", isDate: true)]//,data.init(title: "早睡", icon: "sleep", isDate: false),data.init(title: "日志", icon: "log", isDate: false)]
         
         self.view.backgroundColor = UIColor.init(red: 238/255, green: 238/255, blue: 238/255, alpha: 1)
         
         self.loadTopLineView()
-        self.setCalendarView()
         self.getData()
+        self.setCalendarView()
         self.setScrollView()
-        
     }
     
+    
     func getData() {
+        let dateStr = getDateStr(date: selDate)
+        datas = [data.init(id: "0",title: dateStr, icon: "", isDate: true)]
+        //,data.init(title: "早睡", icon: "sleep", isDate: false),data.init(title: "日志", icon: "log", isDate: false)]
+        let URLStr = "https://slow.hustonline.net/api/v1"
+        var token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE1NTYxNTcyODEsImlkIjoib3ExNVU1OTdLTVNlNTV2d21aLUN3ZDZkSDFNMCIsIm9yaWdfaWF0IjoxNTU1NTUyNDgxfQ.UB5ASV9pM4SO1WP1le1ZyLQtlOjzcOtl8tq3gyOW1rU"
+        let urlStr = "\(URLStr)/user"
+        let headers:HTTPHeaders = ["auth": "Bearer \(token)"]
+        
+        Alamofire.request(urlStr, method: .get, encoding: URLEncoding.default,headers: headers).responseJSON { response in
+            if let value = response.result.value {
+                let json = JSON(value)
+                for i in 0..<json["data"]["routines"].count {
+                    let routine = json["data"]["routines"][i]
+                    for k in 0..<routine["sign_in"].count {
+                        let lastSign = routine["sign_in"][k].int64
+                        let timeInterval:TimeInterval = TimeInterval(Int(lastSign!/1000))
+                        let signDate = Date(timeIntervalSince1970: timeInterval)
+                        self.allDate.append(signDate)
+                        if signDate.isSameDay(day: self.selDate) {
+                            self.datas.append(data.init(id: routine["id"].string, title: routine["title"].string, icon: routine["icon_id"].string, isDate: false))
+                        }
+                    }
+                }
+                for j in 0..<json["data"]["records"].count {
+                    let record = json["data"]["records"][j]
+                    let timeMili = record["time"].int64
+                    let timeInterval:TimeInterval = TimeInterval(Int(timeMili!/1000))
+                    let signDate = Date(timeIntervalSince1970: timeInterval)
+                    self.allDate.append(signDate)
+                    if signDate.isSameDay(day: self.selDate) {
+                        self.datas.append(data.init(id: record["id"].string, title: "日志", icon: "log", isDate: false))
+                    }
+                }
+            }
+            self.calendarView.layoutSubviews()
+            self.setScrollViewData()
+        }
+    }
+    
+    
+    func setScrollViewData() {
+        self.scrollView.removeAllSubviews()
         for i in 0..<datas.count {
             if i == 0 {
                 let cell = FirstLogCell.init(frame: CGRect(x: 0, y: 56*i, width: Int(SCREENSIZE.width), height: 56))
                 cell.title.text = datas[i].title
+                if datas.count == 1 {
+                    cell.line.backgroundColor = UIColor.white
+                }
                 self.scrollView.addSubview(cell)
             }else if i == datas.count-1 {
                 let cell = LastLogCell.init(frame: CGRect(x: 0, y: 56*i, width: Int(SCREENSIZE.width), height: 56))
@@ -70,9 +123,7 @@ class LogViewController: UIViewController,UIScrollViewDelegate,CVCalendarViewDel
                 cell.icon.image = UIImage(named: datas[i].icon!)
                 self.scrollView.addSubview(cell)
             }
-            
         }
-        
     }
     
     func setScrollView() {
@@ -256,16 +307,7 @@ class LogViewController: UIViewController,UIScrollViewDelegate,CVCalendarViewDel
     }
     
     func preliminaryView(shouldDisplayOnDayView dayView: DayView) -> Bool {
-        if !dayView.isHidden && dayView.date != nil {
-            //获取该日期视图的年月日
-            let year = dayView.date.year
-            let month = dayView.date.month
-            let day = dayView.date.day
-            //判断日期是否符合要求
-            if year == 2018 && month == 12 && day >= 1 && day <= 3 {
-                return true
-            }
-        }
+        
         return false
     }
     
@@ -292,6 +334,13 @@ class LogViewController: UIViewController,UIScrollViewDelegate,CVCalendarViewDel
         //print("selected")
     }
     
+    func getDateStr(date: Date) -> String {
+        let timeFormatter = DateFormatter()
+        timeFormatter.dateFormat = "MMM.d"
+        let str = timeFormatter.string(from: date) as String
+        return str
+    }
+    
     func getNowMonth() -> String {
         let date = Date()
         let timeFormatter = DateFormatter()
@@ -301,15 +350,24 @@ class LogViewController: UIViewController,UIScrollViewDelegate,CVCalendarViewDel
     }
     
     func dotMarker(shouldShowOnDayView dayView: DayView) -> Bool {
+        
         if !dayView.isHidden && dayView.date != nil {
             //获取该日期视图的年月日
             let year = dayView.date.year
             let month = dayView.date.month
             let day = dayView.date.day
             //判断日期是否符合要求
-            if year == 2019 && month == 3 && day >= 28 && day <= 30 {
-                return true
+            //            let timeFormatter = DateFormatter()
+            //            timeFormatter.dateFormat = "yyyy年MM月dd日 HH:mm"
+            for i in 0..<allDate.count {
+                let calendar = Calendar.current
+                let unit: Set<Calendar.Component> = [.day,.month,.year]
+                let comps = calendar.dateComponents(unit, from: allDate[i])
+                if year == comps.year && month == comps.month && day == comps.day {
+                    return true
+                }
             }
+            
         }
         return false
     }
@@ -379,6 +437,11 @@ class LogViewController: UIViewController,UIScrollViewDelegate,CVCalendarViewDel
         }
         self.monthView.text = month
         //date.globalDescription
+        self.datas[0].title = "\(month) \(date.day)"
+        self.selDate = date.convertedDate()!
+        self.tableView.reloadData()
+        self.view.layoutIfNeeded()
+        self.getData()
     }
     
     override func viewDidLayoutSubviews() {
