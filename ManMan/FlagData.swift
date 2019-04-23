@@ -16,6 +16,7 @@ public struct FlagData: Codable {
     var detail: String?
     var comment = [CommentDetail]()
     var commentNum: Int?
+    var isLiked: Bool?
     var likeNum: Int?
     var id: String?
 }

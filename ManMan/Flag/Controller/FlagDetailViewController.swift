@@ -28,7 +28,7 @@ class FlagDetailViewController: UIViewController,UITableViewDelegate,UITableView
     var dTime: TimeInterval? = 0
     var height:[CGFloat] = [0,0,0]
     var detail:FlagData?
-    var request: RequestFunction?
+    var request = RequestFunction()
     var nickname: String?
     var profileURl: String?
     
@@ -56,34 +56,56 @@ class FlagDetailViewController: UIViewController,UITableViewDelegate,UITableView
         
         self.setTopLineView()
         
+        var textView = UITextView()
         if let data = UserDefaults.standard.value(forKey: "flagData") {
             let decoder = JSONDecoder()
             let obj = try? decoder.decode(FlagData.self, from: data as! Data)
             detail = obj
+            if detail?.comment.count == 0 {
+                tableView.backgroundColor = UIColor.white
+                textView = UITextView(frame: CGRect(x: 0, y: 0, width: UIScreen.main.bounds.size.width-64, height: 100))
+                textView.text = "此处还没有评论"
+                textView.font = UIFont.systemFont(ofSize: 16)
+                textView.textColor = UIColor.init(red: 0/255, green: 0/255, blue: 0/255, alpha: 0.7)
+                textView.textAlignment = .center
+                tableView.addSubview(textView)
+            }else{
+                tableView.backgroundColor = UIColor.init(red: 238/255, green: 238/255, blue: 238/255, alpha: 1)
+                textView.removeFromSuperview()
+            }
             self.setDetailView()
             self.setCommentLineView()
             self.view.layoutIfNeeded()
             UserDefaults.standard.set(nil, forKey: "flagData")
         } else if let userId = UserDefaults.standard.value(forKey: "userID") {
             let URLStr = "https://slow.hustonline.net/api/v1"
-            var token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE1NTUyNDc1NzMsImlkIjoib3ExNVU1OTdLTVNlNTV2d21aLUN3ZDZkSDFNMCIsIm9yaWdfaWF0IjoxNTU0NjQyNzczfQ.m6i6TH7mK34cA0oc6P9Dc_xKxQWwOoch8VdgGPrwt2k"
+            var token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE1NTYxNTcyODEsImlkIjoib3ExNVU1OTdLTVNlNTV2d21aLUN3ZDZkSDFNMCIsIm9yaWdfaWF0IjoxNTU1NTUyNDgxfQ.UB5ASV9pM4SO1WP1le1ZyLQtlOjzcOtl8tq3gyOW1rU"
             let urlStr = "\(URLStr)/flag"
             let headers:HTTPHeaders = ["auth": "Bearer \(token)"]
             Alamofire.request(urlStr, method: .get, encoding: URLEncoding.default,headers: headers).responseJSON { response in
                 let json = JSON(response.result.value)
-                let num = json["data"]["flags"].count - 1
-                if num >= 0 {
-                    let value = json["data"]["flags"][num]
-                    var comDetails = [CommentDetail]()
+                let num = json["data"]["flags"].count
+                let value = json["data"]["flags"][num]
+                var comDetails = [CommentDetail]()
+                if value["comments"].count != 0 {
                     for i in 0..<value["comments"].count {
                         let comDetail = CommentDetail.init(userName: value["comments"][i]["from_id"].string, userComment: value["comments"][i]["content"].string)
                         comDetails.append(comDetail)
                     }
-                    self.detail = FlagData(userId: value["id"].string, profileURL: self.profileURl, nickname: self.nickname, time: value["time"].int64, detail: value["content"].string, comment: comDetails, commentNum: value["comments"].count, likeNum: value["likes"].count, id: value["id"].string)
-                    self.setDetailView()
-                    self.setCommentLineView()
-                    self.view.layoutIfNeeded()
+                    self.detailView.addSubview(self.tableView)
                 }
+                var isLiked = false
+                let likeNum = value["flags"]["likes"].count
+                if likeNum != 0 {
+                    let likeSign = value["flags"]["likes"][likeNum - 1].int64
+                    let date = Date(timeIntervalSince1970: (TimeInterval(likeSign!/1000)))
+                    isLiked = date.isToday()
+                }
+                self.detail = FlagData(userId: value["id"].string, profileURL: self.profileURl, nickname: self.nickname, time: value["time"].int64, detail: value["content"].string, comment: comDetails, commentNum: value["comments"].count,isLiked: isLiked, likeNum: value["likes"].count, id: value["id"].string)
+                self.setDetailView()
+                self.setCommentLineView()
+                self.view.layoutIfNeeded()
+                
             }
             
         }
@@ -139,9 +161,10 @@ class FlagDetailViewController: UIViewController,UITableViewDelegate,UITableView
             detailView.time.text = timeStr
         }
         if let cNum:Int = detail?.commentNum, let lNum:Int = detail?.likeNum {
-            detailView.commentNumLabel.text = "\(cNum)"
-            detailView.likeNumLabel.text = "\(lNum)"
+            detailView.commentNumber = cNum
+            detailView.likeNumber = lNum
         }
+        detailView.isliked = detail!.isLiked!
         
         Alamofire.request((detail?.profileURL!)!).responseData { response in
             guard let data = response.result.value else { return }
@@ -158,7 +181,7 @@ class FlagDetailViewController: UIViewController,UITableViewDelegate,UITableView
         }
         tableView.layer.cornerRadius = 8
         tableView.clipsToBounds = true
-        tableView.backgroundColor = UIColor.init(red: 238/255, green: 238/255, blue: 238/255, alpha: 1)
+        //tableView.backgroundColor = UIColor.init(red: 238/255, green: 238/255, blue: 238/255, alpha: 1)
         tableView.separatorStyle = .none
         tableView.register(CommentTableViewCell.self, forCellReuseIdentifier: identifier)
         tableView.dataSource = self
@@ -188,14 +211,20 @@ class FlagDetailViewController: UIViewController,UITableViewDelegate,UITableView
     }
     //发送评论
     @objc func send() {
-        self.commentView.inputText.resignFirstResponder()
-        self.request?.postFlagComment(openid: self.detail!.userId!, flagid: self.detail!.id!, comment: self.commentView.inputText.text!)
-        self.tableView.reloadData()
-        UIView.animate(withDuration: 0.5, animations: {
-            self.detailView.layoutIfNeeded()
-            
-        })
-        self.commentView.inputText.text = ""
+        if self.commentView.inputText.text != nil {
+            self.request.postFlagComment(openid: self.detail!.userId!, flagid: self.detail!.id!, comment: self.commentView.inputText.text!)
+            let comment = CommentDetail.init(userName: self.detail!.userId!, userComment: self.commentView.inputText.text!)
+            self.detail?.comment.append(comment)
+            self.commentView.inputText.resignFirstResponder()
+            self.tableView.reloadData()
+            self.view.layoutIfNeeded()
+            UIView.animate(withDuration: 0.5, animations: {
+                self.detailView.layoutIfNeeded()
+                
+            })
+            self.commentView.inputText.text = ""
+        }
+        
         
     }
     @objc func beginEdit() {
@@ -264,6 +293,8 @@ class FlagDetailViewController: UIViewController,UITableViewDelegate,UITableView
     @objc func back() {
         self.navigationController?.popViewController(animated: true)
         self.navigationController?.isNavigationBarHidden = true
+        let flagViewcontroller = FlagViewController()
+        //flagViewcontroller.viewWillAppear(true)
     }
     
     @objc func setMyFlag() {
@@ -285,12 +316,13 @@ class FlagDetailViewController: UIViewController,UITableViewDelegate,UITableView
         }
         cell?.nickname.text = self.detail?.comment[indexPath.row].userName
         cell?.detail.text = self.detail?.comment[indexPath.row].userComment
-        height[indexPath.row] = FlagDetail.heightForTextView(textView: (cell?.detail)!, fixedWidth: (cell?.detail.frame.width)!) + 32
+        //height[indexPath.row] = FlagDetail.heightForTextView(textView: (cell?.detail)!, fixedWidth: (cell?.detail.frame.width)!) + 32
         return cell!
     }
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        return height[indexPath.row]
+        //return height[indexPath.row]
+        return 80
     }
     
     

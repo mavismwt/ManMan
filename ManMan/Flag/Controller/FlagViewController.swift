@@ -37,7 +37,8 @@ class FlagViewController: UIViewController,UITableViewDelegate,UITableViewDataSo
     var selectedCellId = ""
     
     override func viewWillAppear(_ animated: Bool) {
-        
+        //更新flag
+        flagDatas = [FlagData]()
         if let ID = UserDefaults.standard.value(forKey: "userID") {
             MyID = ID as! String
         }
@@ -53,9 +54,15 @@ class FlagViewController: UIViewController,UITableViewDelegate,UITableViewDataSo
                 let value = json["data"]["flags"][k]
                 var comments = [CommentDetail]()
                 for i in 0..<value["flags"]["comments"].count {
-                    comments.append(CommentDetail.init(userName: value["flag"]["comments"][i]["name"].string, userComment: value["flag"]["comments"][i]["content"].string))
+                    comments.append(CommentDetail.init(userName: value["flags"]["comments"][i]["from_id"].string, userComment: value["flags"]["comments"][i]["content"].string))
                 }
-                self.flagDatas.append(FlagData.init(userId: value["wx_id"].string, profileURL: value["img_url"].string, nickname: value["name"].string, time: value["flags"]["time"].int64, detail: value["flags"]["content"].string, comment: comments, commentNum: value["flags"]["comments"].count, likeNum: value["flags"]["likes"].count, id: value["flags"]["id"].string))
+                var isLiked = false
+                for j in 0..<value["flags"]["likes"].count {
+                    if value["flags"]["likes"][j].string == self.MyID {
+                        isLiked = true
+                    }
+                }
+                self.flagDatas.append(FlagData.init(userId: value["wx_id"].string, profileURL: value["img_url"].string, nickname: value["name"].string, time: value["flags"]["time"].int64, detail: value["flags"]["content"].string, comment: comments, commentNum: value["flags"]["comments"].count, isLiked: isLiked, likeNum: value["flags"]["likes"].count, id: value["flags"]["id"].string))
                 
                 self.tableView.reloadData()
                 self.view.layoutIfNeeded()
@@ -172,9 +179,9 @@ class FlagViewController: UIViewController,UITableViewDelegate,UITableViewDataSo
         tapGestureRecognizer.delegate = self
         cell?.commentView.addGestureRecognizer(tapGestureRecognizer)
         
+        let tag = UILabel()
         if flagDatas[indexPath.row].userId == MyID {
-            print(indexPath.row,flagDatas[indexPath.row].userId,MyID)
-            let tag = UILabel()
+            //print(indexPath.row,flagDatas[indexPath.row].userId,MyID)
             tag.text = "我"
             tag.font = UIFont.systemFont(ofSize: 12)
             tag.textAlignment = .center
@@ -188,6 +195,8 @@ class FlagViewController: UIViewController,UITableViewDelegate,UITableViewDataSo
                 make.width.height.equalTo(14)
             cell?.addSubview(tag)
             }
+        }else {
+            tag.removeFromSuperview()
         }
         cell?.id = flagDatas[indexPath.row].id!
         cell?.userid = flagDatas[indexPath.row].userId!
@@ -205,9 +214,11 @@ class FlagViewController: UIViewController,UITableViewDelegate,UITableViewDataSo
         let timeStr = timeFormatter.string(from: date)
         cell?.time.text = timeStr
         cell?.likeNumber = flagDatas[indexPath.row].likeNum!
+        cell?.isliked = flagDatas[indexPath.row].isLiked!
         cell?.commentNumber = flagDatas[indexPath.row].commentNum!
         return cell!
     }
+    
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         return 161
     }
@@ -245,6 +256,8 @@ class FlagViewController: UIViewController,UITableViewDelegate,UITableViewDataSo
         alert.addAction(okAction)
         self.present(alert, animated: true, completion: nil)
     }
+    
+    
     
     @objc func comment() {
         

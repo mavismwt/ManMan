@@ -109,8 +109,8 @@ class CheckCardCell: UITableViewCell {
     }
     
     override func layoutSubviews() {
+        taskProcess.text = "已坚持\(days)天"
         if isfinished == true {
-            taskProcess.text = "已坚持\(days)天"
             background.removeFromSuperview()
             checkButton.removeFromSuperview()
         }

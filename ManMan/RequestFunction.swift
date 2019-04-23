@@ -166,9 +166,9 @@ class RequestFunction {
     }
     
     func postFlag(content:String, token: String) {
-        let flag = "{\"id\":\"\",\"time\":0,\"content\":\"\(content)\",\"likes\":[],\"comments\":[],\"sign_in\":[]}"
+        let flag = "{\"id\":\"\",\"time\":0,\"content\":\(content),\"likes\":[],\"comments\":[],\"sign_in\":[]}"
         let flagData = flag.data(using: String.Encoding.utf8)
-        
+        print(flag)
         let urlStr = "\(URLStr)/flag"
         let url = URL(string: urlStr)!
         var request = URLRequest(url: url)
@@ -271,8 +271,8 @@ class RequestFunction {
     }
     
     func postFlagComment(openid: String, flagid:String , comment: String) {
-        let comment = "{\"openid\":\"\(openid)\",\"flag_id\":\"\(flagid)\",\"comment\":{\"id\":\"\",\"from_id\":\"\",\"content\":\"\(comment)\",\"time\":0,}}"
-        print(comment)
+        print(openid)
+        let comment = "{\"openid\":\"\(openid)\",\"flag_id\":\"\(flagid)\",\"comment\":{\"id\":\"\",\"from_id\":\"\",\"content\":\"\(comment)\",\"time\":0}}"
         let commentData = comment.data(using: String.Encoding.utf8)
         
         let urlStr = "\(URLStr)/flag/comment"
@@ -283,7 +283,7 @@ class RequestFunction {
         request.httpBody = commentData
         
         Alamofire.request(request).responseJSON { response in
-            print("\(response)")
+            print(response)
         }
     }
     

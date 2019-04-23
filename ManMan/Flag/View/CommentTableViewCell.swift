@@ -63,7 +63,7 @@ class CommentTableViewCell: UITableViewCell {
         nickname.textColor = UIColor.init(red: 0/255, green: 0/255, blue: 0/255, alpha: 0.87)
         nickname.text = "mavismwt"
         
-        detail.text = "这是我的flag"
+        detail.text = "flag"
         let height = CommentTableViewCell.heightForTextView(textView: detail, fixedWidth: SCREENRECT.size.width-90)
         detail.snp.makeConstraints{(make) in
             make.top.equalTo(profile.snp.bottom).offset(4)
@@ -84,8 +84,8 @@ class CommentTableViewCell: UITableViewCell {
     
     func setValueForCell(flag:flagData){
         profile.image = UIImage(named: flag.profileURL)
-        nickname.text = flag.nicknameText
-        detail.text = flag.detailText
+        nickname.text = "flag.nicknameText"
+        detail.text = "flag.detailText"
     }
     
     internal class func heightForTextView(textView: UITextView, fixedWidth: CGFloat) -> CGFloat {

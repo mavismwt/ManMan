@@ -196,7 +196,7 @@ class HomeViewController: UIViewController,UITableViewDelegate,UITableViewDataSo
         monthLabel.textColor = UIColor.white
         monthLabel.font = UIFont.boldSystemFont(ofSize: 20)
         
-        tableView.frame =  CGRect(x: 0, y: inset.top+(navRect?.height)!, width: SCREENSIZE.width, height: SCREENSIZE.height-112-inset.top-inset.bottom)
+        tableView.frame =  CGRect(x: 0, y: inset.top+(navRect?.height)!, width: SCREENSIZE.width, height: SCREENSIZE.height-80-inset.top-inset.bottom)
         tableView.backgroundColor = UIColor.init(red: 238/255, green: 238/255, blue: 238/255, alpha: 1)
         tableView.separatorStyle = .none
         tableView.delegate = self

@@ -8,6 +8,8 @@
 
 import UIKit
 import SnapKit
+import Alamofire
+import SwiftyJSON
 
 class FlagDetail: UIView {
     
@@ -20,6 +22,7 @@ class FlagDetail: UIView {
         var detail: String?
         var comment = [commentDetail]()
         var commentNum: Int?
+        var isLiked: Bool?
         var likeNum: Int?
         var id: String?
     }
@@ -42,6 +45,11 @@ class FlagDetail: UIView {
     var likeImg = UIImageView()
     var likeNumLabel = UILabel()
     var likeNumber:Int = 0
+    var isliked = false
+    
+    var request = RequestFunction()
+    var id = String()
+    var userid = String()
     
     override init(frame: CGRect) {
         
@@ -164,7 +172,6 @@ class FlagDetail: UIView {
             make.centerY.equalToSuperview()
             make.width.height.equalTo(15)
         }
-        likeImg.image = UIImage(named: "like")
         
         likeNumLabel.snp.makeConstraints { (make) in
             make.right.equalToSuperview()
@@ -178,22 +185,38 @@ class FlagDetail: UIView {
     }
     
     @objc func like() {
-        UIView.transition(with: self.likeImg, duration: 0.5 , options: .transitionFlipFromLeft , animations: {
-            self.likeImg.image = UIImage(named: "likeSelected")
-        }, completion: nil)
-        DispatchQueue.main.asyncAfter(deadline: .now()+0.4, execute:
-            {
-                self.likeNumber += 1
-                self.likeNumLabel.text = "\(self.likeNumber)"
-        })
+        if isliked == false {
+            request.postFlagLike(openid: userid, flagid: id, token: "")
+            isliked = true
+            UIView.transition(with: self.likeImg, duration: 0.5 , options: .transitionFlipFromLeft , animations: {
+                self.likeImg.image = UIImage(named: "likeSelected")
+            }, completion: nil)
+            DispatchQueue.main.asyncAfter(deadline: .now()+0.4, execute:
+                {
+                    self.likeNumber += 1
+                    self.likeNumLabel.text = "\(self.likeNumber)"
+            })
+        } else {
+            
+        }
     }
     
     func setValueForCell(flag:flagData){
         //profile.image = UIImage(named: flag.profileURL)
         //nickname.text = flag.nicknameText
         //detail.text = flag.detailText
-        commentNumLabel.text = "0"
-        likeNumLabel.text = "0"
+        //commentNumLabel.text = "0"
+        //likeNumLabel.text = "0"
+    }
+    
+    override func layoutSubviews() {
+        self.commentNumLabel.text = "\(commentNumber)"
+        self.likeNumLabel.text = "\(likeNumber)"
+        if self.isliked {
+            likeImg.image = UIImage(named: "likeSelected")
+        }else {
+            likeImg.image = UIImage(named: "like")
+        }
     }
     
     internal class func heightForTextView(textView: UITextView, fixedWidth: CGFloat) -> CGFloat {

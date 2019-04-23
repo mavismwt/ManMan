@@ -157,7 +157,6 @@ class CustomizeUITableViewCell: UITableViewCell {
             make.centerY.equalToSuperview()
             make.width.height.equalTo(15)
         }
-        likeImg.image = UIImage(named: "like")
         
         likeNumLabel.snp.makeConstraints { (make) in
             make.right.equalToSuperview()
@@ -208,6 +207,11 @@ class CustomizeUITableViewCell: UITableViewCell {
     override func layoutSubviews() {
         self.commentNumLabel.text = "\(commentNumber)"
         self.likeNumLabel.text = "\(likeNumber)"
+        if self.isliked {
+            likeImg.image = UIImage(named: "likeSelected")
+        }else {
+            likeImg.image = UIImage(named: "like")
+        }
     }
     required init(coder aDecoder: NSCoder) {
         fatalError("init(code:)has not brrn implomented");
