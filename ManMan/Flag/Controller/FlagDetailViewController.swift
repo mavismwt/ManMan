@@ -83,9 +83,10 @@ class FlagDetailViewController: UIViewController,UITableViewDelegate,UITableView
             let urlStr = "\(URLStr)/flag"
             let headers:HTTPHeaders = ["auth": "Bearer \(token)"]
             Alamofire.request(urlStr, method: .get, encoding: URLEncoding.default,headers: headers).responseJSON { response in
+                print(response)
                 let json = JSON(response.result.value)
                 let num = json["data"]["flags"].count
-                let value = json["data"]["flags"][num]
+                let value = json["data"]["flags"][num-1]
                 var comDetails = [CommentDetail]()
                 if value["comments"].count != 0 {
                     for i in 0..<value["comments"].count {
@@ -102,6 +103,7 @@ class FlagDetailViewController: UIViewController,UITableViewDelegate,UITableView
                     isLiked = date.isToday()
                 }
                 self.detail = FlagData(userId: value["id"].string, profileURL: self.profileURl, nickname: self.nickname, time: value["time"].int64, detail: value["content"].string, comment: comDetails, commentNum: value["comments"].count,isLiked: isLiked, likeNum: value["likes"].count, id: value["id"].string)
+                print(self.detail)
                 self.setDetailView()
                 self.setCommentLineView()
                 self.view.layoutIfNeeded()
