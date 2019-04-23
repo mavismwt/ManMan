@@ -45,7 +45,7 @@ class ShareTableViewCell: UITableViewCell {
             make.height.equalTo(16)
         }
         title.font = UIFont.systemFont(ofSize: 16)
-        title.text = "喝水"
+        //title.text = "喝水"
         title.textColor = UIColor.init(red: 0, green: 0, blue: 0, alpha: 0.74)
         
         status.snp.makeConstraints { (make) in
@@ -59,6 +59,9 @@ class ShareTableViewCell: UITableViewCell {
         
     }
     
+    override func layoutSubviews() {
+        status.text = "已坚持\(self.days)天"
+    }
     
     
     required init?(coder aDecoder: NSCoder) {
