@@ -7,6 +7,8 @@
 //
 
 import UIKit
+import Alamofire
+import SwiftyJSON
 
 class ShareViewController: UIViewController,UITableViewDelegate,UITableViewDataSource {
     
@@ -30,13 +32,15 @@ class ShareViewController: UIViewController,UITableViewDelegate,UITableViewDataS
     let SCREENSIZE = UIScreen.main.bounds.size
     let identifier = "reusedCell"
     let imageName = ["fruit","word","drink","breakfast","makeup","sleep","read","sport","medicine"]
-    struct detail {
-        var name:String?
-        var icon:String?
-        var day:Int?
-    }
     
-    var datas:[detail] = [detail.init(name: "早睡", icon: "sleep", day: 3),detail.init(name: "日志", icon: "log", day: 3)]
+    struct data {
+        var title: String?
+        var icon: String?
+        var days: Int?
+    }
+    var datas = [data]()
+    
+    //var datas:[data] = [data.init(title: "喝水", icon: "drink")]
     
     override func viewDidLoad() {
         
@@ -47,6 +51,7 @@ class ShareViewController: UIViewController,UITableViewDelegate,UITableViewDataS
         
         self.loadTopLineView()
         self.setImageView()
+        self.getData()
         //self.view.addSubview(checkBt)
         
     }
@@ -171,6 +176,33 @@ class ShareViewController: UIViewController,UITableViewDelegate,UITableViewDataS
         
     }
     
+    func getData() {
+        //,data.init(title: "早睡", icon: "sleep", isDate: false),data.init(title: "日志", icon: "log", isDate: false)]
+        let URLStr = "https://slow.hustonline.net/api/v1"
+        var token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE1NTYxNTcyODEsImlkIjoib3ExNVU1OTdLTVNlNTV2d21aLUN3ZDZkSDFNMCIsIm9yaWdfaWF0IjoxNTU1NTUyNDgxfQ.UB5ASV9pM4SO1WP1le1ZyLQtlOjzcOtl8tq3gyOW1rU"
+        let urlStr = "\(URLStr)/user"
+        let headers:HTTPHeaders = ["auth": "Bearer \(token)"]
+        
+        Alamofire.request(urlStr, method: .get, encoding: URLEncoding.default,headers: headers).responseJSON { response in
+            if let value = response.result.value {
+                let json = JSON(value)
+                for i in 0..<json["data"]["routines"].count {
+                    let routine = json["data"]["routines"][i]
+                    for k in 0..<routine["sign_in"].count {
+                        let lastSign = routine["sign_in"][k].int64
+                        let timeInterval:TimeInterval = TimeInterval(Int(lastSign!/1000))
+                        let signDate = Date(timeIntervalSince1970: timeInterval)
+                        if signDate.isToday() {
+                            self.datas.append(data.init(title: routine["title"].string, icon: routine["icon_id"].string, days: routine["sign_in"].count))
+                        }
+                    }
+                }
+            }
+            self.tableView.reloadData()
+            self.view.layoutIfNeeded()
+        }
+    }
+    
     func getNowDate() -> String {
         let date = Date()
         let timeFormatter = DateFormatter()
@@ -189,8 +221,8 @@ class ShareViewController: UIViewController,UITableViewDelegate,UITableViewDataS
             let cell:ShareTableViewCell = ShareTableViewCell.init(style: .default, reuseIdentifier: identifier) as! ShareTableViewCell
         }
         cell?.icon.image = UIImage(named: datas[indexPath.row].icon!)
-        cell?.title.text = datas[indexPath.row].name
-        cell?.days = datas[indexPath.row].day!
+        cell?.title.text = datas[indexPath.row].title
+        cell?.days = datas[indexPath.row].days!
         cell?.selectionStyle = .none
         return cell!
     }

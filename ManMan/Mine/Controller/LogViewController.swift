@@ -67,6 +67,7 @@ class LogViewController: UIViewController,UIScrollViewDelegate,CVCalendarViewDel
         let headers:HTTPHeaders = ["auth": "Bearer \(token)"]
         
         Alamofire.request(urlStr, method: .get, encoding: URLEncoding.default,headers: headers).responseJSON { response in
+            self.allDate = [Date]()
             if let value = response.result.value {
                 let json = JSON(value)
                 for i in 0..<json["data"]["routines"].count {
@@ -93,7 +94,10 @@ class LogViewController: UIViewController,UIScrollViewDelegate,CVCalendarViewDel
                 }
             }
             self.calendarView.layoutSubviews()
+            self.calendarView.commitCalendarViewUpdate()
+            self.calendarView.contentController.refreshPresentedMonth()
             self.setScrollViewData()
+            self.view.layoutIfNeeded()
         }
     }
     

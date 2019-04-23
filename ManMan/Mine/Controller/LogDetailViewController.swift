@@ -8,6 +8,8 @@
 
 import UIKit
 import CVCalendar
+import Alamofire
+import SwiftyJSON
 
 class LogDetailViewController: UIViewController,CVCalendarViewDelegate,CVCalendarMenuViewDelegate,CVCalendarViewAppearanceDelegate,UITextViewDelegate {
     
@@ -27,11 +29,9 @@ class LogDetailViewController: UIViewController,CVCalendarViewDelegate,CVCalenda
     private var calendarView: CVCalendarView!
     var currentCalendar: Calendar!
     
-    struct Log {
-        var time:String?
-        var detail:String?
-    }
-    var logs = [Log.init(time: "1", detail: "今天真是快乐的一天啊！"),Log.init(time: "2", detail: "是做了实验吃了锅包肉的一天"),Log.init(time: "3", detail: "遇到了那个他")]
+    var recordStr = String()
+    var allDate = [Date]()
+    var selDate = Date()
     
     override func viewDidLoad() {
         
@@ -43,9 +43,36 @@ class LogDetailViewController: UIViewController,CVCalendarViewDelegate,CVCalenda
         self.setLogDetailView()
     }
     
+    func getDatas() {
+        let URLStr = "https://slow.hustonline.net/api/v1"
+        var token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE1NTYxNTcyODEsImlkIjoib3ExNVU1OTdLTVNlNTV2d21aLUN3ZDZkSDFNMCIsIm9yaWdfaWF0IjoxNTU1NTUyNDgxfQ.UB5ASV9pM4SO1WP1le1ZyLQtlOjzcOtl8tq3gyOW1rU"
+        let urlStr = "\(URLStr)/user"
+        let headers:HTTPHeaders = ["auth": "Bearer \(token)"]
+        
+        Alamofire.request(urlStr, method: .get, encoding: URLEncoding.default,headers: headers).responseJSON { response in
+            self.allDate = [Date]()
+            if let value = response.result.value {
+                let json = JSON(value)
+                if json["data"]["records"].count != 0 {
+                    let num = json["data"]["records"].count
+                    let record = json["data"]["records"][num-1]
+                    let timeMili = record["time"].int64
+                    let timeInterval:TimeInterval = TimeInterval(Int(timeMili!/1000))
+                    let signDate = Date(timeIntervalSince1970: timeInterval)
+                    self.allDate.append(signDate)
+                    self.recordStr = record["content"].string!
+                }
+            }
+            self.calendarView.layoutSubviews()
+            self.calendarView.commitCalendarViewUpdate()
+            self.calendarView.contentController.refreshPresentedMonth()
+            self.view.layoutIfNeeded()
+        }
+    }
+    
+    
     func setTopLineView() {
         topLineView.addSubview(leftButton)
-        //topLineView.addSubview(rightButton)
         topLineView.addSubview(titleView)
         
         self.view.addSubview(topLineView)
@@ -71,34 +98,9 @@ class LogDetailViewController: UIViewController,CVCalendarViewDelegate,CVCalenda
         }
         leftButton.setImage(UIImage(named: "back"), for: .normal)
         leftButton.addTarget(self, action: #selector(back), for: .touchUpInside)
-        
-//        rightButton.snp.makeConstraints { (make) in
-//            make.centerY.equalToSuperview().offset(10)
-//            make.right.equalTo(-16)
-//            make.height.equalTo(20)
-//        }
-//        rightButton.setTitle("Done", for: .normal)
-//        rightButton.addTarget(self, action: #selector(back), for: .touchUpInside)
     }
     
     func setCalendarView() {
-//        currentCalendar = Calendar.init(identifier: .gregorian)
-//        //初始化星期菜单栏/日历
-//        let WidthOfCalendar = SCREENSIZE.width-28
-//        let navRect = self.navigationController?.navigationBar.frame
-//        menuView = CVCalendarMenuView(frame: CGRect(x:14, y:(navRect?.height)!+inset.top+16, width:WidthOfCalendar, height:15))
-//        calendarView = CVCalendarView(frame: CGRect(x:14, y:(navRect?.height)!+inset.top+16, width:WidthOfCalendar, height:WidthOfCalendar))
-//        calendarView.backgroundColor = UIColor.white
-//        calendarView.layer.cornerRadius = 8
-//        calendarView.layer.shadowColor = UIColor.black.cgColor
-//        calendarView.layer.shadowOffset = CGSize(width: 3, height: 6)
-//        //代理
-//        menuView.menuViewDelegate = self
-//        calendarView.calendarDelegate = self
-//        calendarView.calendarAppearanceDelegate = self
-//        //将菜单视图和日历视图添加到主视图上
-//        //self.view.addSubview(menuView)
-//        self.view.addSubview(calendarView)
         currentCalendar = Calendar.init(identifier: .gregorian)
         //初始化星期菜单栏/日历
         let WidthOfCalendar = SCREENSIZE.width-28
@@ -153,7 +155,7 @@ class LogDetailViewController: UIViewController,CVCalendarViewDelegate,CVCalenda
         }
         inputText.font = UIFont.systemFont(ofSize: 15)
         inputText.delegate = self
-
+        inputText.text = self.recordStr
     }
     
     @objc func back() {
@@ -183,16 +185,16 @@ class LogDetailViewController: UIViewController,CVCalendarViewDelegate,CVCalenda
     }
     
     func preliminaryView(shouldDisplayOnDayView dayView: DayView) -> Bool {
-        if !dayView.isHidden && dayView.date != nil {
-            //获取该日期视图的年月日
-            let year = dayView.date.year
-            let month = dayView.date.month
-            let day = dayView.date.day
-            //判断日期是否符合要求
-            if year == 2018 && month == 12 && day >= 1 && day <= 3 {
-                return true
-            }
-        }
+//        if !dayView.isHidden && dayView.date != nil {
+//            //获取该日期视图的年月日
+//            let year = dayView.date.year
+//            let month = dayView.date.month
+//            let day = dayView.date.day
+//            //判断日期是否符合要求
+//            if year == 2018 && month == 12 && day >= 1 && day <= 3 {
+//                return true
+//            }
+//        }
         return false
     }
     
@@ -204,38 +206,72 @@ class LogDetailViewController: UIViewController,CVCalendarViewDelegate,CVCalenda
         return circleView
     }
     
-    //    func dayLabelColor(by weekDay: Weekday, status: CVStatus, present: CVPresent)
-    //        -> UIColor? {
-    //            switch (weekDay, status, present) {
-    //            case (_, .selected, _), (_, .highlighted, _): return UIColor.white
-    //            case (.sunday, .in, _): return UIColor.black //Color.sundayText
-    //            case (.sunday, _, _): return UIColor.black //Color.sundayTextDisabled
-    //            case (_, .in, _): return UIColor.orange
-    //            default: return UIColor.gray
-    //            }
-    //    }
+//    func dayLabelColor(by weekDay: Weekday, status: CVStatus, present: CVPresent)
+//        -> UIColor? {
+//            switch (weekDay, status, present) {
+//            case (_, .selected, _), (_, .highlighted, _): return UIColor.white
+//            case (.sunday, .in, _): return UIColor.black //Color.sundayText
+//            case (.sunday, _, _): return UIColor.black //Color.sundayTextDisabled
+//            case (_, .in, _): return UIColor.orange
+//            default: return UIColor.gray
+//            }
+//    }
+    
+    func dotMarker(shouldShowOnDayView dayView: DayView) -> Bool {
+        
+        if !dayView.isHidden && dayView.date != nil {
+            //获取该日期视图的年月日
+            let year = dayView.date.year
+            let month = dayView.date.month
+            let day = dayView.date.day
+            //判断日期是否符合要求
+            //            let timeFormatter = DateFormatter()
+            //            timeFormatter.dateFormat = "yyyy年MM月dd日 HH:mm"
+            for i in 0..<allDate.count {
+                let calendar = Calendar.current
+                let unit: Set<Calendar.Component> = [.day,.month,.year]
+                let comps = calendar.dateComponents(unit, from: allDate[i])
+                if year == comps.year && month == comps.month && day == comps.day {
+                    return true
+                }
+            }
+            
+        }
+        return false
+    }
+    
+    func dotMarker(colorOnDayView dayView: DayView) -> [UIColor] {
+        //        switch dayView.date.day {
+        //        case 1:
+        //            return [UIColor.orange]
+        //        case 2:
+        //            return [UIColor.orange, UIColor.green]
+        //        default:
+        //            return [UIColor.orange, UIColor.green, UIColor.blue]
+        //        }
+        return [UIColor.init(red: 255/255, green: 193/255, blue: 7/255, alpha: 1)]
+    }
+    
+    func dotMarker(moveOffsetOnDayView dayView: DayView) -> CGFloat {
+        return 25
+    }
+    
+    func dotMarker(sizeOnDayView dayView: DayView) -> CGFloat {
+        return 4
+    }
     
     func didSelectDayView(_ dayView: DayView, animationDidFinish: Bool) {
-        //print(dayView.dayLabel.text)
-        switch (dayView.dayLabel.text)! {
-        case "1":
-            self.inputText.text = logs[0].detail
-            self.view.layoutIfNeeded()
-            break
-        case "2":
-            self.inputText.text = logs[1].detail
-            self.view.layoutIfNeeded()
-            break
-        case "3":
-            self.inputText.text = logs[2].detail
-            self.view.layoutIfNeeded()
-            break
-        default:
-            self.inputText.text = " "
-            self.view.layoutIfNeeded()
-            break
-        }
+        //点击日期事件
+        
     }
+    //获取当前时间/string
+    func getDateStr(date: Date) -> String {
+        let timeFormatter = DateFormatter()
+        timeFormatter.dateFormat = "MMM.d"
+        let str = timeFormatter.string(from: date) as String
+        return str
+    }
+    //获取当前月份
     func getNowMonth() -> String {
         let date = Date()
         let timeFormatter = DateFormatter()
@@ -289,6 +325,10 @@ class LogDetailViewController: UIViewController,CVCalendarViewDelegate,CVCalenda
         }
         self.monthView.text = month
         //date.globalDescription
+        //self.datas[0].title = "\(month) \(date.day)"
+        self.selDate = date.convertedDate()!
+        self.view.layoutIfNeeded()
+        self.getDatas()
     }
     
     

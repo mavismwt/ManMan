@@ -218,6 +218,9 @@ class FlagDetailViewController: UIViewController,UITableViewDelegate,UITableView
             let comment = CommentDetail.init(userName: self.detail!.userId!, userComment: self.commentView.inputText.text!)
             self.detail?.comment.append(comment)
             self.commentView.inputText.resignFirstResponder()
+            self.detailView.commentNumber = (detail?.comment.count)!
+            print(detail?.comment.count)
+            self.detailView.layoutSubviews()
             self.tableView.reloadData()
             self.view.layoutIfNeeded()
             UIView.animate(withDuration: 0.5, animations: {
