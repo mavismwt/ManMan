@@ -61,7 +61,7 @@ class MineViewController: UIViewController,UITableViewDelegate,UITableViewDataSo
         self.view.backgroundColor = UIColor.init(red: 238/255, green: 238/255, blue: 238/255, alpha: 1)
         
         let URLStr = "https://slow.hustonline.net/api/v1"
-        var token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE1NTYxNTcyODEsImlkIjoib3ExNVU1OTdLTVNlNTV2d21aLUN3ZDZkSDFNMCIsIm9yaWdfaWF0IjoxNTU1NTUyNDgxfQ.UB5ASV9pM4SO1WP1le1ZyLQtlOjzcOtl8tq3gyOW1rU"
+        var token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE1NTY3NzU1MzYsImlkIjoib3ExNVU1OTdLTVNlNTV2d21aLUN3ZDZkSDFNMCIsIm9yaWdfaWF0IjoxNTU2MTcwNzM2fQ.WbTvev5bweV5OlhKRqypu5fdZmrZhBKHUpAji6N-6ng"
         let urlStr = "\(URLStr)/user"
         let headers:HTTPHeaders = ["auth": "Bearer \(token)"]
         Alamofire.request(urlStr, method: .get, encoding: URLEncoding.default,headers: headers).responseJSON { response in

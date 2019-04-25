@@ -10,7 +10,7 @@ import UIKit
 import Alamofire
 import SwiftyJSON
 
-class AddFlagViewController: UIViewController {
+class AddFlagViewController: UIViewController ,UITextViewDelegate {
     
     var topLineView = UIView()
     var leftButton = UIButton()
@@ -75,6 +75,7 @@ class AddFlagViewController: UIViewController {
         }
         inputText.font = UIFont.systemFont(ofSize: 15)
         inputText.isEditable = true
+        inputText.delegate = self
         
         confirmButton.snp.makeConstraints { (make) in
             make.top.equalTo(textView.snp.bottom).offset(16)
@@ -88,6 +89,13 @@ class AddFlagViewController: UIViewController {
         confirmButton.clipsToBounds = true
         confirmButton.addTarget(self, action: #selector(confirm), for: .touchUpInside)
         
+    }
+    
+    func textView(_ textView: UITextView, shouldChangeTextIn range: NSRange, replacementText text: String) -> Bool {
+        if range.location >= 100{
+            return false
+        }
+        return true
     }
     
     @objc func confirm() {

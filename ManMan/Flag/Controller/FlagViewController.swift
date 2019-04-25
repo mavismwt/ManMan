@@ -44,7 +44,7 @@ class FlagViewController: UIViewController,UITableViewDelegate,UITableViewDataSo
         }
         
         let URLStr = "https://slow.hustonline.net/api/v1"
-        var token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE1NTUyNDc1NzMsImlkIjoib3ExNVU1OTdLTVNlNTV2d21aLUN3ZDZkSDFNMCIsIm9yaWdfaWF0IjoxNTU0NjQyNzczfQ.m6i6TH7mK34cA0oc6P9Dc_xKxQWwOoch8VdgGPrwt2k"
+        var token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE1NTY3NzU1MzYsImlkIjoib3ExNVU1OTdLTVNlNTV2d21aLUN3ZDZkSDFNMCIsIm9yaWdfaWF0IjoxNTU2MTcwNzM2fQ.WbTvev5bweV5OlhKRqypu5fdZmrZhBKHUpAji6N-6ng"
         let urlStr = "\(URLStr)/flag/flags"
         let headers:HTTPHeaders = ["auth": "Bearer \(token)"]
         Alamofire.request(urlStr, method: .get, parameters: ["num": index], encoding: URLEncoding.default,headers: headers).responseJSON { response in
@@ -174,10 +174,6 @@ class FlagViewController: UIViewController,UITableViewDelegate,UITableViewDataSo
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         var cell:CustomizeUITableViewCell? = tableView.dequeueReusableCell(withIdentifier: identifier) as? CustomizeUITableViewCell
         cell?.selectionStyle = .none
-        let tapGestureRecognizer = UITapGestureRecognizer()
-        tapGestureRecognizer.addTarget(self, action: #selector(comment))
-        tapGestureRecognizer.delegate = self
-        cell?.commentView.addGestureRecognizer(tapGestureRecognizer)
         
         let tag = UILabel()
         if flagDatas[indexPath.row].userId == MyID {
@@ -259,10 +255,24 @@ class FlagViewController: UIViewController,UITableViewDelegate,UITableViewDataSo
     
     
     
-    @objc func comment() {
+    @objc func comment(_ tap: UITapGestureRecognizer) {
+        let msg = tap.view
+        if let content = msg?.value(forKey: "commentID") {
+            print(content)
+        }
+        print("ok")
+//        var detail = FlagData()
+//        for i in 0..<flagDatas.count {
+//            if flagDatas[i].id == id {
+//                detail = flagDatas[i]
+//            }
+//        }
+//        let encoder = JSONEncoder()
+//        let data = try? encoder.encode(detail)
+//        UserDefaults.standard.set(data, forKey: "flagData")
+//        let flagDetailViewController = FlagDetailViewController()
+//        self.navigationController?.pushViewController(flagDetailViewController, animated: true)
         
-        //let flagDetailViewController = FlagDetailViewController()
-        //self.navigationController?.pushViewController(flagDetailViewController, animated: true)
     }
     
 }

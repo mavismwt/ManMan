@@ -107,6 +107,7 @@ class CustomizeUITableViewCell: UITableViewCell {
             make.right.equalToSuperview().offset(-20)
             make.height.equalTo(70)
         }
+        detail.gestureRecognizers?.removeAll()
         detail.font = UIFont(name: "PingFang SC", size: 15)
         detail.isEditable = false
         detail.isSelectable = false

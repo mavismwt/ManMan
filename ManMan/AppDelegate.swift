@@ -32,7 +32,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate,WXApiDelegate {
         window?.rootViewController = tabbarController
         
 //        }else {
-        //window?.rootViewController = testViewController
+       // window?.rootViewController = loginViewController
 //        }
         WXApi.registerApp("wx7ef876fe1742f5df")
         return true

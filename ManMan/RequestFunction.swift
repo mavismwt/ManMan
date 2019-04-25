@@ -20,7 +20,7 @@ enum MethodType {
 class RequestFunction {
     
     let URLStr = "https://slow.hustonline.net/api/v1"
-    var token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE1NTYxNTcyODEsImlkIjoib3ExNVU1OTdLTVNlNTV2d21aLUN3ZDZkSDFNMCIsIm9yaWdfaWF0IjoxNTU1NTUyNDgxfQ.UB5ASV9pM4SO1WP1le1ZyLQtlOjzcOtl8tq3gyOW1rU"
+    var token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE1NTY3NzU1MzYsImlkIjoib3ExNVU1OTdLTVNlNTV2d21aLUN3ZDZkSDFNMCIsIm9yaWdfaWF0IjoxNTU2MTcwNzM2fQ.WbTvev5bweV5OlhKRqypu5fdZmrZhBKHUpAji6N-6ng"
     //var token = UserDefaults.standard.value(forKey: "token")
     var userInfo = JSON()
     var record = JSON()
@@ -45,7 +45,7 @@ class RequestFunction {
     
     func getUserInfo(token: String){
         let urlStr = "\(URLStr)/user"
-        let headers:HTTPHeaders = ["auth": "Bearer \(token)"]
+        let headers:HTTPHeaders = ["auth": "Bearer \(self.token)"]
         Alamofire.request(urlStr, method: .get, encoding: URLEncoding.default,headers: headers).responseJSON { response in
             let jsonValue = JSON(response.result.value).string
             UserDefaults.standard.set(jsonValue, forKey: "userInfo")
@@ -66,7 +66,7 @@ class RequestFunction {
     
     func getRecord(token: String) {
         let urlStr = "\(URLStr)/record"
-        let headers:HTTPHeaders = ["auth": "Bearer \(token)"]
+        let headers:HTTPHeaders = ["auth": "Bearer \(self.token)"]
         Alamofire.request(urlStr, method: .get, encoding: URLEncoding.default,headers: headers).responseJSON { response in
             response.result.ifSuccess {
                 self.record = JSON(response.result.value)
@@ -79,7 +79,7 @@ class RequestFunction {
     
     func getFlag(token: String) {
         let urlStr = "\(URLStr)/flag"
-        let headers:HTTPHeaders = ["auth": "Bearer \(token)"]
+        let headers:HTTPHeaders = ["auth": "Bearer \(self.token)"]
         Alamofire.request(urlStr, method: .get, encoding: URLEncoding.default,headers: headers).responseJSON { response in
             response.result.ifSuccess {
                 self.flag = JSON(response.result.value)
@@ -92,7 +92,7 @@ class RequestFunction {
     
     func getRoutine(token: String) {
         let urlStr = "\(URLStr)/flag"
-        let headers:HTTPHeaders = ["auth": "Bearer \(token)"]
+        let headers:HTTPHeaders = ["auth": "Bearer \(self.token)"]
         Alamofire.request(urlStr, method: .get, encoding: URLEncoding.default,headers: headers).responseJSON { response in
             response.result.ifSuccess {
                 self.routine = JSON(response.result.value)
@@ -110,12 +110,12 @@ class RequestFunction {
         let url = URL(string: urlStr)!
         var request = URLRequest(url: url)
         request.httpMethod = HTTPMethod.post.rawValue
-        request.addValue("Bearer \(token)", forHTTPHeaderField: "auth")
+        request.addValue("Bearer \(self.token)", forHTTPHeaderField: "auth")
         request.httpBody = recordData
         
         Alamofire.request(request).responseJSON { response in
             response.result.ifSuccess {
-                print(response)
+                
                 }
                 .ifFailure {
                     print("Cannot Post Record")
@@ -123,20 +123,20 @@ class RequestFunction {
         }
     }
     
-    func putRecord(id:String, token: String) {
-        let record = "{\"id\":\"\(id)\",\"time\":0,\"content\":\"\"}"
+    func putRecord(id: String, content: String, token: String) {
+        let record = "{\"id\":\"\(id)\",\"time\":0,\"content\":\"\(content)\"}"
         let recordData = record.data(using: String.Encoding.utf8)
         
         let urlStr = "\(URLStr)/record"
         let url = URL(string: urlStr)!
         var request = URLRequest(url: url)
         request.httpMethod = HTTPMethod.put.rawValue
-        request.addValue("Bearer \(token)", forHTTPHeaderField: "auth")
+        request.addValue("Bearer \(self.token)", forHTTPHeaderField: "auth")
         request.httpBody = recordData
         
         Alamofire.request(request).responseJSON { response in
+            print("put\(response)")
             response.result.ifSuccess {
-                print(response)
                 }
                 .ifFailure {
                     print("Cannot Put Record")
@@ -166,7 +166,7 @@ class RequestFunction {
     }
     
     func postFlag(content:String, token: String) {
-        let flag = "{\"id\":\"\",\"time\":0,\"content\":\(content),\"likes\":[],\"comments\":[],\"sign_in\":[]}"
+        let flag = "{\"id\":\"\",\"time\":0,\"content\":\"\(content)\",\"likes\":[],\"comments\":[],\"sign_in\":[]}"
         let flagData = flag.data(using: String.Encoding.utf8)
         print(flag)
         let urlStr = "\(URLStr)/flag"

@@ -29,6 +29,7 @@ class LogDetailViewController: UIViewController,CVCalendarViewDelegate,CVCalenda
     private var calendarView: CVCalendarView!
     var currentCalendar: Calendar!
     
+    var strData = [String]()
     var recordStr = String()
     var allDate = [Date]()
     var selDate = Date()
@@ -37,7 +38,7 @@ class LogDetailViewController: UIViewController,CVCalendarViewDelegate,CVCalenda
         
         self.view.backgroundColor = UIColor.init(red: 238/255, green: 238/255, blue: 238/255, alpha: 1)
         
-        
+        self.getDatas()
         self.setTopLineView()
         self.setCalendarView()
         self.setLogDetailView()
@@ -45,24 +46,29 @@ class LogDetailViewController: UIViewController,CVCalendarViewDelegate,CVCalenda
     
     func getDatas() {
         let URLStr = "https://slow.hustonline.net/api/v1"
-        var token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE1NTYxNTcyODEsImlkIjoib3ExNVU1OTdLTVNlNTV2d21aLUN3ZDZkSDFNMCIsIm9yaWdfaWF0IjoxNTU1NTUyNDgxfQ.UB5ASV9pM4SO1WP1le1ZyLQtlOjzcOtl8tq3gyOW1rU"
+        var token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE1NTY3NzU1MzYsImlkIjoib3ExNVU1OTdLTVNlNTV2d21aLUN3ZDZkSDFNMCIsIm9yaWdfaWF0IjoxNTU2MTcwNzM2fQ.WbTvev5bweV5OlhKRqypu5fdZmrZhBKHUpAji6N-6ng"
         let urlStr = "\(URLStr)/user"
         let headers:HTTPHeaders = ["auth": "Bearer \(token)"]
         
         Alamofire.request(urlStr, method: .get, encoding: URLEncoding.default,headers: headers).responseJSON { response in
+            self.recordStr = String()
             self.allDate = [Date]()
             if let value = response.result.value {
                 let json = JSON(value)
-                if json["data"]["records"].count != 0 {
-                    let num = json["data"]["records"].count
-                    let record = json["data"]["records"][num-1]
+                let num = json["data"]["records"].count
+                for i in 0..<num {
+                    let record = json["data"]["records"][i]
                     let timeMili = record["time"].int64
                     let timeInterval:TimeInterval = TimeInterval(Int(timeMili!/1000))
                     let signDate = Date(timeIntervalSince1970: timeInterval)
                     self.allDate.append(signDate)
-                    self.recordStr = record["content"].string!
+                    self.strData.append(record["content"].string!)
+                    if signDate.isSameDay(day: self.selDate) {
+                        self.recordStr = record["content"].string!
+                    }
                 }
             }
+            self.setLogDetailView()
             self.calendarView.layoutSubviews()
             self.calendarView.commitCalendarViewUpdate()
             self.calendarView.contentController.refreshPresentedMonth()
@@ -262,7 +268,7 @@ class LogDetailViewController: UIViewController,CVCalendarViewDelegate,CVCalenda
     
     func didSelectDayView(_ dayView: DayView, animationDidFinish: Bool) {
         //点击日期事件
-        
+        self.getDatas()
     }
     //获取当前时间/string
     func getDateStr(date: Date) -> String {

@@ -10,19 +10,27 @@ import UIKit
 import Alamofire
 import SwiftyJSON
 
-class AddLogViewController: UIViewController,UITextViewDelegate {
+class AddLogViewController: UIViewController, UITextViewDelegate {
     
     var topLineView = UIView()
     var leftButton = UIButton()
     var rightButton = UIButton()
     var titleView = UILabel()
-    var textView = UIView()
-    var inputText = UITextView()
-    var textLabel = UILabel()
+    var textView = MyTextView()
     let inset = UIApplication.shared.delegate?.window??.safeAreaInsets ?? UIEdgeInsets.zero
     let SCREENSIZE = UIScreen.main.bounds.size
     
     var request = RequestFunction()
+    var recordID: String?
+    var textStr = String()
+    
+    override func viewWillAppear(_ animated: Bool) {
+        if let ID = UserDefaults.standard.value(forKey: "recordID"), let content = UserDefaults.standard.value(forKey: "recordContent") {
+            recordID = ID as? String
+            textStr = content as! String
+            self.textView.textStr = textStr
+        }
+    }
     
     override func viewDidLoad() {
         
@@ -31,10 +39,8 @@ class AddLogViewController: UIViewController,UITextViewDelegate {
         topLineView.addSubview(leftButton)
         topLineView.addSubview(rightButton)
         topLineView.addSubview(titleView)
-        textView.addSubview(inputText)
         
         self.view.addSubview(textView)
-        self.view.addSubview(textLabel)
         self.view.addSubview(topLineView)
         
         let navRect = self.navigationController?.navigationBar.frame
@@ -67,44 +73,32 @@ class AddLogViewController: UIViewController,UITextViewDelegate {
         }
         rightButton.setTitle("Done", for: .normal)
         //rightButton.setImage(UIImage(named: "back"), for: .normal)
-        rightButton.addTarget(self, action: #selector(back), for: .touchUpInside)
+        rightButton.addTarget(self, action: #selector(post), for: .touchUpInside)
         
         textView.snp.makeConstraints { (make) in
             make.top.equalTo((navRect?.height)!+inset.top+16)
-            make.left.equalTo(16)
-            make.right.equalTo(-16)
-            make.height.equalTo(SCREENSIZE.height/2)
+            make.left.right.equalToSuperview()
+            make.height.equalTo(SCREENSIZE.height/2+20)
         }
-        textView.backgroundColor = UIColor.init(red: 1, green: 1, blue: 1, alpha: 0.87)
-        textView.layer.cornerRadius = 8
-        textView.clipsToBounds = true
-        
-        inputText.snp.makeConstraints { (make) in
-            make.centerX.centerY.equalToSuperview()
-            make.top.left.equalTo(16)
-            make.bottom.right.equalTo(-16)
-        }
-        inputText.font = UIFont.systemFont(ofSize: 15)
-        
-        textLabel.snp.makeConstraints { (make) in
-            make.right.equalTo(textView.snp.right)
-            make.top.equalTo(textView.snp.bottom).offset(8)
-            make.height.equalTo(10)
-        }
-        textLabel.text = "可写280字，已写120字"
-        textLabel.textColor = UIColor.init(red: 0, green: 0, blue: 0, alpha: 0.4)
-        textLabel.font = UIFont.systemFont(ofSize: 14)
     }
+    
+    
     
     @objc func back() {
         self.navigationController?.popViewController(animated: true)
         self.tabBarController?.tabBar.isHidden = false
-        
-        let token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE1NTYxNTcyODEsImlkIjoib3ExNVU1OTdLTVNlNTV2d21aLUN3ZDZkSDFNMCIsIm9yaWdfaWF0IjoxNTU1NTUyNDgxfQ.UB5ASV9pM4SO1WP1le1ZyLQtlOjzcOtl8tq3gyOW1rU"
-        request.postRecord(content: self.inputText.text, token: token)
-       
     }
     
+    @objc func post() {
+        self.navigationController?.popViewController(animated: true)
+        self.tabBarController?.tabBar.isHidden = false
+        let token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE1NTY3NzU1MzYsImlkIjoib3ExNVU1OTdLTVNlNTV2d21aLUN3ZDZkSDFNMCIsIm9yaWdfaWF0IjoxNTU2MTcwNzM2fQ.WbTvev5bweV5OlhKRqypu5fdZmrZhBKHUpAji6N-6ng"
+        if recordID != nil {
+            request.putRecord(id: recordID!, content: self.textView.inputText.text, token: token)
+        } else {
+            request.postRecord(content: self.textView.inputText.text, token: token)
+        }
+    }
     
 }
 

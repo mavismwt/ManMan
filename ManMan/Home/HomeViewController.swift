@@ -113,7 +113,7 @@ class HomeViewController: UIViewController,UITableViewDelegate,UITableViewDataSo
     
     var tasks = [taskDetail]()
     var request = RequestFunction()
-    var token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE1NTYxNTcyODEsImlkIjoib3ExNVU1OTdLTVNlNTV2d21aLUN3ZDZkSDFNMCIsIm9yaWdfaWF0IjoxNTU1NTUyNDgxfQ.UB5ASV9pM4SO1WP1le1ZyLQtlOjzcOtl8tq3gyOW1rU"
+    var token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE1NTY3NzU1MzYsImlkIjoib3ExNVU1OTdLTVNlNTV2d21aLUN3ZDZkSDFNMCIsIm9yaWdfaWF0IjoxNTU2MTcwNzM2fQ.WbTvev5bweV5OlhKRqypu5fdZmrZhBKHUpAji6N-6ng"
     
     override func viewWillAppear(_ animated: Bool) {
         self.tabBarController?.tabBar.isHidden = false
@@ -131,13 +131,6 @@ class HomeViewController: UIViewController,UITableViewDelegate,UITableViewDataSo
         let urlStr2 = "\(URLStr)/user"
         let headers:HTTPHeaders = ["auth": "Bearer \(token)"]
         Alamofire.request(urlStr2, method: .get, headers: headers).responseJSON { response in
-            let json = JSON(response.result.value)
-            //print(json["data"]["wx_id"].string)
-            if let ID = json["data"]["wx_id"].string {
-                UserDefaults.standard.set(ID, forKey: "userID")
-            }
-        }
-        Alamofire.request(urlStr, method: .get, encoding: URLEncoding.default,headers: headers).responseJSON { response in
             self.tasks = [taskDetail]()
             let json = JSON(response.result.value)
             for k in 0..<json["data"]["routines"].count {
@@ -153,10 +146,26 @@ class HomeViewController: UIViewController,UITableViewDelegate,UITableViewDataSo
                 self.tasks.append(taskDetail.init(id: routine["id"].string, name:  routine["title"].string, icon:  routine["icon_id"].string, days: routine["sign_in"].count, isFinished: isFinished))
                 
             }
+            for i in 0..<json["data"]["records"].count {
+                let record = json["data"]["records"][i]
+                let time = record["time"].int64
+                let ID = record["id"].string
+                let content = record["content"].string
+                let date = Date(timeIntervalSince1970: TimeInterval(time!/1000))
+                if date.isToday() {
+                    UserDefaults.standard.set(ID, forKey: "recordID")
+                    UserDefaults.standard.set(content, forKey: "recordContent")
+                }
+            }
+            if let ID = json["data"]["wx_id"].string {
+                UserDefaults.standard.set(ID, forKey: "userID")
+            }
             self.tableView.reloadData()
             self.view.layoutIfNeeded()
         }
     }
+        
+        
     
     override func viewDidLoad() {
         super.viewDidLoad()

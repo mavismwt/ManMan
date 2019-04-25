@@ -10,6 +10,8 @@
 		181DC808225F4939002C8000 /* CommonView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 181DC807225F4939002C8000 /* CommonView.swift */; };
 		181DC80A225F5ADE002C8000 /* FlagData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 181DC809225F5ADE002C8000 /* FlagData.swift */; };
 		18231EF2224CC13C00558C86 /* RequestFunction.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18231EF1224CC13C00558C86 /* RequestFunction.swift */; };
+		185D23F32270B1B2000DC334 /* TopLineView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 185D23F22270B1B2000DC334 /* TopLineView.swift */; };
+		185D23F52270B2B0000DC334 /* MyTextView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 185D23F42270B2B0000DC334 /* MyTextView.swift */; };
 		1860F5C521D13BA500BD221F /* LogDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1860F5C421D13BA500BD221F /* LogDetailView.swift */; };
 		1860F5C821D4705C00BD221F /* flagCardTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1860F5C721D4705C00BD221F /* flagCardTableViewCell.swift */; };
 		1860F5CA21D48B2000BD221F /* MailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1860F5C921D48B2000BD221F /* MailViewController.swift */; };
@@ -114,6 +116,8 @@
 		181DC807225F4939002C8000 /* CommonView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommonView.swift; sourceTree = "<group>"; };
 		181DC809225F5ADE002C8000 /* FlagData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FlagData.swift; sourceTree = "<group>"; };
 		18231EF1224CC13C00558C86 /* RequestFunction.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RequestFunction.swift; sourceTree = "<group>"; };
+		185D23F22270B1B2000DC334 /* TopLineView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TopLineView.swift; sourceTree = "<group>"; };
+		185D23F42270B2B0000DC334 /* MyTextView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyTextView.swift; sourceTree = "<group>"; };
 		1860F5C421D13BA500BD221F /* LogDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LogDetailView.swift; sourceTree = "<group>"; };
 		1860F5C721D4705C00BD221F /* flagCardTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = flagCardTableViewCell.swift; sourceTree = "<group>"; };
 		1860F5C921D48B2000BD221F /* MailViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MailViewController.swift; sourceTree = "<group>"; };
@@ -274,6 +278,8 @@
 			children = (
 				18F9399121BE55C500306EB0 /* CustomizeUICollectinViewCell.swift */,
 				18632B0621C2996500A0CA47 /* FangCustomizeUICollectionViewCell.swift */,
+				185D23F22270B1B2000DC334 /* TopLineView.swift */,
+				185D23F42270B2B0000DC334 /* MyTextView.swift */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -651,6 +657,7 @@
 				18632BED21CBADC900A0CA47 /* CommentLineView.swift in Sources */,
 				18632BE121C89D0600A0CA47 /* LogTableViewCell.swift in Sources */,
 				18F972E921B7F8AF00FFAB90 /* AppDelegate.swift in Sources */,
+				185D23F32270B1B2000DC334 /* TopLineView.swift in Sources */,
 				18F9398621BCE36D00306EB0 /* LetterViewController.swift in Sources */,
 				18F9398421BCD4D200306EB0 /* ListTableViewCell.swift in Sources */,
 				18632AF621C24C8000A0CA47 /* AddUserDefinedCheckViewController.swift in Sources */,
@@ -670,6 +677,7 @@
 				18231EF2224CC13C00558C86 /* RequestFunction.swift in Sources */,
 				18632BF121CCF62200A0CA47 /* LoadView.swift in Sources */,
 				1860F5C821D4705C00BD221F /* flagCardTableViewCell.swift in Sources */,
+				185D23F52270B2B0000DC334 /* MyTextView.swift in Sources */,
 				18632AFA21C26D5000A0CA47 /* LogViewController.swift in Sources */,
 				1860F5C521D13BA500BD221F /* LogDetailView.swift in Sources */,
 			);

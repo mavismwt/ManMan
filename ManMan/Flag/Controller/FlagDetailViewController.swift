@@ -31,6 +31,7 @@ class FlagDetailViewController: UIViewController,UITableViewDelegate,UITableView
     var request = RequestFunction()
     var nickname: String?
     var profileURl: String?
+    var textView = UITextView()
     
     override func viewWillAppear(_ animated: Bool) {
         if let nickname = UserDefaults.standard.value(forKey: "nickname"), let profileURL = UserDefaults.standard.value(forKey: "profileURL") {
@@ -56,7 +57,6 @@ class FlagDetailViewController: UIViewController,UITableViewDelegate,UITableView
         
         self.setTopLineView()
         
-        var textView = UITextView()
         if let data = UserDefaults.standard.value(forKey: "flagData") {
             let decoder = JSONDecoder()
             let obj = try? decoder.decode(FlagData.self, from: data as! Data)
@@ -79,7 +79,7 @@ class FlagDetailViewController: UIViewController,UITableViewDelegate,UITableView
             UserDefaults.standard.set(nil, forKey: "flagData")
         } else if let userId = UserDefaults.standard.value(forKey: "userID") {
             let URLStr = "https://slow.hustonline.net/api/v1"
-            var token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE1NTYxNTcyODEsImlkIjoib3ExNVU1OTdLTVNlNTV2d21aLUN3ZDZkSDFNMCIsIm9yaWdfaWF0IjoxNTU1NTUyNDgxfQ.UB5ASV9pM4SO1WP1le1ZyLQtlOjzcOtl8tq3gyOW1rU"
+            var token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE1NTY3NzU1MzYsImlkIjoib3ExNVU1OTdLTVNlNTV2d21aLUN3ZDZkSDFNMCIsIm9yaWdfaWF0IjoxNTU2MTcwNzM2fQ.WbTvev5bweV5OlhKRqypu5fdZmrZhBKHUpAji6N-6ng"
             let urlStr = "\(URLStr)/flag"
             let headers:HTTPHeaders = ["auth": "Bearer \(token)"]
             Alamofire.request(urlStr, method: .get, encoding: URLEncoding.default,headers: headers).responseJSON { response in
@@ -219,8 +219,9 @@ class FlagDetailViewController: UIViewController,UITableViewDelegate,UITableView
             self.detail?.comment.append(comment)
             self.commentView.inputText.resignFirstResponder()
             self.detailView.commentNumber = (detail?.comment.count)!
-            print(detail?.comment.count)
             self.detailView.layoutSubviews()
+            tableView.backgroundColor = UIColor.init(red: 238/255, green: 238/255, blue: 238/255, alpha: 1)
+            self.textView.removeFromSuperview()
             self.tableView.reloadData()
             self.view.layoutIfNeeded()
             UIView.animate(withDuration: 0.5, animations: {
