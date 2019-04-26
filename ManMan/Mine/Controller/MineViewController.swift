@@ -49,7 +49,7 @@ class MineViewController: UIViewController,UITableViewDelegate,UITableViewDataSo
     let SCREENSIZE = UIScreen.main.bounds.size
     let identifier = "reusedCell"
     let listDetail:[String] = ["我的flag","我的时间轴","设置","问题反馈"]
-    var userInfo = JSON()
+    var userInfo = UserInfo()
     
     
     
@@ -60,24 +60,31 @@ class MineViewController: UIViewController,UITableViewDelegate,UITableViewDataSo
         self.navigationController?.isNavigationBarHidden = true
         self.view.backgroundColor = UIColor.init(red: 238/255, green: 238/255, blue: 238/255, alpha: 1)
         
-        let URLStr = "https://slow.hustonline.net/api/v1"
-        var token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE1NTY3NzU1MzYsImlkIjoib3ExNVU1OTdLTVNlNTV2d21aLUN3ZDZkSDFNMCIsIm9yaWdfaWF0IjoxNTU2MTcwNzM2fQ.WbTvev5bweV5OlhKRqypu5fdZmrZhBKHUpAji6N-6ng"
-        let urlStr = "\(URLStr)/user"
-        let headers:HTTPHeaders = ["auth": "Bearer \(token)"]
-        Alamofire.request(urlStr, method: .get, encoding: URLEncoding.default,headers: headers).responseJSON { response in
-            let value = JSON(response.result.value)
-            //print(URL(string: value["data"]["wx_id"].string!))
-            response.result.ifSuccess {
-                self.userInfo = JSON(response.result.value)
-                self.showUserInfo(name: self.userInfo["data"]["name"].string!,imgURL: self.userInfo["data"]["img_url"].string!)
-                UserDefaults.standard.set(self.userInfo["data"]["img_url"].string!, forKey: "profileURL")
-                UserDefaults.standard.set(self.userInfo["data"]["name"].string!, forKey: "nickname")
-                }
-                .ifFailure {
-                    print("Cannot get Record")
-            }
-            
+        if let data = UserDefaults.standard.value(forKey: "userInfo") {
+            let decoder = JSONDecoder()
+            let obj = try? decoder.decode(UserInfo.self, from: data as! Data)
+            userInfo = obj!
+            self.showUserInfo(name: userInfo.name!, imgURL: userInfo.imgURL!)
         }
+        
+//        let URLStr = "https://slow.hustonline.net/api/v1"
+//        var token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE1NTY3NzU1MzYsImlkIjoib3ExNVU1OTdLTVNlNTV2d21aLUN3ZDZkSDFNMCIsIm9yaWdfaWF0IjoxNTU2MTcwNzM2fQ.WbTvev5bweV5OlhKRqypu5fdZmrZhBKHUpAji6N-6ng"
+//        let urlStr = "\(URLStr)/user"
+//        let headers:HTTPHeaders = ["auth": "Bearer \(token)"]
+//        Alamofire.request(urlStr, method: .get, encoding: URLEncoding.default,headers: headers).responseJSON { response in
+//            let value = JSON(response.result.value)
+//            //print(URL(string: value["data"]["wx_id"].string!))
+//            response.result.ifSuccess {
+//                self.userInfo = JSON(response.result.value)
+//                self.showUserInfo(name: self.userInfo["data"]["name"].string!,imgURL: self.userInfo["data"]["img_url"].string!)
+//                UserDefaults.standard.set(self.userInfo["data"]["img_url"].string!, forKey: "profileURL")
+//                UserDefaults.standard.set(self.userInfo["data"]["name"].string!, forKey: "nickname")
+//                }
+//                .ifFailure {
+//                    print("Cannot get Record")
+//            }
+        
+//        }
         
 //        userInfo = UserDefaults.standard.value(forKey: "userInfo") as! JSON
 //        if userInfo != nil {

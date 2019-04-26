@@ -32,11 +32,13 @@ class FlagDetailViewController: UIViewController,UITableViewDelegate,UITableView
     var nickname: String?
     var profileURl: String?
     var textView = UITextView()
+    var userInfo = UserInfo()
     
     override func viewWillAppear(_ animated: Bool) {
-        if let nickname = UserDefaults.standard.value(forKey: "nickname"), let profileURL = UserDefaults.standard.value(forKey: "profileURL") {
-            self.nickname = nickname as! String
-            self.profileURl = profileURL as! String
+        if let data = UserDefaults.standard.value(forKey: "userInfo") {
+            let decoder = JSONDecoder()
+            let obj = try? decoder.decode(UserInfo.self, from: data as! Data)
+            userInfo = obj!
         }
     }
     
@@ -57,7 +59,9 @@ class FlagDetailViewController: UIViewController,UITableViewDelegate,UITableView
         
         self.setTopLineView()
         
-        if let data = UserDefaults.standard.value(forKey: "flagData") {
+        
+        
+        if let data = UserDefaults.standard.value(forKey: "flagData")  {
             let decoder = JSONDecoder()
             let obj = try? decoder.decode(FlagData.self, from: data as! Data)
             detail = obj
@@ -79,7 +83,7 @@ class FlagDetailViewController: UIViewController,UITableViewDelegate,UITableView
             UserDefaults.standard.set(nil, forKey: "flagData")
         } else if let userId = UserDefaults.standard.value(forKey: "userID") {
             let URLStr = "https://slow.hustonline.net/api/v1"
-            var token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE1NTY3NzU1MzYsImlkIjoib3ExNVU1OTdLTVNlNTV2d21aLUN3ZDZkSDFNMCIsIm9yaWdfaWF0IjoxNTU2MTcwNzM2fQ.WbTvev5bweV5OlhKRqypu5fdZmrZhBKHUpAji6N-6ng"
+            var token =  "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE1NTY3NzU1MzYsImlkIjoib3ExNVU1OTdLTVNlNTV2d21aLUN3ZDZkSDFNMCIsIm9yaWdfaWF0IjoxNTU2MTcwNzM2fQ.WbTvev5bweV5OlhKRqypu5fdZmrZhBKHUpAji6N-6ng"
             let urlStr = "\(URLStr)/flag"
             let headers:HTTPHeaders = ["auth": "Bearer \(token)"]
             Alamofire.request(urlStr, method: .get, encoding: URLEncoding.default,headers: headers).responseJSON { response in
@@ -90,7 +94,7 @@ class FlagDetailViewController: UIViewController,UITableViewDelegate,UITableView
                 var comDetails = [CommentDetail]()
                 if value["comments"].count != 0 {
                     for i in 0..<value["comments"].count {
-                        let comDetail = CommentDetail.init(userName: value["comments"][i]["from_id"].string, userComment: value["comments"][i]["content"].string)
+                        let comDetail = CommentDetail.init(userName: value["comments"][i]["name"].string, userComment: value["comments"][i]["content"].string)
                         comDetails.append(comDetail)
                     }
                     self.detailView.addSubview(self.tableView)
@@ -214,7 +218,7 @@ class FlagDetailViewController: UIViewController,UITableViewDelegate,UITableView
     //发送评论
     @objc func send() {
         if self.commentView.inputText.text != nil {
-            self.request.postFlagComment(openid: self.detail!.userId!, flagid: self.detail!.id!, comment: self.commentView.inputText.text!)
+            self.request.postFlagComment(openid: self.detail!.userId!, flagid: self.detail!.id!, name: self.userInfo.name!, comment: self.commentView.inputText.text!)
             let comment = CommentDetail.init(userName: self.detail!.userId!, userComment: self.commentView.inputText.text!)
             self.detail?.comment.append(comment)
             self.commentView.inputText.resignFirstResponder()

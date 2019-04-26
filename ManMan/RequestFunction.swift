@@ -48,7 +48,6 @@ class RequestFunction {
         let headers:HTTPHeaders = ["auth": "Bearer \(self.token)"]
         Alamofire.request(urlStr, method: .get, encoding: URLEncoding.default,headers: headers).responseJSON { response in
             let jsonValue = JSON(response.result.value).string
-            UserDefaults.standard.set(jsonValue, forKey: "userInfo")
             //print(jsonValue)
             response.result.ifSuccess {
                 self.userInfo = JSON(response.result.value)
@@ -56,10 +55,6 @@ class RequestFunction {
                 .ifFailure {
                     print("Cannot get Record")
             }
-//            if let value = response.result.value {
-//                let json = JSON(value)
-//                //UserDefaults.standard.set(json, forKey: "userInfo")
-//            }
             
         }
     }
@@ -270,9 +265,9 @@ class RequestFunction {
         }
     }
     
-    func postFlagComment(openid: String, flagid:String , comment: String) {
+    func postFlagComment(openid: String, flagid:String, name: String, comment: String) {
         print(openid)
-        let comment = "{\"openid\":\"\(openid)\",\"flag_id\":\"\(flagid)\",\"comment\":{\"id\":\"\",\"from_id\":\"\",\"content\":\"\(comment)\",\"time\":0}}"
+        let comment = "{\"openid\":\"\(openid)\",\"flag_id\":\"\(flagid)\",\"comment\":{\"id\":\"\",\"from_id\":\"\",\"name\":\"\(name)\",\"content\":\"\(comment)\",\"time\":0}}"
         let commentData = comment.data(using: String.Encoding.utf8)
         
         let urlStr = "\(URLStr)/flag/comment"

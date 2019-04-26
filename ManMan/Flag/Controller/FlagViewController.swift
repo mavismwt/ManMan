@@ -54,7 +54,7 @@ class FlagViewController: UIViewController,UITableViewDelegate,UITableViewDataSo
                 let value = json["data"]["flags"][k]
                 var comments = [CommentDetail]()
                 for i in 0..<value["flags"]["comments"].count {
-                    comments.append(CommentDetail.init(userName: value["flags"]["comments"][i]["from_id"].string, userComment: value["flags"]["comments"][i]["content"].string))
+                    comments.append(CommentDetail.init(userName: value["flags"]["comments"][i]["name"].string, userComment: value["flags"]["comments"][i]["content"].string))
                 }
                 var isLiked = false
                 for j in 0..<value["flags"]["likes"].count {
@@ -261,17 +261,6 @@ class FlagViewController: UIViewController,UITableViewDelegate,UITableViewDataSo
             print(content)
         }
         print("ok")
-//        var detail = FlagData()
-//        for i in 0..<flagDatas.count {
-//            if flagDatas[i].id == id {
-//                detail = flagDatas[i]
-//            }
-//        }
-//        let encoder = JSONEncoder()
-//        let data = try? encoder.encode(detail)
-//        UserDefaults.standard.set(data, forKey: "flagData")
-//        let flagDetailViewController = FlagDetailViewController()
-//        self.navigationController?.pushViewController(flagDetailViewController, animated: true)
         
     }
     

@@ -131,6 +131,7 @@ class HomeViewController: UIViewController,UITableViewDelegate,UITableViewDataSo
         let urlStr2 = "\(URLStr)/user"
         let headers:HTTPHeaders = ["auth": "Bearer \(token)"]
         Alamofire.request(urlStr2, method: .get, headers: headers).responseJSON { response in
+            //print(response)
             self.tasks = [taskDetail]()
             let json = JSON(response.result.value)
             for k in 0..<json["data"]["routines"].count {
@@ -157,9 +158,12 @@ class HomeViewController: UIViewController,UITableViewDelegate,UITableViewDataSo
                     UserDefaults.standard.set(content, forKey: "recordContent")
                 }
             }
-            if let ID = json["data"]["wx_id"].string {
-                UserDefaults.standard.set(ID, forKey: "userID")
-            }
+            let info = json["data"]
+            let userInfo = UserInfo.init(id: info["id"].string, wxid: info["wx_id"].string, name: info["name"].string, imgURL: info["img_url"].string)
+            //print(userInfo)
+            let encoder = JSONEncoder()
+            let data = try? encoder.encode(userInfo)
+            UserDefaults.standard.set(data, forKey: "userInfo")
             self.tableView.reloadData()
             self.view.layoutIfNeeded()
         }

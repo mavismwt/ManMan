@@ -24,3 +24,10 @@ public struct CommentDetail: Codable {
     var userName: String?
     var userComment: String?
 }
+
+public struct UserInfo: Codable {
+    var id: String?
+    var wxid: String?
+    var name: String?
+    var imgURL: String?
+}
