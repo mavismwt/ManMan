@@ -100,9 +100,11 @@ class AddFlagViewController: UIViewController ,UITextViewDelegate {
     
     @objc func confirm() {
         let alertView = AlertView()
-        print("post")
-        let token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE1NTYxNTcyODEsImlkIjoib3ExNVU1OTdLTVNlNTV2d21aLUN3ZDZkSDFNMCIsIm9yaWdfaWF0IjoxNTU1NTUyNDgxfQ.UB5ASV9pM4SO1WP1le1ZyLQtlOjzcOtl8tq3gyOW1rU"
-        request.postFlag(content: inputText.text, token: token)
+        if let flagID = UserDefaults.standard.value(forKey: "myFlagID") {
+            request.putFlag(id: flagID as! String, content: inputText.text)
+        } else {
+            request.postFlag(content: inputText.text)
+        }
         
         UIView.animate(withDuration: 1, animations: {
             self.view.addSubview(alertView)
@@ -112,7 +114,6 @@ class AddFlagViewController: UIViewController ,UITextViewDelegate {
                 self.navigationController?.popViewController(animated: true)
         })
          UserDefaults.standard.set(self.inputText.text, forKey: "flagDetail")
-        //self.tabBarController?.tabBar.isHidden = false
     }
     
     @objc func back() {

@@ -12,17 +12,6 @@ class CommentTableViewCell: UITableViewCell {
     
     let SCREENRECT = UIScreen.main.bounds
     
-    struct flagData {
-        var profileURL = "UIImageView()"
-        var nicknameText = "UILabel()"
-        var detailText = "UITextView()"
-        var comment = [{
-            var userName = ""
-            var userComment = ""
-            }]
-        var commentNumText = "UILabel()"
-        var likeNumText = "UILabel()"
-    }
     var basicInfo = UIView()
     var profile = UIImageView()
     var nickname = UILabel()
@@ -82,8 +71,8 @@ class CommentTableViewCell: UITableViewCell {
         self.backgroundColor = UIColor.init(red: 238/255, green: 238/255, blue: 238/255, alpha: 0.8)
     }
     
-    func setValueForCell(flag:flagData){
-        profile.image = UIImage(named: flag.profileURL)
+    func setValueForCell(flag:FlagData){
+        profile.image = UIImage(named: flag.profileURL!)
         nickname.text = "flag.nicknameText"
         detail.text = "flag.detailText"
     }

@@ -248,7 +248,7 @@ class AddUserDefinedCheckViewController: UIViewController,UICollectionViewDelega
         
         if (self.selectedTaskNumber != nil) && (self.taskName.text != nil) {
             print(imageName[self.selectedTaskNumber],self.taskName.text)
-            request.postRoutine(title: self.taskName.text!, icon: imageName[self.selectedTaskNumber], token: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE1NTUyNDc1NzMsImlkIjoib3ExNVU1OTdLTVNlNTV2d21aLUN3ZDZkSDFNMCIsIm9yaWdfaWF0IjoxNTU0NjQyNzczfQ.m6i6TH7mK34cA0oc6P9Dc_xKxQWwOoch8VdgGPrwt2k")
+            request.postRoutine(title: self.taskName.text!, icon: imageName[self.selectedTaskNumber])
         }
         
         let alertView = AlertView()

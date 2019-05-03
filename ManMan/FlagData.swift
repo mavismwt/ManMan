@@ -23,6 +23,7 @@ public struct FlagData: Codable {
 public struct CommentDetail: Codable {
     var userName: String?
     var userComment: String?
+    var imgURl: String?
 }
 
 public struct UserInfo: Codable {

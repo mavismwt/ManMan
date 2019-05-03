@@ -12,9 +12,11 @@ class LoadView: UIView {
     
     var imageView = UIImageView()
     var textView = UITextView()
+    var userInfo = UserInfo()
     
     var nickname = "Mavismwt"
     var greet = "日安"
+    var day = ""
     let inset = UIApplication.shared.delegate?.window??.safeAreaInsets ?? UIEdgeInsets.zero
     
     override init(frame: CGRect) {
@@ -27,6 +29,17 @@ class LoadView: UIView {
 //        let dformatter = DateFormatter()
 //        dformatter.dateFormat = "yyyy年MM月dd日 HH:mm:ss"
 //        print("当前日期时间：\(dformatter.string(from: now))")
+       
+        if let data = UserDefaults.standard.value(forKey: "userInfo") {
+            let decoder = JSONDecoder()
+            let obj = try? decoder.decode(UserInfo.self, from: data as! Data)
+            self.userInfo = obj!
+            if let name = self.userInfo.name {
+                
+                self.nickname = name
+            }
+        }
+        
         
         imageView.snp.makeConstraints { (make) in
             make.top.equalTo(inset.top+58)
@@ -40,6 +53,7 @@ class LoadView: UIView {
         // 创建一个日期格式器
         let dformatter = DateFormatter()
         dformatter.dateFormat = "yyyy年M月dd日"
+        day = dformatter.string(from: now)
         let jugmentResult = judgeDateByStartAndEnd(startStr: "18:00", endStr: "6:00", dateDay: "星期一,星期二,星期三,星期四,星期五,星期六,星期日")
         var img = UIImage()
         if jugmentResult == true {
@@ -56,12 +70,14 @@ class LoadView: UIView {
         imageView.image = img
         
         self.addSubview(textView)
-        textView.text = "Hi \(nickname),\n\n\(greet)。\n\n今天是\(dformatter.string(from: now)),\n\n很高兴陪在你身边。"
+        textView.text = "Hi \(nickname),\n\n\(greet)。\n\n今天是\(day),\n\n很高兴陪在你身边。"
         textView.backgroundColor = UIColor.init(red: 0, green: 0, blue: 0, alpha: 0)
         textView.snp.makeConstraints { (make) in
             make.left.equalTo(41)
+            //make.top.equalTo(0)
             make.bottom.equalTo(-25-inset.bottom)
-            make.width.height.equalTo(300)
+            make.width.equalTo(300)
+            make.height.equalTo(300)
         }
         textView.font = UIFont.systemFont(ofSize: 18)
         textView.isEditable = false
@@ -110,6 +126,10 @@ class LoadView: UIView {
 //        }else{
 //            return false
 //        }
+    }
+    
+    override func layoutSubviews() {
+        textView.text = "Hi \(nickname),\n\n\(greet)。\n\n今天是\(day),很高兴陪在你身边。"
     }
     
 

@@ -172,7 +172,7 @@ class CustomizeUITableViewCell: UITableViewCell {
     
     @objc func like() {
         if isliked == false {
-            request.postFlagLike(openid: userid, flagid: id, token: "")
+            request.postFlagLike(openid: userid, flagid: id)
             isliked = true
             UIView.transition(with: self.likeImg, duration: 0.5 , options: .transitionFlipFromLeft , animations: {
                 self.likeImg.image = UIImage(named: "likeSelected")

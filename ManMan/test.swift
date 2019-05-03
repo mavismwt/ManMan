@@ -62,9 +62,9 @@ class TestViewController: UIViewController {
 //    }
     
     @objc func req() {
-        //function.getUserInfo(token: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE1NTQ2MjIwMzQsImlkIjoib3ExNVU1OTdLTVNlNTV2d21aLUN3ZDZkSDFNMCIsIm9yaWdfaWF0IjoxNTU0MDE3MjM0fQ.5QRNwSvgTWdwv1ONNsmKId93aJAHpprXvQlBpqUO_pA")
-        function.postRoutine(title: "喝水", icon: "drink", token: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE1NTY3NzU1MzYsImlkIjoib3ExNVU1OTdLTVNlNTV2d21aLUN3ZDZkSDFNMCIsIm9yaWdfaWF0IjoxNTU2MTcwNzM2fQ.WbTvev5bweV5OlhKRqypu5fdZmrZhBKHUpAji6N-6ng")
-        //function.postRecord(content: "just", token: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE1NTYxNTcyODEsImlkIjoib3ExNVU1OTdLTVNlNTV2d21aLUN3ZDZkSDFNMCIsIm9yaWdfaWF0IjoxNTU1NTUyNDgxfQ.UB5ASV9pM4SO1WP1le1ZyLQtlOjzcOtl8tq3gyOW1rU")
+        //function.getUserInfo()
+        function.postRoutine(title: "喝水", icon: "drink")
+        //function.postRecord(content: "just")
         
     }
     

@@ -14,22 +14,7 @@ import SwiftyJSON
 class FlagDetail: UIView {
     
     let SCREENRECT = UIScreen.main.bounds
-    
-    struct flagData {
-        var profileURL: String?
-        var nickname: String?
-        var time: Int64?
-        var detail: String?
-        var comment = [commentDetail]()
-        var commentNum: Int?
-        var isLiked: Bool?
-        var likeNum: Int?
-        var id: String?
-    }
-    struct commentDetail {
-        var userName: String?
-        var userComment: String?
-    }
+
     //var data = flagData()
     
     var basicInfo = UIView()
@@ -186,7 +171,7 @@ class FlagDetail: UIView {
     
     @objc func like() {
         if isliked == false {
-            request.postFlagLike(openid: userid, flagid: id, token: "")
+            request.postFlagLike(openid: userid, flagid: id)
             isliked = true
             UIView.transition(with: self.likeImg, duration: 0.5 , options: .transitionFlipFromLeft , animations: {
                 self.likeImg.image = UIImage(named: "likeSelected")
@@ -201,7 +186,7 @@ class FlagDetail: UIView {
         }
     }
     
-    func setValueForCell(flag:flagData){
+    func setValueForCell(flag:FlagData){
         //profile.image = UIImage(named: flag.profileURL)
         //nickname.text = flag.nicknameText
         //detail.text = flag.detailText

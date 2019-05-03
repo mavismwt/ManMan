@@ -13,8 +13,6 @@ import SwiftyJSON
 
 class FlagViewController: UIViewController,UITableViewDelegate,UITableViewDataSource,UITextFieldDelegate,UIGestureRecognizerDelegate {
     
-
-    
     var topLineView = UIView()
     var backButton = UIButton()
     var titleView = UILabel()
@@ -31,6 +29,8 @@ class FlagViewController: UIViewController,UITableViewDelegate,UITableViewDataSo
     var HeightOfKeyboard:CGFloat? = 0
     var dTime:TimeInterval? = 0
     var flagDatas = [FlagData]()
+    var userInfo = UserInfo()
+    var myFlagID = String()
     
     var MyID = ""
     var index = 0
@@ -42,32 +42,41 @@ class FlagViewController: UIViewController,UITableViewDelegate,UITableViewDataSo
         if let ID = UserDefaults.standard.value(forKey: "userID") {
             MyID = ID as! String
         }
+        if let data = UserDefaults.standard.value(forKey: "userInfo") {
+            let decoder = JSONDecoder()
+            let obj = try? decoder.decode(UserInfo.self, from: data as! Data)
+            userInfo = obj!
+        }
         
         let URLStr = "https://slow.hustonline.net/api/v1"
-        var token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE1NTY3NzU1MzYsImlkIjoib3ExNVU1OTdLTVNlNTV2d21aLUN3ZDZkSDFNMCIsIm9yaWdfaWF0IjoxNTU2MTcwNzM2fQ.WbTvev5bweV5OlhKRqypu5fdZmrZhBKHUpAji6N-6ng"
-        let urlStr = "\(URLStr)/flag/flags"
-        let headers:HTTPHeaders = ["auth": "Bearer \(token)"]
-        Alamofire.request(urlStr, method: .get, parameters: ["num": index], encoding: URLEncoding.default,headers: headers).responseJSON { response in
-            //print(response)
-            let json = JSON(response.result.value)
-            for k in 0..<json["data"]["flags"].count {
-                let value = json["data"]["flags"][k]
-                var comments = [CommentDetail]()
-                for i in 0..<value["flags"]["comments"].count {
-                    comments.append(CommentDetail.init(userName: value["flags"]["comments"][i]["name"].string, userComment: value["flags"]["comments"][i]["content"].string))
-                }
-                var isLiked = false
-                for j in 0..<value["flags"]["likes"].count {
-                    if value["flags"]["likes"][j].string == self.MyID {
-                        isLiked = true
+        if let token = UserDefaults.standard.value(forKey: "token") { //"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE1NTc0MTIwMDMsImlkIjoib3ExNVU1OTdLTVNlNTV2d21aLUN3ZDZkSDFNMCIsIm9yaWdfaWF0IjoxNTU2ODA3MjAzfQ.Bd25U4DIFoe0FrSvlqpWRLw0h6mG2to-ttNeV-Fk6nE"//UserDefaults.standard.value(forKey: "token")
+            let urlStr = "\(URLStr)/flag/flags"
+            let headers:HTTPHeaders = ["auth": "Bearer \(token)"]
+            Alamofire.request(urlStr, method: .get, parameters: ["num": index], encoding: URLEncoding.default,headers: headers).responseJSON { response in
+                //print(response)
+                let json = JSON(response.result.value)
+                for k in 0..<json["data"]["flags"].count {
+                    let value = json["data"]["flags"][k]
+                    var comments = [CommentDetail]()
+                    for i in 0..<value["flags"]["comments"].count {
+                        comments.append(CommentDetail.init(userName: value["flags"]["comments"][i]["name"].string, userComment: value["flags"]["comments"][i]["content"].string, imgURl: value["flags"]["comments"][i]["img"].string))
                     }
+                    var isLiked = false
+                    for j in 0..<value["flags"]["likes"].count {
+                        if value["flags"]["likes"][j].string == self.MyID {
+                            isLiked = true
+                        }
+                    }
+                    
+                    self.flagDatas.append(FlagData.init(userId: value["wx_id"].string, profileURL: value["img_url"].string, nickname: value["name"].string, time: value["flags"]["time"].int64, detail: value["flags"]["content"].string, comment: comments, commentNum: value["flags"]["comments"].count, isLiked: isLiked, likeNum: value["flags"]["likes"].count, id: value["flags"]["id"].string))
+                    
+                    self.tableView.reloadData()
+                    self.view.layoutIfNeeded()
                 }
-                self.flagDatas.append(FlagData.init(userId: value["wx_id"].string, profileURL: value["img_url"].string, nickname: value["name"].string, time: value["flags"]["time"].int64, detail: value["flags"]["content"].string, comment: comments, commentNum: value["flags"]["comments"].count, isLiked: isLiked, likeNum: value["flags"]["likes"].count, id: value["flags"]["id"].string))
-                
-                self.tableView.reloadData()
-                self.view.layoutIfNeeded()
             }
+            
         }
+        
     }
     
     override func viewDidLoad() {

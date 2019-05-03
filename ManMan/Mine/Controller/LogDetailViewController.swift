@@ -46,34 +46,37 @@ class LogDetailViewController: UIViewController,CVCalendarViewDelegate,CVCalenda
     
     func getDatas() {
         let URLStr = "https://slow.hustonline.net/api/v1"
-        var token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE1NTY3NzU1MzYsImlkIjoib3ExNVU1OTdLTVNlNTV2d21aLUN3ZDZkSDFNMCIsIm9yaWdfaWF0IjoxNTU2MTcwNzM2fQ.WbTvev5bweV5OlhKRqypu5fdZmrZhBKHUpAji6N-6ng"
-        let urlStr = "\(URLStr)/user"
-        let headers:HTTPHeaders = ["auth": "Bearer \(token)"]
-        
-        Alamofire.request(urlStr, method: .get, encoding: URLEncoding.default,headers: headers).responseJSON { response in
-            self.recordStr = String()
-            self.allDate = [Date]()
-            if let value = response.result.value {
-                let json = JSON(value)
-                let num = json["data"]["records"].count
-                for i in 0..<num {
-                    let record = json["data"]["records"][i]
-                    let timeMili = record["time"].int64
-                    let timeInterval:TimeInterval = TimeInterval(Int(timeMili!/1000))
-                    let signDate = Date(timeIntervalSince1970: timeInterval)
-                    self.allDate.append(signDate)
-                    self.strData.append(record["content"].string!)
-                    if signDate.isSameDay(day: self.selDate) {
-                        self.recordStr = record["content"].string!
+        if let token = UserDefaults.standard.value(forKey: "token") { //"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE1NTc0MTIwMDMsImlkIjoib3ExNVU1OTdLTVNlNTV2d21aLUN3ZDZkSDFNMCIsIm9yaWdfaWF0IjoxNTU2ODA3MjAzfQ.Bd25U4DIFoe0FrSvlqpWRLw0h6mG2to-ttNeV-Fk6nE"//UserDefaults.standard.value(forKey: "token")
+            let urlStr = "\(URLStr)/user"
+            let headers:HTTPHeaders = ["auth": "Bearer \(token)"]
+            
+            Alamofire.request(urlStr, method: .get, encoding: URLEncoding.default,headers: headers).responseJSON { response in
+                self.recordStr = String()
+                self.allDate = [Date]()
+                if let value = response.result.value {
+                    let json = JSON(value)
+                    let num = json["data"]["records"].count
+                    for i in 0..<num {
+                        let record = json["data"]["records"][i]
+                        let timeMili = record["time"].int64
+                        let timeInterval:TimeInterval = TimeInterval(Int(timeMili!/1000))
+                        let signDate = Date(timeIntervalSince1970: timeInterval)
+                        self.allDate.append(signDate)
+                        self.strData.append(record["content"].string!)
+                        if signDate.isSameDay(day: self.selDate) {
+                            self.recordStr = record["content"].string!
+                        }
                     }
                 }
+                self.setLogDetailView()
+                self.calendarView.layoutSubviews()
+                self.calendarView.commitCalendarViewUpdate()
+                self.calendarView.contentController.refreshPresentedMonth()
+                self.view.layoutIfNeeded()
             }
-            self.setLogDetailView()
-            self.calendarView.layoutSubviews()
-            self.calendarView.commitCalendarViewUpdate()
-            self.calendarView.contentController.refreshPresentedMonth()
-            self.view.layoutIfNeeded()
+            
         }
+        
     }
     
     

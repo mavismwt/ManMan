@@ -75,7 +75,7 @@ extension UITabBar
 }
 
 
-class HomeViewController: UIViewController,UITableViewDelegate,UITableViewDataSource,UIGestureRecognizerDelegate {
+class HomeViewController: UIViewController, UITableViewDelegate, UITableViewDataSource, UIScrollViewDelegate, UIGestureRecognizerDelegate {
     
     var audioPlayer:AVAudioPlayer = AVAudioPlayer()
     
@@ -91,6 +91,7 @@ class HomeViewController: UIViewController,UITableViewDelegate,UITableViewDataSo
     let load = LoadView()
     var tableView = UITableView(frame: CGRect(x: 0, y: 0, width: 200, height: 200), style: .grouped)
     let identifier = "reusedCell"
+    var offset = CGFloat()
     
     let SCREENSIZE = UIScreen.main.bounds.size
     let inset = UIApplication.shared.delegate?.window??.safeAreaInsets ?? UIEdgeInsets.zero
@@ -113,9 +114,12 @@ class HomeViewController: UIViewController,UITableViewDelegate,UITableViewDataSo
     
     var tasks = [taskDetail]()
     var request = RequestFunction()
-    var token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE1NTY3NzU1MzYsImlkIjoib3ExNVU1OTdLTVNlNTV2d21aLUN3ZDZkSDFNMCIsIm9yaWdfaWF0IjoxNTU2MTcwNzM2fQ.WbTvev5bweV5OlhKRqypu5fdZmrZhBKHUpAji6N-6ng"
+    var flagID = String()
+    var userInfo = UserInfo()
+    
     
     override func viewWillAppear(_ animated: Bool) {
+        print("appear")
         self.tabBarController?.tabBar.isHidden = false
         if let isOn:Int =  UserDefaults.standard.value(forKey: "isVolumnOn") as? Int {
             if isOn == 1 {
@@ -126,47 +130,55 @@ class HomeViewController: UIViewController,UITableViewDelegate,UITableViewDataSo
             UserDefaults.standard.set(nil, forKey: "isVolumnOn")
         }
         let URLStr = "https://slow.hustonline.net/api/v1"
-        
-        let urlStr = "\(URLStr)/routine"
-        let urlStr2 = "\(URLStr)/user"
-        let headers:HTTPHeaders = ["auth": "Bearer \(token)"]
-        Alamofire.request(urlStr2, method: .get, headers: headers).responseJSON { response in
-            //print(response)
-            self.tasks = [taskDetail]()
-            let json = JSON(response.result.value)
-            for k in 0..<json["data"]["routines"].count {
-                var isFinished = false
-                let routine = json["data"]["routines"][k]
-                let dayCount = routine["sign_in"].count
-                if dayCount != 0 {
-                    let lastSign = routine["sign_in"][dayCount-1].int64
-                    let timeInterval:TimeInterval = TimeInterval(Int(lastSign!/1000))
-                    let date = Date(timeIntervalSince1970: timeInterval)
-                    isFinished = date.isToday()
-                }
-                self.tasks.append(taskDetail.init(id: routine["id"].string, name:  routine["title"].string, icon:  routine["icon_id"].string, days: routine["sign_in"].count, isFinished: isFinished))
+        if let token = UserDefaults.standard.value(forKey: "token") { //"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE1NTc0MTIwMDMsImlkIjoib3ExNVU1OTdLTVNlNTV2d21aLUN3ZDZkSDFNMCIsIm9yaWdfaWF0IjoxNTU2ODA3MjAzfQ.Bd25U4DIFoe0FrSvlqpWRLw0h6mG2to-ttNeV-Fk6nE"//UserDefaults.standard.value(forKey: "token")
+            let urlStr = "\(URLStr)/routine"
+            let urlStr2 = "\(URLStr)/user"
+            let headers:HTTPHeaders = ["auth": "Bearer \(token)"]
+            Alamofire.request(urlStr2, method: .get, headers: headers).responseJSON { response in
                 
-            }
-            for i in 0..<json["data"]["records"].count {
-                let record = json["data"]["records"][i]
-                let time = record["time"].int64
-                let ID = record["id"].string
-                let content = record["content"].string
-                let date = Date(timeIntervalSince1970: TimeInterval(time!/1000))
-                if date.isToday() {
-                    UserDefaults.standard.set(ID, forKey: "recordID")
-                    UserDefaults.standard.set(content, forKey: "recordContent")
+                self.tasks = [taskDetail]()
+                let json = JSON(response.result.value)
+                if json["data"]["flags"].count != 0 {
+                    let num = json["data"]["flags"].count
+                    self.flagID = json["data"]["flags"][num-1]["id"].string!
+                    UserDefaults.standard.set(self.flagID, forKey: "myFlagID")
                 }
+                for k in 0..<json["data"]["routines"].count {
+                    var isFinished = false
+                    let routine = json["data"]["routines"][k]
+                    let dayCount = routine["sign_in"].count
+                    if dayCount != 0 {
+                        let lastSign = routine["sign_in"][dayCount-1].int64
+                        let timeInterval:TimeInterval = TimeInterval(Int(lastSign!/1000))
+                        let date = Date(timeIntervalSince1970: timeInterval)
+                        isFinished = date.isToday()
+                    }
+                    self.tasks.append(taskDetail.init(id: routine["id"].string, name:  routine["title"].string, icon:  routine["icon_id"].string, days: routine["sign_in"].count, isFinished: isFinished))
+                    
+                }
+                for i in 0..<json["data"]["records"].count {
+                    let record = json["data"]["records"][i]
+                    let time = record["time"].int64
+                    let ID = record["id"].string
+                    let content = record["content"].string
+                    let date = Date(timeIntervalSince1970: TimeInterval(time!/1000))
+                    if date.isToday() {
+                        UserDefaults.standard.set(ID, forKey: "recordID")
+                        UserDefaults.standard.set(content, forKey: "recordContent")
+                    }
+                }
+                let info = json["data"]
+                let userInfo = UserInfo.init(id: info["id"].string, wxid: info["wx_id"].string, name: info["name"].string, imgURL: info["img_url"].string)
+                //print(userInfo)
+                let encoder = JSONEncoder()
+                let data = try? encoder.encode(userInfo)
+                UserDefaults.standard.set(data, forKey: "userInfo")
+                print("response")
+                self.tableView.reloadData()
+                self.view.layoutIfNeeded()
             }
-            let info = json["data"]
-            let userInfo = UserInfo.init(id: info["id"].string, wxid: info["wx_id"].string, name: info["name"].string, imgURL: info["img_url"].string)
-            //print(userInfo)
-            let encoder = JSONEncoder()
-            let data = try? encoder.encode(userInfo)
-            UserDefaults.standard.set(data, forKey: "userInfo")
-            self.tableView.reloadData()
-            self.view.layoutIfNeeded()
         }
+        
     }
         
         
@@ -315,6 +327,10 @@ class HomeViewController: UIViewController,UITableViewDelegate,UITableViewDataSo
         }
     }
     
+    func scrollViewDidEndDecelerating(_ scrollView: UIScrollView) {
+        offset = scrollView.contentOffset.y
+    }
+    
     //点击卡片动画
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         
@@ -323,16 +339,16 @@ class HomeViewController: UIViewController,UITableViewDelegate,UITableViewDataSo
 //        tapGestureRecognizer.addTarget(self, action: #selector(check))
 //        cell.cell.addGestureRecognizer(tapGestureRecognizer)
         cell.selectionStyle = .none
-        self.img.frame = CGRect(x: cell.frame.width-115, y: cell.frame.maxY, width: 150, height: 150)
+        self.img.frame = CGRect(x: cell.frame.width-115, y: cell.frame.maxY+10-offset, width: 150, height: 150)
         if cell.isfinished == false {
-            self.request.postRoutineSign(id: self.tasks[indexPath.row].id!, token: self.token)
+            self.request.postRoutineSign(id: self.tasks[indexPath.row].id!)
             UIView.animate(withDuration: 0.25, delay: 0, options: .curveEaseIn, animations: {
                 cell.checkButton.removeFromSuperview()
                 self.view.addSubview(self.img)
-                self.img.frame = CGRect(x: cell.frame.width-115, y: cell.frame.maxY, width: 110, height: 110)
+                self.img.frame = CGRect(x: cell.frame.width-115, y: cell.frame.maxY+10-self.offset, width: 120, height: 110)
                 self.img.layer.cornerRadius = 60
             }, completion: nil)
-            DispatchQueue.main.asyncAfter(deadline: .now()+0.25, execute:
+            DispatchQueue.main.asyncAfter(deadline: .now()+0.5, execute:
                 {
                     cell.days += 1
                     cell.isfinished = true
@@ -345,6 +361,9 @@ class HomeViewController: UIViewController,UITableViewDelegate,UITableViewDataSo
             })
             
             cell.isfinished = true
+        } else {
+            
+            //cell.isfinished = false
         }
     }
     
@@ -361,8 +380,8 @@ class HomeViewController: UIViewController,UITableViewDelegate,UITableViewDataSo
         let detail = UITableViewRowAction(style: .normal, title: "编辑") {
             action, index in
             print("favorite button tapped")
-            UserDefaults.standard.set(self.tasks[indexPath.row].icon, forKey: "userDefinedTaskImage")
-            UserDefaults.standard.set(self.tasks[indexPath.row].name, forKey: "taskName")
+            //UserDefaults.standard.set(self.tasks[indexPath.row].icon, forKey: "userDefinedTaskImage")
+            //UserDefaults.standard.set(self.tasks[indexPath.row].name, forKey: "taskName")
             let addUserDefinedCheckViewController = AddUserDefinedCheckViewController()
             self.navigationController?.pushViewController(addUserDefinedCheckViewController, animated: true)
             self.tabBarController?.tabBar.isHidden = true
@@ -371,7 +390,7 @@ class HomeViewController: UIViewController,UITableViewDelegate,UITableViewDataSo
         
         let delete = UITableViewRowAction(style: .normal, title: "删除") {
             action, index in
-            self.request.deleteRoutine(id: self.tasks[indexPath.row].id!, token: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE1NTUyNDc1NzMsImlkIjoib3ExNVU1OTdLTVNlNTV2d21aLUN3ZDZkSDFNMCIsIm9yaWdfaWF0IjoxNTU0NjQyNzczfQ.m6i6TH7mK34cA0oc6P9Dc_xKxQWwOoch8VdgGPrwt2k")
+            self.request.deleteRoutine(id: self.tasks[indexPath.row].id!)
             
             self.tasks.remove(at: indexPath.row)
             tableView.deleteRows(at: [indexPath], with: UITableView.RowAnimation.automatic)

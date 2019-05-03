@@ -20,15 +20,19 @@ enum MethodType {
 class RequestFunction {
     
     let URLStr = "https://slow.hustonline.net/api/v1"
-    var token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE1NTY3NzU1MzYsImlkIjoib3ExNVU1OTdLTVNlNTV2d21aLUN3ZDZkSDFNMCIsIm9yaWdfaWF0IjoxNTU2MTcwNzM2fQ.WbTvev5bweV5OlhKRqypu5fdZmrZhBKHUpAji6N-6ng"
-    //var token = UserDefaults.standard.value(forKey: "token")
+    //var token = String()
+    var token = String() //UserDefaults.standard.value(forKey: "token") //"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE1NTc0MTIwMDMsImlkIjoib3ExNVU1OTdLTVNlNTV2d21aLUN3ZDZkSDFNMCIsIm9yaWdfaWF0IjoxNTU2ODA3MjAzfQ.Bd25U4DIFoe0FrSvlqpWRLw0h6mG2to-ttNeV-Fk6nE"//UserDefaults.standard.value(forKey: "token")
     var userInfo = JSON()
     var record = JSON()
     var flag = JSON()
     var routine = JSON()
     
     
+    
     private func getToken(code: String){
+        if let str = UserDefaults.standard.value(forKey: "token") {
+            token = str as! String
+        }
         let urlStr = "\(URLStr)/user/login"
         var token = String()
         Alamofire.request(urlStr,method: .post,parameters:["code": code]).responseJSON { response in
@@ -43,7 +47,10 @@ class RequestFunction {
         }
     }
     
-    func getUserInfo(token: String){
+    func getUserInfo(){
+        if let str = UserDefaults.standard.value(forKey: "token") {
+            token = str as! String
+        }
         let urlStr = "\(URLStr)/user"
         let headers:HTTPHeaders = ["auth": "Bearer \(self.token)"]
         Alamofire.request(urlStr, method: .get, encoding: URLEncoding.default,headers: headers).responseJSON { response in
@@ -59,7 +66,10 @@ class RequestFunction {
         }
     }
     
-    func getRecord(token: String) {
+    func getRecord() {
+        if let str = UserDefaults.standard.value(forKey: "token") {
+            token = str as! String
+        }
         let urlStr = "\(URLStr)/record"
         let headers:HTTPHeaders = ["auth": "Bearer \(self.token)"]
         Alamofire.request(urlStr, method: .get, encoding: URLEncoding.default,headers: headers).responseJSON { response in
@@ -72,7 +82,10 @@ class RequestFunction {
         }
     }
     
-    func getFlag(token: String) {
+    func getFlag() {
+        if let str = UserDefaults.standard.value(forKey: "token") {
+            token = str as! String
+        }
         let urlStr = "\(URLStr)/flag"
         let headers:HTTPHeaders = ["auth": "Bearer \(self.token)"]
         Alamofire.request(urlStr, method: .get, encoding: URLEncoding.default,headers: headers).responseJSON { response in
@@ -85,7 +98,10 @@ class RequestFunction {
         }
     }
     
-    func getRoutine(token: String) {
+    func getRoutine() {
+        if let str = UserDefaults.standard.value(forKey: "token") {
+            token = str as! String
+        }
         let urlStr = "\(URLStr)/flag"
         let headers:HTTPHeaders = ["auth": "Bearer \(self.token)"]
         Alamofire.request(urlStr, method: .get, encoding: URLEncoding.default,headers: headers).responseJSON { response in
@@ -98,7 +114,10 @@ class RequestFunction {
         }
     }
     
-    func postRecord(content:String, token: String) {
+    func postRecord(content:String) {
+        if let str = UserDefaults.standard.value(forKey: "token") {
+            token = str as! String
+        }
         let record = "{\"id\":\"\",\"time\":0,\"content\":\"\(content)\"}"
         let recordData = record.data(using: String.Encoding.utf8)
         let urlStr = "\(URLStr)/record"
@@ -118,7 +137,10 @@ class RequestFunction {
         }
     }
     
-    func putRecord(id: String, content: String, token: String) {
+    func putRecord(id: String, content: String) {
+        if let str = UserDefaults.standard.value(forKey: "token") {
+            token = str as! String
+        }
         let record = "{\"id\":\"\(id)\",\"time\":0,\"content\":\"\(content)\"}"
         let recordData = record.data(using: String.Encoding.utf8)
         
@@ -139,7 +161,10 @@ class RequestFunction {
         }
     }
     
-    func deleteRecord(id:String, token: String) {
+    func deleteRecord(id:String) {
+        if let str = UserDefaults.standard.value(forKey: "token") {
+            token = str as! String
+        }
         let record = "{\"id\":\"\(id)\",\"time\":0,\"content\":\"\"}"
         let recordData = record.data(using: String.Encoding.utf8)
         
@@ -147,7 +172,7 @@ class RequestFunction {
         let url = URL(string: urlStr)!
         var request = URLRequest(url: url)
         request.httpMethod = HTTPMethod.delete.rawValue
-        request.addValue("Bearer \(token)", forHTTPHeaderField: "auth")
+        request.addValue("Bearer \(self.token)", forHTTPHeaderField: "auth")
         request.httpBody = recordData
         
         Alamofire.request(request).responseJSON { response in
@@ -160,15 +185,17 @@ class RequestFunction {
         }
     }
     
-    func postFlag(content:String, token: String) {
+    func postFlag(content:String) {
+        if let str = UserDefaults.standard.value(forKey: "token") {
+            token = str as! String
+        }
         let flag = "{\"id\":\"\",\"time\":0,\"content\":\"\(content)\",\"likes\":[],\"comments\":[],\"sign_in\":[]}"
         let flagData = flag.data(using: String.Encoding.utf8)
-        print(flag)
         let urlStr = "\(URLStr)/flag"
         let url = URL(string: urlStr)!
         var request = URLRequest(url: url)
         request.httpMethod = HTTPMethod.post.rawValue
-        request.addValue("Bearer \(token)", forHTTPHeaderField: "auth")
+        request.addValue("Bearer \(self.token)", forHTTPHeaderField: "auth")
         request.httpBody = flagData
         
         Alamofire.request(request).responseJSON { response in
@@ -181,7 +208,10 @@ class RequestFunction {
         }
     }
     
-    func deleteFlag(id:String, token: String) {
+    func deleteFlag(id:String) {
+        if let str = UserDefaults.standard.value(forKey: "token") {
+            token = str as! String
+        }
         let flag = "{\"id\":\"\(id)\",\"time\":0,\"content\":\"\",\"likes\":[],\"comments\":[],\"sign_in\":[]}"
         let flagData = flag.data(using: String.Encoding.utf8)
         
@@ -189,7 +219,7 @@ class RequestFunction {
         let url = URL(string: urlStr)!
         var request = URLRequest(url: url)
         request.httpMethod = HTTPMethod.delete.rawValue
-        request.addValue("Bearer \(token)", forHTTPHeaderField: "auth")
+        request.addValue("Bearer \(self.token)", forHTTPHeaderField: "auth")
         request.httpBody = flagData
         
         Alamofire.request(request).responseJSON { response in
@@ -202,7 +232,10 @@ class RequestFunction {
         }
     }
     
-    func putFlag(id:String, content:String, token: String) {
+    func putFlag(id:String, content:String) {
+        if let str = UserDefaults.standard.value(forKey: "token") {
+            token = str as! String
+        }
         let flag = "{\"id\":\"\(id)\",\"time\":0,\"content\":\"\(content)\",\"likes\":[],\"comments\":[],\"sign_in\":[]}"
         let flagData = flag.data(using: String.Encoding.utf8)
         
@@ -210,7 +243,7 @@ class RequestFunction {
         let url = URL(string: urlStr)!
         var request = URLRequest(url: url)
         request.httpMethod = HTTPMethod.put.rawValue
-        request.addValue("Bearer \(token)", forHTTPHeaderField: "auth")
+        request.addValue("Bearer \(self.token)", forHTTPHeaderField: "auth")
         request.httpBody = flagData
         
         Alamofire.request(request).responseJSON { response in
@@ -223,7 +256,10 @@ class RequestFunction {
         }
     }
     
-    func postFlagSign(id: String, token: String) {
+    func postFlagSign(id: String) {
+        if let str = UserDefaults.standard.value(forKey: "token") {
+            token = str as! String
+        }
         let flag = "{\"id\":\"\(id)\",\"time\":0,\"content\":\"\",\"likes\":[],\"comments\":[],\"sign_in\":[]}"
         let flagData = flag.data(using: String.Encoding.utf8)
         
@@ -231,7 +267,7 @@ class RequestFunction {
         let url = URL(string: urlStr)!
         var request = URLRequest(url: url)
         request.httpMethod = HTTPMethod.post.rawValue
-        request.addValue("Bearer \(token)", forHTTPHeaderField: "auth")
+        request.addValue("Bearer \(self.token)", forHTTPHeaderField: "auth")
         request.httpBody = flagData
         
         Alamofire.request(request).responseJSON { response in
@@ -244,7 +280,10 @@ class RequestFunction {
         }
     }
     
-    func postFlagLike(openid: String, flagid: String, token: String) {
+    func postFlagLike(openid: String, flagid: String) {
+        if let str = UserDefaults.standard.value(forKey: "token") {
+            token = str as! String
+        }
         let like = "{\"openid\":\"\(openid)\", \"flag_id\":\"\(flagid)\"}"
         let likeData = like.data(using: String.Encoding.utf8)
         
@@ -265,9 +304,11 @@ class RequestFunction {
         }
     }
     
-    func postFlagComment(openid: String, flagid:String, name: String, comment: String) {
-        print(openid)
-        let comment = "{\"openid\":\"\(openid)\",\"flag_id\":\"\(flagid)\",\"comment\":{\"id\":\"\",\"from_id\":\"\",\"name\":\"\(name)\",\"content\":\"\(comment)\",\"time\":0}}"
+    func postFlagComment(openid: String, flagid:String, name: String, img: String, comment: String) {
+        if let str = UserDefaults.standard.value(forKey: "token") {
+            token = str as! String
+        }
+        let comment = "{\"openid\":\"\(openid)\",\"flag_id\":\"\(flagid)\",\"comment\":{\"id\":\"\",\"from_id\":\"\",\"img\":\"\(img)\",\"name\":\"\(name)\",\"content\":\"\(comment)\",\"time\":0}}"
         let commentData = comment.data(using: String.Encoding.utf8)
         
         let urlStr = "\(URLStr)/flag/comment"
@@ -282,7 +323,10 @@ class RequestFunction {
         }
     }
     
-    func postRoutine(title:String, icon:String, token: String){
+    func postRoutine(title:String, icon:String){
+        if let str = UserDefaults.standard.value(forKey: "token") {
+            token = str as! String
+        }
         let routine = "{\"id\":\"\",\"time\":0,\"title\":\"\(title)\",\"icon_id\":\"\(icon)\",\"sign_in\":[]}"
         let routineData = routine.data(using: String.Encoding.utf8)
         let urlStr = "\(URLStr)/routine/"
@@ -299,7 +343,10 @@ class RequestFunction {
         
     }
     
-    func putRoutineTitle(id:String, title:String, token: String) {
+    func putRoutineTitle(id:String, title:String) {
+        if let str = UserDefaults.standard.value(forKey: "token") {
+            token = str as! String
+        }
         let routine = "{\"id\":\"\(id)\",\"time\":0,\"title\":\"\(title)\",\"icon_id\":\"\",\"sign_in\":[]}"
         let routineData = routine.data(using: String.Encoding.utf8)
         
@@ -307,7 +354,7 @@ class RequestFunction {
         let url = URL(string: urlStr)!
         var request = URLRequest(url: url)
         request.httpMethod = HTTPMethod.put.rawValue
-        request.addValue("Bearer \(token)", forHTTPHeaderField: "auth")
+        request.addValue("Bearer \(self.token)", forHTTPHeaderField: "auth")
         request.httpBody = routineData
         
         Alamofire.request(request).responseJSON { response in
@@ -320,7 +367,10 @@ class RequestFunction {
         }
     }
     
-    func putRoutineIcon(id:String, icon:String, token: String) {
+    func putRoutineIcon(id:String, icon:String) {
+        if let str = UserDefaults.standard.value(forKey: "token") {
+            token = str as! String
+        }
         let routine = "{\"id\":\"\(id)\",\"time\":0,\"title\":\"\",\"icon_id\":\"\(icon)\",\"sign_in\":[]}"
         let routineData = routine.data(using: String.Encoding.utf8)
         
@@ -328,7 +378,7 @@ class RequestFunction {
         let url = URL(string: urlStr)!
         var request = URLRequest(url: url)
         request.httpMethod = HTTPMethod.put.rawValue
-        request.addValue("Bearer \(token)", forHTTPHeaderField: "auth")
+        request.addValue("Bearer \(self.token)", forHTTPHeaderField: "auth")
         request.httpBody = routineData
         
         Alamofire.request(request).responseJSON { response in
@@ -341,7 +391,10 @@ class RequestFunction {
         }
     }
     
-    func deleteRoutine(id:String, token: String) {
+    func deleteRoutine(id:String) {
+        if let str = UserDefaults.standard.value(forKey: "token") {
+            token = str as! String
+        }
         let routine = "{\"id\":\"\(id)\",\"time\":0,\"title\":\"\",\"icon_id\":\"\",\"sign_in\":[]}"
         let routineData = routine.data(using: String.Encoding.utf8)
         
@@ -362,7 +415,10 @@ class RequestFunction {
         }
     }
     
-    func postRoutineSign(id:String, token: String) {
+    func postRoutineSign(id:String) {
+        if let str = UserDefaults.standard.value(forKey: "token") {
+            token = str as! String
+        }
         print(id)
         let routine = "{\"id\":\"\(id)\",\"time\":0,\"title\":\"\",\"icon_id\":\"\",\"sign_in\":[]}"
         let routineData = routine.data(using: String.Encoding.utf8)
@@ -371,7 +427,7 @@ class RequestFunction {
         let url = URL(string: urlStr)!
         var request = URLRequest(url: url)
         request.httpMethod = HTTPMethod.post.rawValue
-        request.addValue("Bearer \(token)", forHTTPHeaderField: "auth")
+        request.addValue("Bearer \(self.token)", forHTTPHeaderField: "auth")
         request.httpBody = routineData
         
         Alamofire.request(request).responseJSON { response in

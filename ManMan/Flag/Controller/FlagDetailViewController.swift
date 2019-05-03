@@ -81,38 +81,39 @@ class FlagDetailViewController: UIViewController,UITableViewDelegate,UITableView
             self.setCommentLineView()
             self.view.layoutIfNeeded()
             UserDefaults.standard.set(nil, forKey: "flagData")
-        } else if let userId = UserDefaults.standard.value(forKey: "userID") {
+        } else {
             let URLStr = "https://slow.hustonline.net/api/v1"
-            var token =  "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE1NTY3NzU1MzYsImlkIjoib3ExNVU1OTdLTVNlNTV2d21aLUN3ZDZkSDFNMCIsIm9yaWdfaWF0IjoxNTU2MTcwNzM2fQ.WbTvev5bweV5OlhKRqypu5fdZmrZhBKHUpAji6N-6ng"
-            let urlStr = "\(URLStr)/flag"
-            let headers:HTTPHeaders = ["auth": "Bearer \(token)"]
-            Alamofire.request(urlStr, method: .get, encoding: URLEncoding.default,headers: headers).responseJSON { response in
-                print(response)
-                let json = JSON(response.result.value)
-                let num = json["data"]["flags"].count
-                let value = json["data"]["flags"][num-1]
-                var comDetails = [CommentDetail]()
-                if value["comments"].count != 0 {
-                    for i in 0..<value["comments"].count {
-                        let comDetail = CommentDetail.init(userName: value["comments"][i]["name"].string, userComment: value["comments"][i]["content"].string)
-                        comDetails.append(comDetail)
-                    }
-                    self.detailView.addSubview(self.tableView)
-                }
-                var isLiked = false
-                let likeNum = value["flags"]["likes"].count
-                if likeNum != 0 {
-                    let likeSign = value["flags"]["likes"][likeNum - 1].int64
-                    let date = Date(timeIntervalSince1970: (TimeInterval(likeSign!/1000)))
-                    isLiked = date.isToday()
-                }
-                self.detail = FlagData(userId: value["id"].string, profileURL: self.profileURl, nickname: self.nickname, time: value["time"].int64, detail: value["content"].string, comment: comDetails, commentNum: value["comments"].count,isLiked: isLiked, likeNum: value["likes"].count, id: value["id"].string)
-                print(self.detail)
-                self.setDetailView()
-                self.setCommentLineView()
-                self.view.layoutIfNeeded()
+            if let token = UserDefaults.standard.value(forKey: "token") { //"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE1NTc0MTIwMDMsImlkIjoib3ExNVU1OTdLTVNlNTV2d21aLUN3ZDZkSDFNMCIsIm9yaWdfaWF0IjoxNTU2ODA3MjAzfQ.Bd25U4DIFoe0FrSvlqpWRLw0h6mG2to-ttNeV-Fk6nE"//UserDefaults.standard.value(forKey: "token")
                 
+                let urlStr = "\(URLStr)/flag"
+                let headers:HTTPHeaders = ["auth": "Bearer \(token)"]
+                Alamofire.request(urlStr, method: .get, encoding: URLEncoding.default,headers: headers).responseJSON { response in
+                    //print(response)
+                    let json = JSON(response.result.value)
+                    let num = json["data"]["flags"].count
+                    let value = json["data"]["flags"][num-1]
+                    var comDetails = [CommentDetail]()
+                    if value["comments"].count != 0 {
+                        let num = value["comments"].count
+                        let comDetail = CommentDetail.init(userName: value["comments"][num-1]["name"].string, userComment: value["comments"][num-1]["content"].string, imgURl: value["comments"][num-1]["img"].string)
+                        comDetails.append(comDetail)
+                        self.detailView.addSubview(self.tableView)
+                    }
+                    var isLiked = false
+                    let likeNum = value["flags"]["likes"].count
+                    if likeNum != 0 {
+                        let likeSign = value["flags"]["likes"][likeNum - 1].int64
+                        let date = Date(timeIntervalSince1970: (TimeInterval(likeSign!/1000)))
+                        isLiked = date.isToday()
+                    }
+                    self.detail = FlagData(userId: value["id"].string, profileURL: self.userInfo.imgURL, nickname: self.userInfo.name, time: value["time"].int64, detail: value["content"].string, comment: comDetails, commentNum: value["comments"].count,isLiked: isLiked, likeNum: value["likes"].count, id: value["id"].string)
+                    self.setDetailView()
+                    self.setCommentLineView()
+                    self.view.layoutIfNeeded()
+                    
+                }
             }
+            
             
         }
         
@@ -145,6 +146,8 @@ class FlagDetailViewController: UIViewController,UITableViewDelegate,UITableView
     }
     
     func setDetailView() {
+        
+        
         detailView.snp.makeConstraints { (make) in
             make.top.equalTo(topLineView.snp.bottom).offset(16)
             make.left.equalToSuperview().offset(16)
@@ -218,8 +221,8 @@ class FlagDetailViewController: UIViewController,UITableViewDelegate,UITableView
     //发送评论
     @objc func send() {
         if self.commentView.inputText.text != nil {
-            self.request.postFlagComment(openid: self.detail!.userId!, flagid: self.detail!.id!, name: self.userInfo.name!, comment: self.commentView.inputText.text!)
-            let comment = CommentDetail.init(userName: self.detail!.userId!, userComment: self.commentView.inputText.text!)
+            self.request.postFlagComment(openid: self.detail!.userId!, flagid: self.detail!.id!, name: self.userInfo.name!, img: self.userInfo.imgURL!, comment: self.commentView.inputText.text!)
+            let comment = CommentDetail.init(userName: self.userInfo.name!, userComment: self.commentView.inputText.text!,imgURl: self.userInfo.imgURL!)
             self.detail?.comment.append(comment)
             self.commentView.inputText.resignFirstResponder()
             self.detailView.commentNumber = (detail?.comment.count)!
@@ -326,6 +329,13 @@ class FlagDetailViewController: UIViewController,UITableViewDelegate,UITableView
         }
         cell?.nickname.text = self.detail?.comment[indexPath.row].userName
         cell?.detail.text = self.detail?.comment[indexPath.row].userComment
+        if let imgURL = self.detail?.comment[indexPath.row].imgURl {
+            Alamofire.request(imgURL).responseData { response in
+                guard let data = response.result.value else { return }
+                let image = UIImage(data: data)
+                cell?.profile.image = image
+            }
+        }
         //height[indexPath.row] = FlagDetail.heightForTextView(textView: (cell?.detail)!, fixedWidth: (cell?.detail.frame.width)!) + 32
         return cell!
     }

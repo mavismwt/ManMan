@@ -179,28 +179,31 @@ class ShareViewController: UIViewController,UITableViewDelegate,UITableViewDataS
     func getData() {
         //,data.init(title: "早睡", icon: "sleep", isDate: false),data.init(title: "日志", icon: "log", isDate: false)]
         let URLStr = "https://slow.hustonline.net/api/v1"
-        var token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE1NTY3NzU1MzYsImlkIjoib3ExNVU1OTdLTVNlNTV2d21aLUN3ZDZkSDFNMCIsIm9yaWdfaWF0IjoxNTU2MTcwNzM2fQ.WbTvev5bweV5OlhKRqypu5fdZmrZhBKHUpAji6N-6ng"
-        let urlStr = "\(URLStr)/user"
-        let headers:HTTPHeaders = ["auth": "Bearer \(token)"]
-        
-        Alamofire.request(urlStr, method: .get, encoding: URLEncoding.default,headers: headers).responseJSON { response in
-            if let value = response.result.value {
-                let json = JSON(value)
-                for i in 0..<json["data"]["routines"].count {
-                    let routine = json["data"]["routines"][i]
-                    for k in 0..<routine["sign_in"].count {
-                        let lastSign = routine["sign_in"][k].int64
-                        let timeInterval:TimeInterval = TimeInterval(Int(lastSign!/1000))
-                        let signDate = Date(timeIntervalSince1970: timeInterval)
-                        if signDate.isToday() {
-                            self.datas.append(data.init(title: routine["title"].string, icon: routine["icon_id"].string, days: routine["sign_in"].count))
+        if let token = UserDefaults.standard.value(forKey: "token") { //"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE1NTc0MTIwMDMsImlkIjoib3ExNVU1OTdLTVNlNTV2d21aLUN3ZDZkSDFNMCIsIm9yaWdfaWF0IjoxNTU2ODA3MjAzfQ.Bd25U4DIFoe0FrSvlqpWRLw0h6mG2to-ttNeV-Fk6nE"//UserDefaults.standard.value(forKey: "token")
+            let urlStr = "\(URLStr)/user"
+            let headers:HTTPHeaders = ["auth": "Bearer \(token)"]
+            
+            Alamofire.request(urlStr, method: .get, encoding: URLEncoding.default,headers: headers).responseJSON { response in
+                if let value = response.result.value {
+                    let json = JSON(value)
+                    for i in 0..<json["data"]["routines"].count {
+                        let routine = json["data"]["routines"][i]
+                        for k in 0..<routine["sign_in"].count {
+                            let lastSign = routine["sign_in"][k].int64
+                            let timeInterval:TimeInterval = TimeInterval(Int(lastSign!/1000))
+                            let signDate = Date(timeIntervalSince1970: timeInterval)
+                            if signDate.isToday() {
+                                self.datas.append(data.init(title: routine["title"].string, icon: routine["icon_id"].string, days: routine["sign_in"].count))
+                            }
                         }
                     }
                 }
+                self.tableView.reloadData()
+                self.view.layoutIfNeeded()
             }
-            self.tableView.reloadData()
-            self.view.layoutIfNeeded()
+            
         }
+        
     }
     
     func getNowDate() -> String {

@@ -62,43 +62,45 @@ class LogViewController: UIViewController,UIScrollViewDelegate,CVCalendarViewDel
         datas = [data.init(id: "0",title: dateStr, icon: "", isDate: true)]
         //,data.init(title: "早睡", icon: "sleep", isDate: false),data.init(title: "日志", icon: "log", isDate: false)]
         let URLStr = "https://slow.hustonline.net/api/v1"
-        var token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE1NTY3NzU1MzYsImlkIjoib3ExNVU1OTdLTVNlNTV2d21aLUN3ZDZkSDFNMCIsIm9yaWdfaWF0IjoxNTU2MTcwNzM2fQ.WbTvev5bweV5OlhKRqypu5fdZmrZhBKHUpAji6N-6ng"
-        let urlStr = "\(URLStr)/user"
-        let headers:HTTPHeaders = ["auth": "Bearer \(token)"]
-        
-        Alamofire.request(urlStr, method: .get, encoding: URLEncoding.default,headers: headers).responseJSON { response in
-            self.allDate = [Date]()
-            if let value = response.result.value {
-                let json = JSON(value)
-                for i in 0..<json["data"]["routines"].count {
-                    let routine = json["data"]["routines"][i]
-                    for k in 0..<routine["sign_in"].count {
-                        let lastSign = routine["sign_in"][k].int64
-                        let timeInterval:TimeInterval = TimeInterval(Int(lastSign!/1000))
+        if let token = UserDefaults.standard.value(forKey: "token") { //"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE1NTc0MTIwMDMsImlkIjoib3ExNVU1OTdLTVNlNTV2d21aLUN3ZDZkSDFNMCIsIm9yaWdfaWF0IjoxNTU2ODA3MjAzfQ.Bd25U4DIFoe0FrSvlqpWRLw0h6mG2to-ttNeV-Fk6nE"//UserDefaults.standard.value(forKey: "token")
+            let urlStr = "\(URLStr)/user"
+            let headers:HTTPHeaders = ["auth": "Bearer \(token)"]
+            
+            Alamofire.request(urlStr, method: .get, encoding: URLEncoding.default,headers: headers).responseJSON { response in
+                self.allDate = [Date]()
+                if let value = response.result.value {
+                    let json = JSON(value)
+                    for i in 0..<json["data"]["routines"].count {
+                        let routine = json["data"]["routines"][i]
+                        for k in 0..<routine["sign_in"].count {
+                            let lastSign = routine["sign_in"][k].int64
+                            let timeInterval:TimeInterval = TimeInterval(Int(lastSign!/1000))
+                            let signDate = Date(timeIntervalSince1970: timeInterval)
+                            self.allDate.append(signDate)
+                            if signDate.isSameDay(day: self.selDate) {
+                                self.datas.append(data.init(id: routine["id"].string, title: routine["title"].string, icon: routine["icon_id"].string, isDate: false))
+                            }
+                        }
+                    }
+                    for j in 0..<json["data"]["records"].count {
+                        let record = json["data"]["records"][j]
+                        let timeMili = record["time"].int64
+                        let timeInterval:TimeInterval = TimeInterval(Int(timeMili!/1000))
                         let signDate = Date(timeIntervalSince1970: timeInterval)
                         self.allDate.append(signDate)
                         if signDate.isSameDay(day: self.selDate) {
-                            self.datas.append(data.init(id: routine["id"].string, title: routine["title"].string, icon: routine["icon_id"].string, isDate: false))
+                            self.datas.append(data.init(id: record["id"].string, title: "日志", icon: "log", isDate: false))
                         }
                     }
                 }
-                for j in 0..<json["data"]["records"].count {
-                    let record = json["data"]["records"][j]
-                    let timeMili = record["time"].int64
-                    let timeInterval:TimeInterval = TimeInterval(Int(timeMili!/1000))
-                    let signDate = Date(timeIntervalSince1970: timeInterval)
-                    self.allDate.append(signDate)
-                    if signDate.isSameDay(day: self.selDate) {
-                        self.datas.append(data.init(id: record["id"].string, title: "日志", icon: "log", isDate: false))
-                    }
-                }
+                self.calendarView.layoutSubviews()
+                self.calendarView.commitCalendarViewUpdate()
+                self.calendarView.contentController.refreshPresentedMonth()
+                self.setScrollViewData()
+                self.view.layoutIfNeeded()
             }
-            self.calendarView.layoutSubviews()
-            self.calendarView.commitCalendarViewUpdate()
-            self.calendarView.contentController.refreshPresentedMonth()
-            self.setScrollViewData()
-            self.view.layoutIfNeeded()
         }
+        
     }
     
     

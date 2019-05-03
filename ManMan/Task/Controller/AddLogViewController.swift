@@ -92,11 +92,10 @@ class AddLogViewController: UIViewController, UITextViewDelegate {
     @objc func post() {
         self.navigationController?.popViewController(animated: true)
         self.tabBarController?.tabBar.isHidden = false
-        let token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE1NTY3NzU1MzYsImlkIjoib3ExNVU1OTdLTVNlNTV2d21aLUN3ZDZkSDFNMCIsIm9yaWdfaWF0IjoxNTU2MTcwNzM2fQ.WbTvev5bweV5OlhKRqypu5fdZmrZhBKHUpAji6N-6ng"
         if recordID != nil {
-            request.putRecord(id: recordID!, content: self.textView.inputText.text, token: token)
+            request.putRecord(id: recordID!, content: self.textView.inputText.text)
         } else {
-            request.postRecord(content: self.textView.inputText.text, token: token)
+            request.postRecord(content: self.textView.inputText.text)
         }
     }
     

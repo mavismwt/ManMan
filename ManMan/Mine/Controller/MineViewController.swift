@@ -96,10 +96,10 @@ class MineViewController: UIViewController,UITableViewDelegate,UITableViewDataSo
     }
     
     func showUserInfo(name: String, imgURL: String) {
-        function.getUserInfo(token: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE1NTUyNDc1NzMsImlkIjoib3ExNVU1OTdLTVNlNTV2d21aLUN3ZDZkSDFNMCIsIm9yaWdfaWF0IjoxNTU0NjQyNzczfQ.m6i6TH7mK34cA0oc6P9Dc_xKxQWwOoch8VdgGPrwt2k")
+        function.getUserInfo()
         topLineView.addSubview(profileView)
         topLineView.addSubview(nickname)
-        topLineView.addSubview(editButton)
+        //topLineView.addSubview(editButton)
         
         self.view.addSubview(topLineView)
         self.view.addSubview(tableView)
@@ -116,7 +116,7 @@ class MineViewController: UIViewController,UITableViewDelegate,UITableViewDataSo
             make.centerX.equalToSuperview()
             make.width.height.equalTo(72)
         }
-    Alamofire.request(imgURL).responseData { response in
+        Alamofire.request(imgURL).responseData { response in
             guard let data = response.result.value else { return }
             let image = UIImage(data: data)
             self.profileView.image = image
@@ -138,14 +138,14 @@ class MineViewController: UIViewController,UITableViewDelegate,UITableViewDataSo
         nickname.returnKeyType = .done
         nickname.delegate = self
         
-        editButton.snp.makeConstraints { (make) in
-            make.centerY.equalTo(nickname.snp.centerY)
-            make.left.equalTo(nickname.snp.right).offset(8)
-            make.width.height.equalTo(15)
-        }
-        let editImg = UIImage(named: "editWhite")
-        editButton.setImage(editImg, for: UIControl.State.normal)
-        editButton.addTarget(self, action: #selector(changeEditStatus), for: .touchUpInside)
+//        editButton.snp.makeConstraints { (make) in
+//            make.centerY.equalTo(nickname.snp.centerY)
+//            make.left.equalTo(nickname.snp.right).offset(8)
+//            make.width.height.equalTo(15)
+//        }
+//        let editImg = UIImage(named: "editWhite")
+//        editButton.setImage(editImg, for: UIControl.State.normal)
+//        editButton.addTarget(self, action: #selector(changeEditStatus), for: .touchUpInside)
         
         tableView.snp.makeConstraints { (make) in
             make.top.equalTo(191)
@@ -304,7 +304,7 @@ class MineViewController: UIViewController,UITableViewDelegate,UITableViewDataSo
     override func viewWillAppear(_ animated: Bool) {
         self.tabBarController?.tabBar.addSubview(coverView)
         self.tabBarController?.tabBar.isHidden = false
-        //function.getUserInfo(token: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE1NTQwMDA4MTgsImlkIjoib3ExNVU1OTdLTVNlNTV2d21aLUN3ZDZkSDFNMCIsIm9yaWdfaWF0IjoxNTUzMzk2MDE4fQ.m_mjQURafkbSVKGCeuRn79dTY7Gbb0uYmdot1-w_Lek")
+        //function.getUserInfo()
     }
     
     override func viewWillDisappear(_ animated: Bool) {
