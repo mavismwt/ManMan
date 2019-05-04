@@ -29,6 +29,7 @@ class AddLogViewController: UIViewController, UITextViewDelegate {
             recordID = ID as? String
             textStr = content as! String
             self.textView.textStr = textStr
+            self.textView.inputText.text = textStr
         }
     }
     
@@ -93,7 +94,7 @@ class AddLogViewController: UIViewController, UITextViewDelegate {
         self.navigationController?.popViewController(animated: true)
         self.tabBarController?.tabBar.isHidden = false
         if recordID != nil {
-            request.putRecord(id: recordID!, content: self.textView.inputText.text)
+            request.putRecord(id: recordID!, content: self.textView.textStr)
         } else {
             request.postRecord(content: self.textView.inputText.text)
         }

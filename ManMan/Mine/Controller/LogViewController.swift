@@ -193,24 +193,33 @@ class LogViewController: UIViewController,UIScrollViewDelegate,CVCalendarViewDel
         let panGestrue = scrollView.panGestureRecognizer
         let vol = panGestrue.velocity(in: self.view)
         //print(vol)
-        if vol.y < -500 {
+        if vol.y < -1000 {
             self.calendarView.changeMode(.weekView)
-            UIView.animate(withDuration: 0.35, animations: {
+            UIView.animate(withDuration: 0.6, animations: {
                 let WidthOfCalendar = self.SCREENSIZE.width-28
                 let navRect = self.navigationController?.navigationBar.frame
                 //self.calendarView.frame = CGRect(x:0, y:(navRect?.height)!+self.inset.top+16, width:WidthOfCalendar, height:60)
                 self.cView.frame = CGRect(x:14, y:(navRect?.height)!+self.inset.top+16, width:WidthOfCalendar, height:140)
                 
             })
-        }else if vol.y > 500 {
+            UIView.animate(withDuration: 1.5, delay: 0, options: .curveEaseIn, animations: {
+                self.scrollView.contentOffset = CGPoint(x: 0, y: -250)
+            }, completion: nil)
+            
+        }else if vol.y > 1000 {
             self.calendarView.changeMode(.monthView)
-            UIView.animate(withDuration: 0.35, animations: {
+            UIView.animate(withDuration: 0.6, animations: {
                 let WidthOfCalendar = self.SCREENSIZE.width-28
                 let navRect = self.navigationController?.navigationBar.frame
                 //self.calendarView.frame = CGRect(x:0, y:(navRect?.height)!+self.inset.top+16, width:WidthOfCalendar, height:WidthOfCalendar)
                 self.cView.frame = CGRect(x:14, y:(navRect?.height)!+self.inset.top+16, width:WidthOfCalendar, height:WidthOfCalendar)
+                
             })
+            UIView.animate(withDuration: 0.3, delay: 0.4, options: .curveLinear, animations: {
+                self.scrollView.contentOffset = CGPoint(x: 0, y: 0)
+            }, completion: nil)
         }
+        print(self.scrollView.contentOffset.y)
         
     }
     

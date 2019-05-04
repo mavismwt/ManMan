@@ -247,7 +247,6 @@ class AddUserDefinedCheckViewController: UIViewController,UICollectionViewDelega
     @objc func backToHome() {
         
         if (self.selectedTaskNumber != nil) && (self.taskName.text != nil) {
-            print(imageName[self.selectedTaskNumber],self.taskName.text)
             request.postRoutine(title: self.taskName.text!, icon: imageName[self.selectedTaskNumber])
         }
         

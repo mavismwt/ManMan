@@ -137,6 +137,7 @@ class MineViewController: UIViewController,UITableViewDelegate,UITableViewDataSo
         nickname.font = UIFont.boldSystemFont(ofSize: 18)
         nickname.returnKeyType = .done
         nickname.delegate = self
+        nickname.isUserInteractionEnabled = false
         
 //        editButton.snp.makeConstraints { (make) in
 //            make.centerY.equalTo(nickname.snp.centerY)

@@ -105,11 +105,12 @@ class HomeViewController: UIViewController, UITableViewDelegate, UITableViewData
     var function = RequestFunction()
     
     struct taskDetail {
-        var id:String?
-        var name:String?
-        var icon:String?
-        var days:Int?
-        var isFinished:Bool?
+        var id: String?
+        var name: String?
+        var icon: String?
+        var days: Int?
+        var time: [Int64]?
+        var isFinished: Bool?
     }
     
     var tasks = [taskDetail]()
@@ -119,7 +120,6 @@ class HomeViewController: UIViewController, UITableViewDelegate, UITableViewData
     
     
     override func viewWillAppear(_ animated: Bool) {
-        print("appear")
         self.tabBarController?.tabBar.isHidden = false
         if let isOn:Int =  UserDefaults.standard.value(forKey: "isVolumnOn") as? Int {
             if isOn == 1 {
@@ -147,13 +147,17 @@ class HomeViewController: UIViewController, UITableViewDelegate, UITableViewData
                     var isFinished = false
                     let routine = json["data"]["routines"][k]
                     let dayCount = routine["sign_in"].count
+                    var time = [Int64]()
                     if dayCount != 0 {
                         let lastSign = routine["sign_in"][dayCount-1].int64
                         let timeInterval:TimeInterval = TimeInterval(Int(lastSign!/1000))
                         let date = Date(timeIntervalSince1970: timeInterval)
                         isFinished = date.isToday()
                     }
-                    self.tasks.append(taskDetail.init(id: routine["id"].string, name:  routine["title"].string, icon:  routine["icon_id"].string, days: routine["sign_in"].count, isFinished: isFinished))
+                    for i in 0..<dayCount {
+                        time.append(routine["sign_in"][i].int64!)
+                    }
+                    self.tasks.append(taskDetail.init(id: routine["id"].string, name:  routine["title"].string, icon:  routine["icon_id"].string, days: routine["sign_in"].count, time: time, isFinished: isFinished))
                     
                 }
                 for i in 0..<json["data"]["records"].count {
@@ -169,11 +173,9 @@ class HomeViewController: UIViewController, UITableViewDelegate, UITableViewData
                 }
                 let info = json["data"]
                 let userInfo = UserInfo.init(id: info["id"].string, wxid: info["wx_id"].string, name: info["name"].string, imgURL: info["img_url"].string)
-                //print(userInfo)
                 let encoder = JSONEncoder()
                 let data = try? encoder.encode(userInfo)
                 UserDefaults.standard.set(data, forKey: "userInfo")
-                print("response")
                 self.tableView.reloadData()
                 self.view.layoutIfNeeded()
             }
@@ -297,10 +299,7 @@ class HomeViewController: UIViewController, UITableViewDelegate, UITableViewData
                 cell?.taskName.text = tasks[indexPath.row].name
                 cell?.taskIcon.image = UIImage(named: "\(tasks[indexPath.row].icon!)")
                 cell?.isfinished = tasks[indexPath.row].isFinished!
-                if cell?.isfinished == true {
-                    cell!.reSetTableViewCell()
-                    self.img.removeFromSuperview()
-                }
+               cell!.layoutSubviews()
             }
             return cell!
         }
@@ -339,31 +338,34 @@ class HomeViewController: UIViewController, UITableViewDelegate, UITableViewData
 //        tapGestureRecognizer.addTarget(self, action: #selector(check))
 //        cell.cell.addGestureRecognizer(tapGestureRecognizer)
         cell.selectionStyle = .none
-        self.img.frame = CGRect(x: cell.frame.width-115, y: cell.frame.maxY+10-offset, width: 150, height: 150)
+        self.img.frame = CGRect(x: cell.frame.width-110, y: cell.frame.maxY+8-offset, width: 150, height: 150)
         if cell.isfinished == false {
-            self.request.postRoutineSign(id: self.tasks[indexPath.row].id!)
+            let time = self.request.postRoutineSign(id: self.tasks[indexPath.row].id!)
+            self.tasks[indexPath.row].time?.append(time)
             UIView.animate(withDuration: 0.25, delay: 0, options: .curveEaseIn, animations: {
                 cell.checkButton.removeFromSuperview()
                 self.view.addSubview(self.img)
-                self.img.frame = CGRect(x: cell.frame.width-115, y: cell.frame.maxY+10-self.offset, width: 120, height: 110)
+                self.img.frame = CGRect(x: (cell.frame.width-113)/382*(self.SCREENSIZE.width-32), y: cell.frame.maxY+4-self.offset, width: 120, height: 110)
                 self.img.layer.cornerRadius = 60
             }, completion: nil)
-            DispatchQueue.main.asyncAfter(deadline: .now()+0.5, execute:
+            DispatchQueue.main.asyncAfter(deadline: .now()+0.25, execute:
                 {
+                    self.img.removeFromSuperview()
                     cell.days += 1
                     cell.isfinished = true
-                    cell.reSetTableViewCell()
-                    self.img.removeFromSuperview()
+                    cell.layoutSubviews()
                     if self.isVolumnOn == true {
                         self.localMusic()
                     }
                     
             })
-            
-            cell.isfinished = true
         } else {
-            
-            //cell.isfinished = false
+            cell.days -= 1
+            cell.isfinished = false
+            cell.layoutSubviews()
+            let timeCount = tasks[indexPath.row].time?.count
+            self.request.deleteRoutineSign(id: self.tasks[indexPath.row].id!, sign: self.tasks[indexPath.row].time![timeCount!-1])
+            self.tasks[indexPath.row].time?.remove(at: timeCount!-1)
         }
     }
     
@@ -379,7 +381,6 @@ class HomeViewController: UIViewController, UITableViewDelegate, UITableViewData
     func tableView(_ tableView: UITableView, editActionsForRowAt indexPath: IndexPath) -> [UITableViewRowAction]? {
         let detail = UITableViewRowAction(style: .normal, title: "编辑") {
             action, index in
-            print("favorite button tapped")
             //UserDefaults.standard.set(self.tasks[indexPath.row].icon, forKey: "userDefinedTaskImage")
             //UserDefaults.standard.set(self.tasks[indexPath.row].name, forKey: "taskName")
             let addUserDefinedCheckViewController = AddUserDefinedCheckViewController()
@@ -394,7 +395,6 @@ class HomeViewController: UIViewController, UITableViewDelegate, UITableViewData
             
             self.tasks.remove(at: indexPath.row)
             tableView.deleteRows(at: [indexPath], with: UITableView.RowAnimation.automatic)
-            print(self.tasks)
         }
         delete.backgroundColor = UIColor.init(red: 241/255, green: 107/255, blue: 104/255, alpha: 1)
         

@@ -42,8 +42,10 @@ class MyTextView: UIView, UITextViewDelegate {
             make.top.left.equalTo(16)
             make.bottom.right.equalTo(-16)
         }
+        inputText.text = textStr
         inputText.font = UIFont.systemFont(ofSize: 15)
         inputText.delegate = self
+        inputText.isEditable = true
         
         textLabel.snp.makeConstraints { (make) in
             make.right.equalTo(textView.snp.right)
@@ -62,12 +64,13 @@ class MyTextView: UIView, UITextViewDelegate {
     }
     
     func textViewDidChange(_ textView: UITextView) {
+        textStr = inputText.text
         textCount = textView.text.count
         self.layoutSubviews()
     }
     
     override func layoutSubviews() {
-        inputText.text = textStr
+        //
         textLabel.text = "可写280字，已写\(textCount)字"
     }
     

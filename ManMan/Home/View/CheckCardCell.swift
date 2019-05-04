@@ -95,24 +95,24 @@ class CheckCardCell: UITableViewCell {
         
     }
     
-    func reSetTableViewCell() {
-        if isfinished == true {
-            taskProcess.text = "已坚持\(days)天"
-            background.removeFromSuperview()
-            checkButton.removeFromSuperview()
-        }
-    }
+    
     
     @objc func check() {
-        background.removeFromSuperview()
-        checkButton.removeFromSuperview()
+//        background.removeFromSuperview()
+//        checkButton.removeFromSuperview()
     }
     
     override func layoutSubviews() {
         taskProcess.text = "已坚持\(days)天"
         if isfinished == true {
-            background.removeFromSuperview()
-            checkButton.removeFromSuperview()
+            taskProcess.text = "已坚持\(days)天"
+            background.layer.opacity = 0//removeFromSuperview()
+            checkButton.layer.opacity = 0//removeFromSuperview()
+        }
+        else {
+            taskProcess.text = "已坚持\(days)天"
+            background.layer.opacity = 1//removeFromSuperview()
+            checkButton.layer.opacity = 1//removeFromSuperview()
         }
     }
     

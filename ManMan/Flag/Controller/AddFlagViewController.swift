@@ -74,7 +74,7 @@ class AddFlagViewController: UIViewController ,UITextViewDelegate {
             make.bottom.right.equalTo(-16)
         }
         inputText.font = UIFont.systemFont(ofSize: 15)
-        inputText.isEditable = true
+        //inputText.isEditable = true
         inputText.delegate = self
         
         confirmButton.snp.makeConstraints { (make) in
@@ -100,12 +100,13 @@ class AddFlagViewController: UIViewController ,UITextViewDelegate {
     
     @objc func confirm() {
         let alertView = AlertView()
-        if let flagID = UserDefaults.standard.value(forKey: "myFlagID") {
-            request.putFlag(id: flagID as! String, content: inputText.text)
-        } else {
+//        if let flagID = UserDefaults.standard.value(forKey: "myFlagID") {
+//            let flagid = flagID as! String
+//            request.putFlag(id: flagid, content: "test")
+//        } else {
             request.postFlag(content: inputText.text)
-        }
-        
+//        }
+    
         UIView.animate(withDuration: 1, animations: {
             self.view.addSubview(alertView)
         })

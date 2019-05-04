@@ -32,29 +32,25 @@ class FlagViewController: UIViewController,UITableViewDelegate,UITableViewDataSo
     var userInfo = UserInfo()
     var myFlagID = String()
     
-    var MyID = ""
+    var flagNum = 0
     var index = 0
     var selectedCellId = ""
     
     override func viewWillAppear(_ animated: Bool) {
         //更新flag
-        flagDatas = [FlagData]()
-        if let ID = UserDefaults.standard.value(forKey: "userID") {
-            MyID = ID as! String
-        }
+        //flagDatas = [FlagData]()
         if let data = UserDefaults.standard.value(forKey: "userInfo") {
             let decoder = JSONDecoder()
             let obj = try? decoder.decode(UserInfo.self, from: data as! Data)
             userInfo = obj!
         }
-        
         let URLStr = "https://slow.hustonline.net/api/v1"
-        if let token = UserDefaults.standard.value(forKey: "token") { //"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE1NTc0MTIwMDMsImlkIjoib3ExNVU1OTdLTVNlNTV2d21aLUN3ZDZkSDFNMCIsIm9yaWdfaWF0IjoxNTU2ODA3MjAzfQ.Bd25U4DIFoe0FrSvlqpWRLw0h6mG2to-ttNeV-Fk6nE"//UserDefaults.standard.value(forKey: "token")
+        if let token = UserDefaults.standard.value(forKey: "token") {
             let urlStr = "\(URLStr)/flag/flags"
             let headers:HTTPHeaders = ["auth": "Bearer \(token)"]
             Alamofire.request(urlStr, method: .get, parameters: ["num": index], encoding: URLEncoding.default,headers: headers).responseJSON { response in
-                //print(response)
                 let json = JSON(response.result.value)
+                self.flagNum = json["data"]["flags"].count
                 for k in 0..<json["data"]["flags"].count {
                     let value = json["data"]["flags"][k]
                     var comments = [CommentDetail]()
@@ -63,16 +59,16 @@ class FlagViewController: UIViewController,UITableViewDelegate,UITableViewDataSo
                     }
                     var isLiked = false
                     for j in 0..<value["flags"]["likes"].count {
-                        if value["flags"]["likes"][j].string == self.MyID {
+                        if value["flags"]["likes"][j].string == self.userInfo.wxid {
                             isLiked = true
                         }
                     }
                     
                     self.flagDatas.append(FlagData.init(userId: value["wx_id"].string, profileURL: value["img_url"].string, nickname: value["name"].string, time: value["flags"]["time"].int64, detail: value["flags"]["content"].string, comment: comments, commentNum: value["flags"]["comments"].count, isLiked: isLiked, likeNum: value["flags"]["likes"].count, id: value["flags"]["id"].string))
                     
-                    self.tableView.reloadData()
-                    self.view.layoutIfNeeded()
                 }
+                self.tableView.reloadData()
+                self.view.layoutIfNeeded()
             }
             
         }
@@ -153,14 +149,16 @@ class FlagViewController: UIViewController,UITableViewDelegate,UITableViewDataSo
     @objc func headerRefresh(){
         // 结束刷新
         self.tableView.mj_header.endRefreshing()
+        flagDatas = [FlagData]()
+        self.viewWillAppear(true)
     }
     
     // 底部刷新
     @objc func footerRefresh(){
         self.tableView.mj_footer.endRefreshing()
-        // 2次后模拟没有更多数据
         index = index + 1
-        if index > 2 {
+        self.viewWillAppear(true)
+        if index > 10 {
             footer.endRefreshingWithNoMoreData()
         }
     }
@@ -183,28 +181,9 @@ class FlagViewController: UIViewController,UITableViewDelegate,UITableViewDataSo
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         var cell:CustomizeUITableViewCell? = tableView.dequeueReusableCell(withIdentifier: identifier) as? CustomizeUITableViewCell
         cell?.selectionStyle = .none
-        
-        let tag = UILabel()
-        if flagDatas[indexPath.row].userId == MyID {
-            //print(indexPath.row,flagDatas[indexPath.row].userId,MyID)
-            tag.text = "我"
-            tag.font = UIFont.systemFont(ofSize: 12)
-            tag.textAlignment = .center
-            tag.textColor = UIColor.white
-            tag.backgroundColor = UIColor.init(red: 255/255, green: 193/255, blue: 7/255, alpha: 1)
-            tag.layer.cornerRadius = 2
-            tag.clipsToBounds = true
-            tag.snp.makeConstraints { (make) in
-                make.centerY.equalTo((cell?.nickname.snp.centerY)!)
-                make.left.equalTo((cell?.nickname.snp.right)!).offset(8)
-                make.width.height.equalTo(14)
-            cell?.addSubview(tag)
-            }
-        }else {
-            tag.removeFromSuperview()
-        }
         cell?.id = flagDatas[indexPath.row].id!
-        cell?.userid = flagDatas[indexPath.row].userId!
+        cell?.myID = self.userInfo.wxid!
+        cell?.userid = flagDatas[indexPath.row].userId!//flagDatas[indexPath.row].userId!
         cell?.detail.text = flagDatas[indexPath.row].detail
         Alamofire.request(flagDatas[indexPath.row].profileURL!).responseData { response in
             guard let data = response.result.value else { return }
@@ -221,6 +200,9 @@ class FlagViewController: UIViewController,UITableViewDelegate,UITableViewDataSo
         cell?.likeNumber = flagDatas[indexPath.row].likeNum!
         cell?.isliked = flagDatas[indexPath.row].isLiked!
         cell?.commentNumber = flagDatas[indexPath.row].commentNum!
+        if cell?.myID == self.userInfo.wxid {
+            cell?.setTag()
+        }
         return cell!
     }
     
@@ -267,9 +249,7 @@ class FlagViewController: UIViewController,UITableViewDelegate,UITableViewDataSo
     @objc func comment(_ tap: UITapGestureRecognizer) {
         let msg = tap.view
         if let content = msg?.value(forKey: "commentID") {
-            print(content)
         }
-        print("ok")
         
     }
     

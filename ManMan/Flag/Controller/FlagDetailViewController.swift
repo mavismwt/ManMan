@@ -27,7 +27,7 @@ class FlagDetailViewController: UIViewController,UITableViewDelegate,UITableView
     var HeightOfKeyboard:CGFloat? = 0
     var dTime: TimeInterval? = 0
     var height:[CGFloat] = [0,0,0]
-    var detail:FlagData?
+    var detail: FlagData?
     var request = RequestFunction()
     var nickname: String?
     var profileURl: String?
@@ -65,25 +65,11 @@ class FlagDetailViewController: UIViewController,UITableViewDelegate,UITableView
             let decoder = JSONDecoder()
             let obj = try? decoder.decode(FlagData.self, from: data as! Data)
             detail = obj
-            if detail?.comment.count == 0 {
-                tableView.backgroundColor = UIColor.white
-                textView = UITextView(frame: CGRect(x: 0, y: 0, width: UIScreen.main.bounds.size.width-64, height: 100))
-                textView.text = "此处还没有评论"
-                textView.font = UIFont.systemFont(ofSize: 16)
-                textView.textColor = UIColor.init(red: 0/255, green: 0/255, blue: 0/255, alpha: 0.7)
-                textView.textAlignment = .center
-                tableView.addSubview(textView)
-            }else{
-                tableView.backgroundColor = UIColor.init(red: 238/255, green: 238/255, blue: 238/255, alpha: 1)
-                textView.removeFromSuperview()
-            }
-            self.setDetailView()
-            self.setCommentLineView()
-            self.view.layoutIfNeeded()
+            self.setView()
             UserDefaults.standard.set(nil, forKey: "flagData")
         } else {
             let URLStr = "https://slow.hustonline.net/api/v1"
-            if let token = UserDefaults.standard.value(forKey: "token") { //"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE1NTc0MTIwMDMsImlkIjoib3ExNVU1OTdLTVNlNTV2d21aLUN3ZDZkSDFNMCIsIm9yaWdfaWF0IjoxNTU2ODA3MjAzfQ.Bd25U4DIFoe0FrSvlqpWRLw0h6mG2to-ttNeV-Fk6nE"//UserDefaults.standard.value(forKey: "token")
+            if let token = UserDefaults.standard.value(forKey: "token") {
                 
                 let urlStr = "\(URLStr)/flag"
                 let headers:HTTPHeaders = ["auth": "Bearer \(token)"]
@@ -100,25 +86,35 @@ class FlagDetailViewController: UIViewController,UITableViewDelegate,UITableView
                         self.detailView.addSubview(self.tableView)
                     }
                     var isLiked = false
-                    let likeNum = value["flags"]["likes"].count
-                    if likeNum != 0 {
-                        let likeSign = value["flags"]["likes"][likeNum - 1].int64
-                        let date = Date(timeIntervalSince1970: (TimeInterval(likeSign!/1000)))
-                        isLiked = date.isToday()
+                    let likeNum = value["likes"].count
+                    for j in 0..<likeNum {
+                        if value["likes"][j].string == self.userInfo.wxid {
+                            isLiked = true
+                        }
                     }
                     self.detail = FlagData(userId: value["id"].string, profileURL: self.userInfo.imgURL, nickname: self.userInfo.name, time: value["time"].int64, detail: value["content"].string, comment: comDetails, commentNum: value["comments"].count,isLiked: isLiked, likeNum: value["likes"].count, id: value["id"].string)
-                    self.setDetailView()
-                    self.setCommentLineView()
-                    self.view.layoutIfNeeded()
-                    
+                    self.setView()
                 }
             }
-            
-            
         }
-        
-        
-        
+    }
+    
+    func setView() {
+        if self.detail?.comment.count == 0 {
+            self.tableView.backgroundColor = UIColor.white
+            self.textView = UITextView(frame: CGRect(x: 0, y: 0, width: UIScreen.main.bounds.size.width-64, height: 100))
+            self.textView.text = "此处还没有评论"
+            self.textView.font = UIFont.systemFont(ofSize: 16)
+            self.textView.textColor = UIColor.init(red: 0/255, green: 0/255, blue: 0/255, alpha: 0.7)
+            self.textView.textAlignment = .center
+            self.tableView.addSubview(textView)
+        }else{
+            self.tableView.backgroundColor = UIColor.init(red: 238/255, green: 238/255, blue: 238/255, alpha: 1)
+            self.textView.removeFromSuperview()
+        }
+        self.setDetailView()
+        self.setCommentLineView()
+        self.view.layoutIfNeeded()
     }
     
     func setTopLineView() {
@@ -146,8 +142,6 @@ class FlagDetailViewController: UIViewController,UITableViewDelegate,UITableView
     }
     
     func setDetailView() {
-        
-        
         detailView.snp.makeConstraints { (make) in
             make.top.equalTo(topLineView.snp.bottom).offset(16)
             make.left.equalToSuperview().offset(16)
@@ -160,7 +154,7 @@ class FlagDetailViewController: UIViewController,UITableViewDelegate,UITableView
         if let detail:String = self.detail?.detail {
             detailView.detail.text = detail
         }
-        detailView.detail.text = detail?.detail
+        detailView.userid = detail!.userId!
         detailView.nickname.text = detail?.nickname
         if let timeInterval = detail?.time {
             let timeFormatter = DateFormatter()
@@ -174,7 +168,7 @@ class FlagDetailViewController: UIViewController,UITableViewDelegate,UITableView
             detailView.likeNumber = lNum
         }
         detailView.isliked = detail!.isLiked!
-        
+        detailView.id = detail!.id!
         Alamofire.request((detail?.profileURL!)!).responseData { response in
             guard let data = response.result.value else { return }
             let image = UIImage(data: data)
@@ -306,8 +300,7 @@ class FlagDetailViewController: UIViewController,UITableViewDelegate,UITableView
     @objc func back() {
         self.navigationController?.popViewController(animated: true)
         self.navigationController?.isNavigationBarHidden = true
-        let flagViewcontroller = FlagViewController()
-        //flagViewcontroller.viewWillAppear(true)
+        //let flagViewcontroller = FlagViewController()
     }
     
     @objc func setMyFlag() {

@@ -72,13 +72,14 @@ class LoadView: UIView {
         self.addSubview(textView)
         textView.text = "Hi \(nickname),\n\n\(greet)。\n\n今天是\(day),\n\n很高兴陪在你身边。"
         textView.backgroundColor = UIColor.init(red: 0, green: 0, blue: 0, alpha: 0)
-        textView.snp.makeConstraints { (make) in
-            make.left.equalTo(41)
-            //make.top.equalTo(0)
-            make.bottom.equalTo(-25-inset.bottom)
-            make.width.equalTo(300)
-            make.height.equalTo(300)
-        }
+//        textView.snp.makeConstraints { (make) in
+//            make.left.equalTo(41)
+//            //make.top.equalTo(0)
+//            make.bottom.equalTo(-25-inset.bottom)
+//            make.width.equalTo(300)
+//            make.height.equalTo(300)
+//        }
+        textView.frame = CGRect(x: 41, y: 400, width: 300, height: 600)
         textView.font = UIFont.systemFont(ofSize: 18)
         textView.isEditable = false
         textView.isSelectable = false
@@ -129,7 +130,7 @@ class LoadView: UIView {
     }
     
     override func layoutSubviews() {
-        textView.text = "Hi \(nickname),\n\n\(greet)。\n\n今天是\(day),很高兴陪在你身边。"
+        textView.text = "Hi \(nickname),\n\n\(greet)。\n\n今天是\(day),\n\n很高兴陪在你身边。"
     }
     
 

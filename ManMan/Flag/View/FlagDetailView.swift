@@ -187,11 +187,6 @@ class FlagDetail: UIView {
     }
     
     func setValueForCell(flag:FlagData){
-        //profile.image = UIImage(named: flag.profileURL)
-        //nickname.text = flag.nicknameText
-        //detail.text = flag.detailText
-        //commentNumLabel.text = "0"
-        //likeNumLabel.text = "0"
     }
     
     override func layoutSubviews() {

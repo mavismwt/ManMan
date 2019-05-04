@@ -27,11 +27,14 @@ class CustomizeUITableViewCell: UITableViewCell {
     var likeView = UIView()
     var likeImg = UIImageView()
     var likeNumLabel = UILabel()
+    var tagLabel = UILabel()
     var likeNumber:Int = 0
     var isliked = false
+    var isMine = false
     
     var request = RequestFunction()
     var id = String()
+    var myID = String()
     var userid = String()
     
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
@@ -183,11 +186,28 @@ class CustomizeUITableViewCell: UITableViewCell {
                     self.likeNumLabel.text = "\(self.likeNumber)"
             })
         } else {
-            
+
         }
     }
     
     @objc func comment() {
+        
+    }
+    
+    func setTag() {
+            tagLabel.text = "我"
+            tagLabel.font = UIFont.systemFont(ofSize: 12)
+            tagLabel.textAlignment = .center
+            tagLabel.textColor = UIColor.white
+            tagLabel.backgroundColor = UIColor.init(red: 255/255, green: 193/255, blue: 7/255, alpha: 1)
+            tagLabel.layer.cornerRadius = 2
+            tagLabel.clipsToBounds = true
+            tagLabel.snp.makeConstraints { (make) in
+                make.centerY.equalTo((self.nickname.snp.centerY))
+                make.left.equalTo((self.nickname.snp.right)).offset(8)
+                make.width.height.equalTo(14)
+                self.addSubview(tagLabel)
+            }
         
     }
     
@@ -212,6 +232,12 @@ class CustomizeUITableViewCell: UITableViewCell {
             likeImg.image = UIImage(named: "likeSelected")
         }else {
             likeImg.image = UIImage(named: "like")
+        }
+        if userid == myID {
+            self.setTag()
+        }
+        else {
+            tagLabel.removeFromSuperview()
         }
     }
     required init(coder aDecoder: NSCoder) {

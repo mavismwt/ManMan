@@ -238,7 +238,7 @@ class RequestFunction {
         }
         let flag = "{\"id\":\"\(id)\",\"time\":0,\"content\":\"\(content)\",\"likes\":[],\"comments\":[],\"sign_in\":[]}"
         let flagData = flag.data(using: String.Encoding.utf8)
-        
+        print(flag)
         let urlStr = "\(URLStr)/flag"
         let url = URL(string: urlStr)!
         var request = URLRequest(url: url)
@@ -285,8 +285,9 @@ class RequestFunction {
             token = str as! String
         }
         let like = "{\"openid\":\"\(openid)\", \"flag_id\":\"\(flagid)\"}"
+        print(openid,flagid)
         let likeData = like.data(using: String.Encoding.utf8)
-        
+        print(like)
         let urlStr = "\(URLStr)/flag/like"
         let url = URL(string: urlStr)!
         var request = URLRequest(url: url)
@@ -415,13 +416,36 @@ class RequestFunction {
         }
     }
     
-    func postRoutineSign(id:String) {
+    func deleteRoutineSign(id: String, sign: Int64) {
+        if let str = UserDefaults.standard.value(forKey: "token") {
+            token = str as! String
+        }
+        print(id)
+        let routine = "{\"id\":\"\(id)\",\"time\":0,\"title\":\"\",\"icon_id\":\"\",\"sign_in\":[\(sign)]}"
+        let routineData = routine.data(using: String.Encoding.utf8)
+        
+        let urlStr = "\(URLStr)/routine/sign"
+        let url = URL(string: urlStr)!
+        var request = URLRequest(url: url)
+        request.httpMethod = HTTPMethod.delete.rawValue
+        request.addValue("Bearer \(self.token)", forHTTPHeaderField: "auth")
+        request.httpBody = routineData
+        
+        Alamofire.request(request).responseJSON { response in
+            response.result.ifSuccess {
+                //print("delete\(response)")
+            }
+        }
+    }
+    
+    func postRoutineSign(id:String) -> Int64 {
         if let str = UserDefaults.standard.value(forKey: "token") {
             token = str as! String
         }
         print(id)
         let routine = "{\"id\":\"\(id)\",\"time\":0,\"title\":\"\",\"icon_id\":\"\",\"sign_in\":[]}"
         let routineData = routine.data(using: String.Encoding.utf8)
+        var time = Int64()
         
         let urlStr = "\(URLStr)/routine/sign"
         let url = URL(string: urlStr)!
@@ -431,10 +455,12 @@ class RequestFunction {
         request.httpBody = routineData
         
         Alamofire.request(request).responseJSON { response in
-            print(response)
+            //print("sign\(response)")
+            let json = JSON(response.result.value)
+            //time = json["data"]["routines"][0]["sign_in"][].int64!
         }
+        return time
     }
-    
 }
 
 extension Date {
