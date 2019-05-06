@@ -268,7 +268,7 @@ class MineViewController: UIViewController,UITableViewDelegate,UITableViewDataSo
         let appName = infoDic?["CFBundleDisplayName"]
         //调用
         let modelName = UIDevice.current.modelName
-        mailComposeVC.setMessageBody("\n\n\n\n\n\n应用名称：\(appName)\n应用版本：\(appVersion)\n系统版本：\(systemVersion)\n设备型号：\(modelName)", isHTML: false)
+        mailComposeVC.setMessageBody("\n\n\n\n\n\n应用名称：\(appName!)\n应用版本：\(appVersion!)\n系统版本：\(systemVersion)\n设备型号：\(modelName)", isHTML: false)
         
         return mailComposeVC
         

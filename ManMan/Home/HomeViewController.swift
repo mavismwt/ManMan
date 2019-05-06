@@ -130,13 +130,14 @@ class HomeViewController: UIViewController, UITableViewDelegate, UITableViewData
             UserDefaults.standard.set(nil, forKey: "isVolumnOn")
         }
         let URLStr = "https://slow.hustonline.net/api/v1"
-        if let token = UserDefaults.standard.value(forKey: "token") { //"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE1NTc0MTIwMDMsImlkIjoib3ExNVU1OTdLTVNlNTV2d21aLUN3ZDZkSDFNMCIsIm9yaWdfaWF0IjoxNTU2ODA3MjAzfQ.Bd25U4DIFoe0FrSvlqpWRLw0h6mG2to-ttNeV-Fk6nE"//UserDefaults.standard.value(forKey: "token")
+        if let token = UserDefaults.standard.value(forKey: "token") {
             let urlStr = "\(URLStr)/routine"
             let urlStr2 = "\(URLStr)/user"
             let headers:HTTPHeaders = ["auth": "Bearer \(token)"]
             Alamofire.request(urlStr2, method: .get, headers: headers).responseJSON { response in
                 
                 self.tasks = [taskDetail]()
+                self.tableView.removeAllSubviews()
                 let json = JSON(response.result.value)
                 if json["data"]["flags"].count != 0 {
                     let num = json["data"]["flags"].count
@@ -188,7 +189,9 @@ class HomeViewController: UIViewController, UITableViewDelegate, UITableViewData
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view, typically from a nib.
-        self.tabBarController?.view.addSubview(load)
+        if let userinfo = UserDefaults.standard.value(forKey: "userInfo") {
+            self.tabBarController?.view.addSubview(load)
+        }
         DispatchQueue.main.asyncAfter(deadline: .now()+3, execute:
             {
                 self.load.removeFromSuperview()
@@ -216,8 +219,8 @@ class HomeViewController: UIViewController, UITableViewDelegate, UITableViewData
         
         monthLabel.snp.makeConstraints { (make) in
             make.right.equalTo(topLineView.snp.right).offset(-20)
-            make.bottom.equalTo(calenderDetailButton.snp.bottom)
-            make.height.equalTo(18)
+            make.bottom.equalTo(calenderDetailButton.snp.bottom).offset(4)
+            make.height.equalTo(22)
         }
         monthLabel.text = getNowDate()
         monthLabel.textColor = UIColor.white
@@ -292,15 +295,15 @@ class HomeViewController: UIViewController, UITableViewDelegate, UITableViewData
             return flagCell!
         }else{
             var cell:CheckCardCell? = tableView.dequeueReusableCell(withIdentifier: identifier) as? CheckCardCell
-            if (cell == nil)
-            {
+//            if (cell == nil)
+//            {
                 cell = CheckCardCell(style: UITableViewCell.CellStyle.default, reuseIdentifier: identifier)
                 cell?.days = tasks[indexPath.row].days!
                 cell?.taskName.text = tasks[indexPath.row].name
                 cell?.taskIcon.image = UIImage(named: "\(tasks[indexPath.row].icon!)")
                 cell?.isfinished = tasks[indexPath.row].isFinished!
                cell!.layoutSubviews()
-            }
+//            }
             return cell!
         }
     }

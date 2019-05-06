@@ -44,6 +44,14 @@ class FlagViewController: UIViewController,UITableViewDelegate,UITableViewDataSo
             let obj = try? decoder.decode(UserInfo.self, from: data as! Data)
             userInfo = obj!
         }
+        self.reloadData()
+    }
+    func reloadData() {
+        index = 0
+        flagDatas = [FlagData]()
+        refreshData()
+    }
+    func refreshData() {
         let URLStr = "https://slow.hustonline.net/api/v1"
         if let token = UserDefaults.standard.value(forKey: "token") {
             let urlStr = "\(URLStr)/flag/flags"
@@ -72,9 +80,7 @@ class FlagViewController: UIViewController,UITableViewDelegate,UITableViewDataSo
             }
             
         }
-        
     }
-    
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view, typically from a nib.
@@ -149,15 +155,14 @@ class FlagViewController: UIViewController,UITableViewDelegate,UITableViewDataSo
     @objc func headerRefresh(){
         // 结束刷新
         self.tableView.mj_header.endRefreshing()
-        flagDatas = [FlagData]()
-        self.viewWillAppear(true)
+        self.reloadData()
     }
     
     // 底部刷新
     @objc func footerRefresh(){
         self.tableView.mj_footer.endRefreshing()
         index = index + 1
-        self.viewWillAppear(true)
+        self.refreshData()
         if index > 10 {
             footer.endRefreshingWithNoMoreData()
         }
