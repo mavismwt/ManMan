@@ -39,11 +39,20 @@ class ShareViewController: UIViewController,UITableViewDelegate,UITableViewDataS
         var days: Int?
     }
     var datas = [data]()
+    var userInfo = UserInfo()
     
     //var datas:[data] = [data.init(title: "喝水", icon: "drink")]
     
-    override func viewDidLoad() {
+    override func viewWillAppear(_ animated: Bool) {
         
+    }
+    
+    override func viewDidLoad() {
+        if let data = UserDefaults.standard.value(forKey: "userInfo") {
+            let decoder = JSONDecoder()
+            let obj = try? decoder.decode(UserInfo.self, from: data as! Data)
+            userInfo = obj!
+        }
         
         checkBt.frame = CGRect(x: 100, y: 500, width: 200, height: 100)
         checkBt.backgroundColor = UIColor.orange
@@ -131,12 +140,13 @@ class ShareViewController: UIViewController,UITableViewDelegate,UITableViewDataS
         taskView.clipsToBounds = true
         taskView.layer.shadowOffset = CGSize(width: 3, height: 6)
         
+        let now = getNowDate()
         nameView.snp.makeConstraints { (make) in
             make.left.equalTo(32)
             make.top.equalTo(32)
             make.height.equalTo(24)
         }
-        nameView.text = "mavismwt"+"的"+"\(getNowDate())"
+        nameView.text = "\(self.userInfo.name!)"+"的"+"\(now)"
         nameView.textColor = UIColor.init(red: 255/255, green: 193/255, blue: 7/255, alpha: 1)
         nameView.font = UIFont.boldSystemFont(ofSize: 24)
         

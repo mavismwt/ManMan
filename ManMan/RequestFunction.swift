@@ -30,9 +30,6 @@ class RequestFunction {
     
     
     private func getToken(code: String){
-        if let str = UserDefaults.standard.value(forKey: "token") {
-            token = str as! String
-        }
         let urlStr = "\(URLStr)/user/login"
         var token = String()
         Alamofire.request(urlStr,method: .post,parameters:["code": code]).responseJSON { response in
@@ -42,8 +39,34 @@ class RequestFunction {
                 self.token = json["token"].string!
                 }
                 .ifFailure {
-                    print("Cannot get Token")
+                    print("Cannot refresh Token")
             }
+        }
+    }
+    
+    func refreshToken(){
+        if let str = UserDefaults.standard.value(forKey: "token") {
+            token = str as! String
+        }
+        let urlStr = "\(URLStr)/auth/refresh_token"
+        let headers:HTTPHeaders = ["auth": "Bearer \(self.token)"]
+        Alamofire.request(urlStr, method: .get, encoding: URLEncoding.default,headers: headers).responseJSON { response in
+            //print(response)
+            response.result.ifSuccess {
+                let json = JSON(response.result.value)
+                let newToken = json["token"].string
+                UserDefaults.standard.set(newToken, forKey: "token")
+                let dateString = json["expire"].string
+                let dateFormatter = DateFormatter()
+                dateFormatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ssZZZZZ"
+                if let date =  dateFormatter.date(from: dateString!) {
+                    UserDefaults.standard.set(date, forKey: "expire")
+                }
+                }
+                .ifFailure {
+                    print("Cannot get Record")
+            }
+            
         }
     }
     
@@ -420,7 +443,6 @@ class RequestFunction {
         if let str = UserDefaults.standard.value(forKey: "token") {
             token = str as! String
         }
-        print(id)
         let routine = "{\"id\":\"\(id)\",\"time\":0,\"title\":\"\",\"icon_id\":\"\",\"sign_in\":[\(sign)]}"
         let routineData = routine.data(using: String.Encoding.utf8)
         
@@ -433,7 +455,7 @@ class RequestFunction {
         
         Alamofire.request(request).responseJSON { response in
             response.result.ifSuccess {
-                //print("delete\(response)")
+                print("delete\(response)")
             }
         }
     }
@@ -455,9 +477,10 @@ class RequestFunction {
         request.httpBody = routineData
         
         Alamofire.request(request).responseJSON { response in
-            //print("sign\(response)")
+            print("sign\(response)")
             let json = JSON(response.result.value)
-            //time = json["data"]["routines"][0]["sign_in"][].int64!
+            let num = json["data"]["routines"][0]["sign_in"].count
+            time = json["data"]["routines"][0]["sign_in"][num-1].int64!
         }
         return time
     }
@@ -490,6 +513,19 @@ extension Date {
             (selfCmps.month == nowComps.month) &&
             (selfCmps.day == nowComps.day)
         
+    }
+    
+    func isExpired() -> Bool {
+        let calendar = Calendar.current
+        let unit: Set<Calendar.Component> = [.year, .month, .day, .minute, .second]
+        let nowComps = calendar.dateComponents(unit, from: Date())
+        let selfCmps = calendar.dateComponents(unit, from: self)
+        
+        return (selfCmps.year! > nowComps.year!) ||
+            (selfCmps.month! > nowComps.month!) ||
+            (selfCmps.day! > nowComps.day!) ||
+            (selfCmps.minute! > nowComps.minute!) ||
+        (selfCmps.second! > nowComps.second!)
     }
     
     //是否在同一天

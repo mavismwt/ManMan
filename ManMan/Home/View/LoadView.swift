@@ -52,7 +52,7 @@ class LoadView: UIView {
         let now = Date()
         // 创建一个日期格式器
         let dformatter = DateFormatter()
-        dformatter.dateFormat = "yyyy年M月dd日"
+        dformatter.dateFormat = "yyyy年M月d日"
         day = dformatter.string(from: now)
         let jugmentResult = judgeDateByStartAndEnd(startStr: "18:00", endStr: "6:00", dateDay: "星期一,星期二,星期三,星期四,星期五,星期六,星期日")
         var img = UIImage()

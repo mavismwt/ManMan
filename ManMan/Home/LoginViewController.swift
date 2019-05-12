@@ -33,7 +33,7 @@ class LoginViewController: UIViewController {
             make.top.equalTo(0)
             make.left.equalTo(0)
             make.width.equalTo(SCREENSIZE.width)
-            make.bottom.equalTo(-inset.bottom)
+            make.bottom.equalToSuperview()
         }
         imageView.backgroundColor = UIColor(patternImage: UIImage(named:"login")!)
         

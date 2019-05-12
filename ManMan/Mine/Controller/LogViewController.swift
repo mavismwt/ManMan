@@ -219,7 +219,6 @@ class LogViewController: UIViewController,UIScrollViewDelegate,CVCalendarViewDel
                 self.scrollView.contentOffset = CGPoint(x: 0, y: 0)
             }, completion: nil)
         }
-        print(self.scrollView.contentOffset.y)
         
     }
     

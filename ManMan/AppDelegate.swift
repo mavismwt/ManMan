@@ -26,7 +26,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate,WXApiDelegate {
         tabbarController.viewControllers = [firstNavigationController,secondNavigationController]
         let loginViewController = LoginViewController()
         let testViewController = TestViewController()
-        let token = UserDefaults.standard.value(forKey: "token") //"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE1NTc0MTIwMDMsImlkIjoib3ExNVU1OTdLTVNlNTV2d21aLUN3ZDZkSDFNMCIsIm9yaWdfaWF0IjoxNTU2ODA3MjAzfQ.Bd25U4DIFoe0FrSvlqpWRLw0h6mG2to-ttNeV-Fk6nE"//UserDefaults.standard.value(forKey: "token")
+        let token = UserDefaults.standard.value(forKey: "token")
         if token != nil {
             window?.rootViewController = tabbarController
         }else {

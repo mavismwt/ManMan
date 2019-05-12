@@ -13,6 +13,14 @@ import AVKit
 import Alamofire
 import SwiftyJSON
 
+extension Formatter {
+    static let iso8601: ISO8601DateFormatter = {
+        let formatter = ISO8601DateFormatter()
+        formatter.formatOptions = [.withInternetDateTime, .withFractionalSeconds]
+        return formatter
+    }()
+}
+
 extension UIImage {
     /**
      *  重设图片大小
@@ -117,6 +125,7 @@ class HomeViewController: UIViewController, UITableViewDelegate, UITableViewData
     var request = RequestFunction()
     var flagID = String()
     var userInfo = UserInfo()
+    var refreshTime = TimeInterval()
     
     
     override func viewWillAppear(_ animated: Bool) {
@@ -129,61 +138,62 @@ class HomeViewController: UIViewController, UITableViewDelegate, UITableViewData
             }
             UserDefaults.standard.set(nil, forKey: "isVolumnOn")
         }
-        let URLStr = "https://slow.hustonline.net/api/v1"
         if let token = UserDefaults.standard.value(forKey: "token") {
-            let urlStr = "\(URLStr)/routine"
-            let urlStr2 = "\(URLStr)/user"
-            let headers:HTTPHeaders = ["auth": "Bearer \(token)"]
-            Alamofire.request(urlStr2, method: .get, headers: headers).responseJSON { response in
-                
-                self.tasks = [taskDetail]()
-                self.tableView.removeAllSubviews()
-                let json = JSON(response.result.value)
-                if json["data"]["flags"].count != 0 {
-                    let num = json["data"]["flags"].count
-                    self.flagID = json["data"]["flags"][num-1]["id"].string!
-                    UserDefaults.standard.set(self.flagID, forKey: "myFlagID")
-                }
-                for k in 0..<json["data"]["routines"].count {
-                    var isFinished = false
-                    let routine = json["data"]["routines"][k]
-                    let dayCount = routine["sign_in"].count
-                    var time = [Int64]()
-                    if dayCount != 0 {
-                        let lastSign = routine["sign_in"][dayCount-1].int64
-                        let timeInterval:TimeInterval = TimeInterval(Int(lastSign!/1000))
-                        let date = Date(timeIntervalSince1970: timeInterval)
-                        isFinished = date.isToday()
-                    }
-                    for i in 0..<dayCount {
-                        time.append(routine["sign_in"][i].int64!)
-                    }
-                    self.tasks.append(taskDetail.init(id: routine["id"].string, name:  routine["title"].string, icon:  routine["icon_id"].string, days: routine["sign_in"].count, time: time, isFinished: isFinished))
-                    
-                }
-                for i in 0..<json["data"]["records"].count {
-                    let record = json["data"]["records"][i]
-                    let time = record["time"].int64
-                    let ID = record["id"].string
-                    let content = record["content"].string
-                    let date = Date(timeIntervalSince1970: TimeInterval(time!/1000))
-                    if date.isToday() {
-                        UserDefaults.standard.set(ID, forKey: "recordID")
-                        UserDefaults.standard.set(content, forKey: "recordContent")
-                    }
-                }
-                let info = json["data"]
-                let userInfo = UserInfo.init(id: info["id"].string, wxid: info["wx_id"].string, name: info["name"].string, imgURL: info["img_url"].string)
-                let encoder = JSONEncoder()
-                let data = try? encoder.encode(userInfo)
-                UserDefaults.standard.set(data, forKey: "userInfo")
-                self.tableView.reloadData()
-                self.view.layoutIfNeeded()
-            }
+            self.requestInfo(token: token as! String)
         }
-        
     }
-        
+    
+    func requestInfo(token: String) {
+        let URLStr = "https://slow.hustonline.net/api/v1"
+        let urlStr = "\(URLStr)/routine"
+        let urlStr2 = "\(URLStr)/user"
+        let headers:HTTPHeaders = ["auth": "Bearer \(token)"]
+        Alamofire.request(urlStr2, method: .get, headers: headers).responseJSON { response in
+            self.tasks = [taskDetail]()
+            self.tableView.removeAllSubviews()
+            let json = JSON(response.result.value)
+            if json["data"]["flags"].count != 0 {
+                let num = json["data"]["flags"].count
+                self.flagID = json["data"]["flags"][num-1]["id"].string!
+                UserDefaults.standard.set(self.flagID, forKey: "myFlagID")
+            }
+            for k in 0..<json["data"]["routines"].count {
+                var isFinished = false
+                let routine = json["data"]["routines"][k]
+                let dayCount = routine["sign_in"].count
+                var time = [Int64]()
+                if dayCount != 0 {
+                    let lastSign = routine["sign_in"][dayCount-1].int64
+                    let timeInterval:TimeInterval = TimeInterval(Int(lastSign!/1000))
+                    let date = Date(timeIntervalSince1970: timeInterval)
+                    isFinished = date.isToday()
+                }
+                for i in 0..<dayCount {
+                    time.append(routine["sign_in"][i].int64!)
+                }
+                self.tasks.append(taskDetail.init(id: routine["id"].string, name:  routine["title"].string, icon:  routine["icon_id"].string, days: routine["sign_in"].count, time: time, isFinished: isFinished))
+                
+            }
+            for i in 0..<json["data"]["records"].count {
+                let record = json["data"]["records"][i]
+                let time = record["time"].int64
+                let ID = record["id"].string
+                let content = record["content"].string
+                let date = Date(timeIntervalSince1970: TimeInterval(time!/1000))
+                if date.isToday() {
+                    UserDefaults.standard.set(ID, forKey: "recordID")
+                    UserDefaults.standard.set(content, forKey: "recordContent")
+                }
+            }
+            let info = json["data"]
+            let userInfo = UserInfo.init(id: info["id"].string, wxid: info["wx_id"].string, name: info["name"].string, imgURL: info["img_url"].string)
+            let encoder = JSONEncoder()
+            let data = try? encoder.encode(userInfo)
+            UserDefaults.standard.set(data, forKey: "userInfo")
+            self.tableView.reloadData()
+            self.view.layoutIfNeeded()
+        }
+    }
         
     
     override func viewDidLoad() {
@@ -343,7 +353,12 @@ class HomeViewController: UIViewController, UITableViewDelegate, UITableViewData
         cell.selectionStyle = .none
         self.img.frame = CGRect(x: cell.frame.width-110, y: cell.frame.maxY+8-offset, width: 150, height: 150)
         if cell.isfinished == false {
-            let time = self.request.postRoutineSign(id: self.tasks[indexPath.row].id!)
+            let queue = DispatchQueue(label: "thread", attributes: .concurrent)
+            var time = Int64()
+            queue.async {
+                time = self.request.postRoutineSign(id: self.tasks[indexPath.row].id!)
+            }
+            queue.async(flags: .barrier) {
             self.tasks[indexPath.row].time?.append(time)
             UIView.animate(withDuration: 0.25, delay: 0, options: .curveEaseIn, animations: {
                 cell.checkButton.removeFromSuperview()
@@ -362,13 +377,14 @@ class HomeViewController: UIViewController, UITableViewDelegate, UITableViewData
                     }
                     
             })
+            }
         } else {
             cell.days -= 1
             cell.isfinished = false
+            let timeCount = self.tasks.count
+            self.request.deleteRoutineSign(id: self.tasks[indexPath.row].id!, sign: self.tasks[indexPath.row].time!.last!)
+            self.tasks[indexPath.row].time?.remove(at: timeCount-1)
             cell.layoutSubviews()
-            let timeCount = tasks[indexPath.row].time?.count
-            self.request.deleteRoutineSign(id: self.tasks[indexPath.row].id!, sign: self.tasks[indexPath.row].time![timeCount!-1])
-            self.tasks[indexPath.row].time?.remove(at: timeCount!-1)
         }
     }
     

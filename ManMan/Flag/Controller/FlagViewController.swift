@@ -47,7 +47,6 @@ class FlagViewController: UIViewController,UITableViewDelegate,UITableViewDataSo
         self.reloadData()
     }
     func reloadData() {
-        index = 0
         flagDatas = [FlagData]()
         refreshData()
     }
