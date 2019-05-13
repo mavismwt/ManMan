@@ -48,6 +48,7 @@ class FlagViewController: UIViewController,UITableViewDelegate,UITableViewDataSo
     }
     func reloadData() {
         flagDatas = [FlagData]()
+        index = 0
         refreshData()
     }
     func refreshData() {
@@ -152,7 +153,6 @@ class FlagViewController: UIViewController,UITableViewDelegate,UITableViewDataSo
     
     // 顶部刷新
     @objc func headerRefresh(){
-        // 结束刷新
         self.tableView.mj_header.endRefreshing()
         self.reloadData()
     }

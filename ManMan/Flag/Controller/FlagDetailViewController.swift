@@ -65,7 +65,6 @@ class FlagDetailViewController: UIViewController,UITableViewDelegate,UITableView
             let decoder = JSONDecoder()
             let obj = try? decoder.decode(FlagData.self, from: data as! Data)
             detail = obj
-            self.setView()
             UserDefaults.standard.set(nil, forKey: "flagData")
         } else {
             let URLStr = "https://slow.hustonline.net/api/v1"
@@ -93,7 +92,6 @@ class FlagDetailViewController: UIViewController,UITableViewDelegate,UITableView
                         }
                     }
                     self.detail = FlagData(userId: value["id"].string, profileURL: self.userInfo.imgURL, nickname: self.userInfo.name, time: value["time"].int64, detail: value["content"].string, comment: comDetails, commentNum: value["comments"].count,isLiked: isLiked, likeNum: value["likes"].count, id: value["id"].string)
-                    self.setView()
                 }
             }
         }
@@ -112,9 +110,11 @@ class FlagDetailViewController: UIViewController,UITableViewDelegate,UITableView
             self.tableView.backgroundColor = UIColor.init(red: 238/255, green: 238/255, blue: 238/255, alpha: 1)
             self.textView.removeFromSuperview()
         }
-        self.setDetailView()
-        self.setCommentLineView()
-        self.view.layoutIfNeeded()
+        if self.detail != nil {
+            self.setDetailView()
+            self.setCommentLineView()
+            self.view.layoutIfNeeded()
+        }
     }
     
     func setTopLineView() {
