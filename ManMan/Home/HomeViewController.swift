@@ -353,37 +353,63 @@ class HomeViewController: UIViewController, UITableViewDelegate, UITableViewData
         cell.selectionStyle = .none
         self.img.frame = CGRect(x: cell.frame.width-110, y: cell.frame.maxY+8-offset, width: 150, height: 150)
         if cell.isfinished == false {
-            let queue = DispatchQueue(label: "thread", attributes: .concurrent)
+            
+//            let queue = DispatchQueue(label: "thread", attributes: .concurrent)
+//            queue.async {
+//                time = self.request.postRoutineSign(id: self.tasks[indexPath.row].id!)
+//                Thread.sleep(forTimeInterval: 0.5)
+//                self.tasks[indexPath.row].time?.append(time)
+//                print(time)
+//                print(self.tasks[indexPath.row].time)
+//            }
+//            queue.async(flags: .barrier) {
+//                print("1")
+//            }
+            var token = String()
             var time = Int64()
-            queue.async {
-                time = self.request.postRoutineSign(id: self.tasks[indexPath.row].id!)
+            if let str = UserDefaults.standard.value(forKey: "token") {
+                token = str as! String
             }
-            queue.async(flags: .barrier) {
-            self.tasks[indexPath.row].time?.append(time)
-            UIView.animate(withDuration: 0.25, delay: 0, options: .curveEaseIn, animations: {
-                cell.checkButton.removeFromSuperview()
-                self.view.addSubview(self.img)
-                self.img.frame = CGRect(x: (cell.frame.width-113)/382*(self.SCREENSIZE.width-32), y: cell.frame.maxY+4-self.offset, width: 120, height: 110)
-                self.img.layer.cornerRadius = 60
-            }, completion: nil)
-            DispatchQueue.main.asyncAfter(deadline: .now()+0.25, execute:
-                {
-                    self.img.removeFromSuperview()
-                    cell.days += 1
-                    cell.isfinished = true
-                    cell.layoutSubviews()
-                    if self.isVolumnOn == true {
-                        self.localMusic()
-                    }
-                    
-            })
+            let routine = "{\"id\":\"\(self.tasks[indexPath.row].id!)\",\"time\":0,\"title\":\"\",\"icon_id\":\"\",\"sign_in\":[]}"
+            let routineData = routine.data(using: String.Encoding.utf8)
+            
+            let urlStr = "https://slow.hustonline.net/api/v1/routine/sign"
+            let url = URL(string: urlStr)!
+            var request = URLRequest(url: url)
+            request.httpMethod = HTTPMethod.post.rawValue
+            request.addValue("Bearer \(token)", forHTTPHeaderField: "auth")
+            request.httpBody = routineData
+            
+            Alamofire.request(request).responseJSON { response in
+                print("sign\(response)")
+                let json = JSON(response.result.value)
+                time = json["data"]["routines"][0]["time"].int64!
+                print(time)
+                self.tasks[indexPath.row].time?.append(time)
+                UIView.animate(withDuration: 0.25, delay: 0, options: .curveEaseIn, animations: {
+                    cell.checkButton.removeFromSuperview()
+                    self.view.addSubview(self.img)
+                    self.img.frame = CGRect(x: (cell.frame.width-113)/382*(self.SCREENSIZE.width-32), y: cell.frame.maxY+4-self.offset, width: 120, height: 110)
+                    self.img.layer.cornerRadius = 60
+                }, completion: nil)
+                DispatchQueue.main.asyncAfter(deadline: .now()+0.25, execute:
+                    {
+                        self.img.removeFromSuperview()
+                        cell.days += 1
+                        cell.isfinished = true
+                        cell.layoutSubviews()
+                        if self.isVolumnOn == true {
+                            self.localMusic()
+                        }
+                        
+                })
             }
         } else {
             cell.days -= 1
             cell.isfinished = false
-            let timeCount = self.tasks.count
+            let timeCount = self.tasks[indexPath.row].time?.count
             self.request.deleteRoutineSign(id: self.tasks[indexPath.row].id!, sign: self.tasks[indexPath.row].time!.last!)
-            self.tasks[indexPath.row].time?.remove(at: timeCount-1)
+            self.tasks[indexPath.row].time?.remove(at: timeCount!-1)
             cell.layoutSubviews()
         }
     }

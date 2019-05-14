@@ -479,8 +479,8 @@ class RequestFunction {
         Alamofire.request(request).responseJSON { response in
             print("sign\(response)")
             let json = JSON(response.result.value)
-            let num = json["data"]["routines"][0]["sign_in"].count
-            time = json["data"]["routines"][0]["sign_in"][num-1].int64!
+            time = json["data"]["routines"][0]["time"].int64!
+            print(time)
         }
         return time
     }

@@ -50,6 +50,7 @@ class FlagViewController: UIViewController,UITableViewDelegate,UITableViewDataSo
         flagDatas = [FlagData]()
         index = 0
         refreshData()
+        self.view.layoutIfNeeded()
     }
     func refreshData() {
         let URLStr = "https://slow.hustonline.net/api/v1"
