@@ -65,15 +65,15 @@ class FlagDetailViewController: UIViewController,UITableViewDelegate,UITableView
             let decoder = JSONDecoder()
             let obj = try? decoder.decode(FlagData.self, from: data as! Data)
             detail = obj
+            self.setView()
             UserDefaults.standard.set(nil, forKey: "flagData")
         } else {
             let URLStr = "https://slow.hustonline.net/api/v1"
             if let token = UserDefaults.standard.value(forKey: "token") {
-                
                 let urlStr = "\(URLStr)/flag"
                 let headers:HTTPHeaders = ["auth": "Bearer \(token)"]
                 Alamofire.request(urlStr, method: .get, encoding: URLEncoding.default,headers: headers).responseJSON { response in
-                    //print(response)
+                    print(response)
                     let json = JSON(response.result.value)
                     let num = json["data"]["flags"].count
                     let value = json["data"]["flags"][num-1]
@@ -92,6 +92,8 @@ class FlagDetailViewController: UIViewController,UITableViewDelegate,UITableView
                         }
                     }
                     self.detail = FlagData(userId: value["id"].string, profileURL: self.userInfo.imgURL, nickname: self.userInfo.name, time: value["time"].int64, detail: value["content"].string, comment: comDetails, commentNum: value["comments"].count,isLiked: isLiked, likeNum: value["likes"].count, id: value["id"].string)
+                    
+                    self.setView()
                 }
             }
         }

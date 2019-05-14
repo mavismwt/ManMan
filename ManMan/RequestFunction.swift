@@ -152,7 +152,7 @@ class RequestFunction {
         
         Alamofire.request(request).responseJSON { response in
             response.result.ifSuccess {
-                
+                print(response)
                 }
                 .ifFailure {
                     print("Cannot Post Record")

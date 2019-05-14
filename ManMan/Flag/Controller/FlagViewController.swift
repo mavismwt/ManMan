@@ -48,9 +48,34 @@ class FlagViewController: UIViewController,UITableViewDelegate,UITableViewDataSo
     }
     func reloadData() {
         flagDatas = [FlagData]()
-        index = 0
-        refreshData()
-        self.view.layoutIfNeeded()
+        let URLStr = "https://slow.hustonline.net/api/v1"
+        if let token = UserDefaults.standard.value(forKey: "token") {
+            let urlStr = "\(URLStr)/flag/flags"
+            let headers:HTTPHeaders = ["auth": "Bearer \(token)"]
+            Alamofire.request(urlStr, method: .get, parameters: ["num": 0], encoding: URLEncoding.default,headers: headers).responseJSON { response in
+                let json = JSON(response.result.value)
+                self.flagNum = json["data"]["flags"].count
+                for k in 0..<json["data"]["flags"].count {
+                    let value = json["data"]["flags"][k]
+                    var comments = [CommentDetail]()
+                    for i in 0..<value["flags"]["comments"].count {
+                        comments.append(CommentDetail.init(userName: value["flags"]["comments"][i]["name"].string, userComment: value["flags"]["comments"][i]["content"].string, imgURl: value["flags"]["comments"][i]["img"].string))
+                    }
+                    var isLiked = false
+                    for j in 0..<value["flags"]["likes"].count {
+                        if value["flags"]["likes"][j].string == self.userInfo.wxid {
+                            isLiked = true
+                        }
+                    }
+                    
+                    self.flagDatas.append(FlagData.init(userId: value["wx_id"].string, profileURL: value["img_url"].string, nickname: value["name"].string, time: value["flags"]["time"].int64, detail: value["flags"]["content"].string, comment: comments, commentNum: value["flags"]["comments"].count, isLiked: isLiked, likeNum: value["flags"]["likes"].count, id: value["flags"]["id"].string))
+                    
+                }
+                self.tableView.reloadData()
+                self.view.layoutIfNeeded()
+            }
+            
+        }
     }
     func refreshData() {
         let URLStr = "https://slow.hustonline.net/api/v1"
@@ -155,7 +180,6 @@ class FlagViewController: UIViewController,UITableViewDelegate,UITableViewDataSo
     // 顶部刷新
     @objc func headerRefresh(){
         self.tableView.mj_header.endRefreshing()
-        self.reloadData()
     }
     
     // 底部刷新

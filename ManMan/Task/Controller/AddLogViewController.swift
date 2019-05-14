@@ -95,8 +95,10 @@ class AddLogViewController: UIViewController, UITextViewDelegate {
         self.tabBarController?.tabBar.isHidden = false
         if recordID != nil {
             request.putRecord(id: recordID!, content: self.textView.textStr)
+            print("ox")
         } else {
             request.postRecord(content: self.textView.inputText.text)
+            print("okkkk")
         }
     }
     

@@ -174,6 +174,8 @@ class ShareViewController: UIViewController,UITableViewDelegate,UITableViewDataS
             make.width.height.equalTo(26)
         }
         appIcon.image = UIImage(named: "AppIcon")
+        appIcon.layer.cornerRadius = 4
+        appIcon.clipsToBounds = true
         
         appLabel.snp.makeConstraints { (make) in
             make.centerY.equalToSuperview()
@@ -183,6 +185,7 @@ class ShareViewController: UIViewController,UITableViewDelegate,UITableViewDataS
         appLabel.text = "慢慢"
         appLabel.textColor = UIColor.init(red: 255/255, green: 193/255, blue: 7/255, alpha: 1)
         appLabel.font = UIFont(name: "ArialRoundedMTBold", size: 16)
+        
         
     }
     
