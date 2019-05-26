@@ -171,6 +171,7 @@ class FlagDetail: UIView {
     
     @objc func like() {
         if isliked == false {
+            MobClick.event("flagLikes")
             request.postFlagLike(openid: userid, flagid: id)
             isliked = true
             UIView.transition(with: self.likeImg, duration: 0.5 , options: .transitionFlipFromLeft , animations: {

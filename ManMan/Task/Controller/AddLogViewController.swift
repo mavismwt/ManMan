@@ -91,6 +91,7 @@ class AddLogViewController: UIViewController, UITextViewDelegate {
     }
     
     @objc func post() {
+        MobClick.event("newRecord")
         self.navigationController?.popViewController(animated: true)
         self.tabBarController?.tabBar.isHidden = false
         if recordID != nil {

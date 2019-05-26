@@ -111,6 +111,7 @@ class HomeViewController: UIViewController, UITableViewDelegate, UITableViewData
     var isVolumnOn = true
     
     var function = RequestFunction()
+    var update = [Date]()
     
     struct taskDetail {
         var id: String?
@@ -129,6 +130,7 @@ class HomeViewController: UIViewController, UITableViewDelegate, UITableViewData
     
     
     override func viewWillAppear(_ animated: Bool) {
+        MobClick.beginLogPageView("MainVC")
         self.tabBarController?.tabBar.isHidden = false
         if let isOn:Int =  UserDefaults.standard.value(forKey: "isVolumnOn") as? Int {
             if isOn == 1 {
@@ -141,14 +143,30 @@ class HomeViewController: UIViewController, UITableViewDelegate, UITableViewData
         if let token = UserDefaults.standard.value(forKey: "token") {
             self.requestInfo(token: token as! String)
         }
+        let date = Date()
+        if let lastUpdate = UserDefaults.standard.value(forKey: "lastUpdate") {
+            if date.isSameDay(day: lastUpdate as! Date) {
+                print("same day")
+            } else {
+                request.refreshToken()
+                UserDefaults.standard.set(date, forKey: "lastUpdate")
+            }
+        }
+        
     }
     
     func requestInfo(token: String) {
+        
         let URLStr = "https://slow.hustonline.net/api/v1"
         let urlStr = "\(URLStr)/routine"
         let urlStr2 = "\(URLStr)/user"
         let headers:HTTPHeaders = ["auth": "Bearer \(token)"]
         Alamofire.request(urlStr2, method: .get, headers: headers).responseJSON { response in
+            if response.response?.statusCode == 401 {
+                let loginViewController = LoginViewController()
+                self.tabBarController?.tabBar.isHidden = true
+                self.navigationController?.pushViewController(loginViewController, animated: true)
+            }
             self.tasks = [taskDetail]()
             self.tableView.removeAllSubviews()
             let json = JSON(response.result.value)
@@ -345,11 +363,9 @@ class HomeViewController: UIViewController, UITableViewDelegate, UITableViewData
     
     //点击卡片动画
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        
+        MobClick.event("routine", attributes: ["routine":self.tasks[indexPath.row].days])
+        MobClick.event("routineNumber")
         let cell:CheckCardCell = tableView.cellForRow(at: indexPath) as! CheckCardCell
-//        let tapGestureRecognizer = UITapGestureRecognizer()
-//        tapGestureRecognizer.addTarget(self, action: #selector(check))
-//        cell.cell.addGestureRecognizer(tapGestureRecognizer)
         cell.selectionStyle = .none
         self.img.frame = CGRect(x: cell.frame.width-110, y: cell.frame.maxY+8-offset, width: 150, height: 150)
         if cell.isfinished == false {
@@ -440,6 +456,7 @@ class HomeViewController: UIViewController, UITableViewDelegate, UITableViewData
             
             self.tasks.remove(at: indexPath.row)
             tableView.deleteRows(at: [indexPath], with: UITableView.RowAnimation.automatic)
+            MobClick.event("deleteRoutine")
         }
         delete.backgroundColor = UIColor.init(red: 241/255, green: 107/255, blue: 104/255, alpha: 1)
         
@@ -526,6 +543,7 @@ class HomeViewController: UIViewController, UITableViewDelegate, UITableViewData
     }
     
     override func viewWillDisappear(_ animated: Bool) {
+        MobClick.endLogPageView("MainVC")
         //self.tabBarController?.tabBar.isHidden = true
     }
 }

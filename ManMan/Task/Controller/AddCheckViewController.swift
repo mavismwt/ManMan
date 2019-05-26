@@ -146,7 +146,7 @@ class AddCheckViewController: UIViewController,UICollectionViewDelegate,UICollec
         self.tabBarController?.tabBar.isHidden = false
     }
     @objc func backTo() {
-        
+        MobClick.event("newRoutine")
         if let number = self.selectedTaskNumber {
             request.postRoutine(title: titleStr[number], icon: imageName[number])
            

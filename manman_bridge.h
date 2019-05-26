@@ -13,5 +13,8 @@
 #import "WXApiObject.h"
 #import <CommonCrypto/CommonCrypto.h>
 #import "MJRefresh.h"
+#import <UMCommon/UMCommon.h>
+#import <UMCommon/UMConfigure.h>
+#import <UMAnalytics/MobClick.h>
 
 #endif /* manman_bridge_h */

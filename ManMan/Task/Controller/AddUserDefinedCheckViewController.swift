@@ -260,6 +260,7 @@ class AddUserDefinedCheckViewController: UIViewController,UICollectionViewDelega
         })
         UserDefaults.standard.set(self.selectedTaskNumber, forKey: "userDefinedTaskNumber")
         UserDefaults.standard.set(self.taskName.text, forKey: "taskName")
+        MobClick.event("newUserDefinedRoutine")
     }
     
     override func viewWillAppear(_ animated: Bool) {

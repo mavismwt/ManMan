@@ -33,9 +33,18 @@ class AppDelegate: UIResponder, UIApplicationDelegate,WXApiDelegate {
             window?.rootViewController = loginViewController
         }
         WXApi.registerApp("wx7ef876fe1742f5df")
+        UMConfigure.initWithAppkey("5ce92f790cafb2a2f9000de7", channel: nil)
+        UMConfigure.setLogEnabled(true)
         return true
+//        // 统计
+//        let umconfig = UMAnalyticsConfig.sharedInstance()
+//        umconfig?.appKey = ""
+//        umconfig?.channelId = "AppStore"
+//        MobClick.start(withConfigure: umconfig)
+//        let version = Bundle.main.infoDictionary?["CFBundleShortVersionString"] as! String
+//        MobClick.setAppVersion(version)
     }
-
+    
     func applicationWillResignActive(_ application: UIApplication) {
         // Sent when the application is about to move from active to inactive state. This can occur for certain types of temporary interruptions (such as an incoming phone call or SMS message) or when the user quits the application and it begins the transition to the background state.
         // Use this method to pause ongoing tasks, disable timers, and invalidate graphics rendering callbacks. Games should use this method to pause the game.

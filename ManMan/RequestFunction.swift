@@ -521,11 +521,11 @@ extension Date {
         let nowComps = calendar.dateComponents(unit, from: Date())
         let selfCmps = calendar.dateComponents(unit, from: self)
         
-        return (selfCmps.year! > nowComps.year!) ||
-            (selfCmps.month! > nowComps.month!) ||
-            (selfCmps.day! > nowComps.day!) ||
-            (selfCmps.minute! > nowComps.minute!) ||
-        (selfCmps.second! > nowComps.second!)
+        return (selfCmps.year! < nowComps.year!) ||
+            (selfCmps.month! < nowComps.month!) ||
+            (selfCmps.day! < nowComps.day!+2) ||
+            (selfCmps.minute! < nowComps.minute!) ||
+        (selfCmps.second! < nowComps.second!)
     }
     
     //是否在同一天

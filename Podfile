@@ -6,4 +6,6 @@ pod 'SwiftyJSON', '~> 4.0'
 pod 'WechatOpenSDK'
 pod 'SnapKit', '~> 4.0.0'
 pod 'MJRefresh'
+pod 'UMCCommon'
+pod 'UMCAnalytics'
 end

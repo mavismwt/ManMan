@@ -216,6 +216,7 @@ class FlagDetailViewController: UIViewController,UITableViewDelegate,UITableView
     }
     //发送评论
     @objc func send() {
+        MobClick.event("flag", attributes: ["flag":commentView.inputText.text])
         if self.commentView.inputText.text != nil {
             self.request.postFlagComment(openid: self.detail!.userId!, flagid: self.detail!.id!, name: self.userInfo.name!, img: self.userInfo.imgURL!, comment: self.commentView.inputText.text!)
             let comment = CommentDetail.init(userName: self.userInfo.name!, userComment: self.commentView.inputText.text!,imgURl: self.userInfo.imgURL!)

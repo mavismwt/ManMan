@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		1810F28D229A69FF00FCA116 /* libz.1.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 1810F28C229A69FF00FCA116 /* libz.1.dylib */; };
 		181DC808225F4939002C8000 /* CommonView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 181DC807225F4939002C8000 /* CommonView.swift */; };
 		181DC80A225F5ADE002C8000 /* FlagData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 181DC809225F5ADE002C8000 /* FlagData.swift */; };
 		18231EF2224CC13C00558C86 /* RequestFunction.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18231EF1224CC13C00558C86 /* RequestFunction.swift */; };
@@ -113,6 +114,7 @@
 /* Begin PBXFileReference section */
 		04FF2F6A77DC3D4DE55EEB2B /* Pods-ManMan.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ManMan.release.xcconfig"; path = "Target Support Files/Pods-ManMan/Pods-ManMan.release.xcconfig"; sourceTree = "<group>"; };
 		089009E7227B791C8B910559 /* Pods_ManMan.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_ManMan.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		1810F28C229A69FF00FCA116 /* libz.1.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libz.1.dylib; path = ../../../../usr/lib/libz.1.dylib; sourceTree = "<group>"; };
 		181DC807225F4939002C8000 /* CommonView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommonView.swift; sourceTree = "<group>"; };
 		181DC809225F5ADE002C8000 /* FlagData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FlagData.swift; sourceTree = "<group>"; };
 		18231EF1224CC13C00558C86 /* RequestFunction.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RequestFunction.swift; sourceTree = "<group>"; };
@@ -183,6 +185,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				1810F28D229A69FF00FCA116 /* libz.1.dylib in Frameworks */,
 				1860F5CD21D5E53600BD221F /* MessageUI.framework in Frameworks */,
 				1860F60921D74B4900BD221F /* CVCalendar.framework in Frameworks */,
 				C46031618781FD2FFF13D8EF /* Pods_ManMan.framework in Frameworks */,
@@ -209,6 +212,7 @@
 		1860F5CB21D5E53500BD221F /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				1810F28C229A69FF00FCA116 /* libz.1.dylib */,
 				18C88E23223C8223004FB741 /* project.xcworkspace */,
 				1860F5F621D74B3300BD221F /* CVCalendar.xcodeproj */,
 				1860F5CC21D5E53600BD221F /* MessageUI.framework */,
@@ -861,8 +865,8 @@
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = "$(inherited)";
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				CODE_SIGN_IDENTITY = "iPhone Distribution";
-				CODE_SIGN_STYLE = Manual;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = 6PVAPR495F;
 				HEADER_SEARCH_PATHS = (
 					"$(inherited)",
@@ -881,7 +885,7 @@
 				PODS_ROOT = "$(inherited)";
 				PRODUCT_BUNDLE_IDENTIFIER = net.bingyan.MManMan;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE_SPECIFIER = "ManMan Provisioning Profile";
+				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_OBJC_BRIDGING_HEADER = manman_bridge.h;
 				SWIFT_VERSION = 4.2;
 				TARGETED_DEVICE_FAMILY = 1;
@@ -894,8 +898,8 @@
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = "$(inherited)";
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				CODE_SIGN_IDENTITY = "iPhone Distribution";
-				CODE_SIGN_STYLE = Manual;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = 6PVAPR495F;
 				HEADER_SEARCH_PATHS = (
 					"$(inherited)",
@@ -914,7 +918,7 @@
 				PODS_ROOT = "$(inherited)";
 				PRODUCT_BUNDLE_IDENTIFIER = net.bingyan.MManMan;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE_SPECIFIER = "ManMan Provisioning Profile";
+				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_OBJC_BRIDGING_HEADER = manman_bridge.h;
 				SWIFT_VERSION = 4.2;
 				TARGETED_DEVICE_FAMILY = 1;

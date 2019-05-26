@@ -115,6 +115,7 @@ class AddFlagViewController: UIViewController ,UITextViewDelegate {
                 self.navigationController?.popViewController(animated: true)
         })
          UserDefaults.standard.set(self.inputText.text, forKey: "flagDetail")
+        MobClick.event("newFlag")
     }
     
     @objc func back() {
