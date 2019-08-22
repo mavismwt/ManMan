@@ -67,31 +67,6 @@ class MineViewController: UIViewController,UITableViewDelegate,UITableViewDataSo
             self.showUserInfo(name: userInfo.name!, imgURL: userInfo.imgURL!)
         }
         
-//        let URLStr = "https://slow.hustonline.net/api/v1"
-//        var token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE1NTY3NzU1MzYsImlkIjoib3ExNVU1OTdLTVNlNTV2d21aLUN3ZDZkSDFNMCIsIm9yaWdfaWF0IjoxNTU2MTcwNzM2fQ.WbTvev5bweV5OlhKRqypu5fdZmrZhBKHUpAji6N-6ng"
-//        let urlStr = "\(URLStr)/user"
-//        let headers:HTTPHeaders = ["auth": "Bearer \(token)"]
-//        Alamofire.request(urlStr, method: .get, encoding: URLEncoding.default,headers: headers).responseJSON { response in
-//            let value = JSON(response.result.value)
-//            //print(URL(string: value["data"]["wx_id"].string!))
-//            response.result.ifSuccess {
-//                self.userInfo = JSON(response.result.value)
-//                self.showUserInfo(name: self.userInfo["data"]["name"].string!,imgURL: self.userInfo["data"]["img_url"].string!)
-//                UserDefaults.standard.set(self.userInfo["data"]["img_url"].string!, forKey: "profileURL")
-//                UserDefaults.standard.set(self.userInfo["data"]["name"].string!, forKey: "nickname")
-//                }
-//                .ifFailure {
-//                    print("Cannot get Record")
-//            }
-        
-//        }
-        
-//        userInfo = UserDefaults.standard.value(forKey: "userInfo") as! JSON
-//        if userInfo != nil {
-//            let name = userInfo[0]["data"][0]["name"].string
-//            self.showUserInfo(name: name!)
-//        }
-        
         
     }
     
@@ -116,10 +91,14 @@ class MineViewController: UIViewController,UITableViewDelegate,UITableViewDataSo
             make.centerX.equalToSuperview()
             make.width.height.equalTo(72)
         }
-        Alamofire.request(imgURL).responseData { response in
-            guard let data = response.result.value else { return }
-            let image = UIImage(data: data)
-            self.profileView.image = image
+        if imgURL == nil {
+            profileView.image = UIImage(named: "MyProfile")
+        } else {
+            Alamofire.request(imgURL).responseData { response in
+                guard let data = response.result.value else { return }
+                let image = UIImage(data: data)
+                self.profileView.image = image
+            }
         }
         profileView.layer.cornerRadius = 36
         profileView.clipsToBounds = true

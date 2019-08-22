@@ -14,8 +14,8 @@ class LoadView: UIView {
     var textView = UITextView()
     var userInfo = UserInfo()
     
-    var nickname = "Mavismwt"
-    var greet = "日安"
+    var nickname = ""
+    var greet = ""
     var day = ""
     let inset = UIApplication.shared.delegate?.window??.safeAreaInsets ?? UIEdgeInsets.zero
     
@@ -35,7 +35,6 @@ class LoadView: UIView {
             let obj = try? decoder.decode(UserInfo.self, from: data as! Data)
             self.userInfo = obj!
             if let name = self.userInfo.name {
-                
                 self.nickname = name
             }
         }
@@ -70,7 +69,11 @@ class LoadView: UIView {
         imageView.image = img
         
         self.addSubview(textView)
-        textView.text = "Hi \(nickname),\n\n\(greet)。\n\n今天是\(day),\n\n很高兴陪在你身边。"
+        if nickname == "" {
+            textView.text = "Hi，\n\n\(greet)。\n\n今天是\(day),\n\n很高兴陪在你身边。"
+        } else {
+            textView.text = "Hi \(nickname)，\n\n\(greet)。\n\n今天是\(day),\n\n很高兴陪在你身边。"
+        }
         textView.backgroundColor = UIColor.init(red: 0, green: 0, blue: 0, alpha: 0)
 //        textView.snp.makeConstraints { (make) in
 //            make.left.equalTo(41)

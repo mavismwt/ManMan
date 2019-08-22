@@ -27,13 +27,15 @@ class AppDelegate: UIResponder, UIApplicationDelegate,WXApiDelegate {
         let loginViewController = LoginViewController()
         let testViewController = TestViewController()
         let token = UserDefaults.standard.value(forKey: "token")
-        if token != nil {
-            window?.rootViewController = tabbarController
-        }else {
-            window?.rootViewController = loginViewController
-        }
+        let isVisitor = UserDefaults.standard.value(forKey: "visitor")
+        window?.rootViewController = tabbarController
+//        if token != nil && isVisitor != nil {
+//            window?.rootViewController = tabbarController
+//        }else {
+//            window?.rootViewController = loginViewController
+//        }
         WXApi.registerApp("wx7ef876fe1742f5df")
-        UMConfigure.initWithAppkey("5ce92f790cafb2a2f9000de7", channel: nil)
+        UMConfigure.initWithAppkey("5cea787b0cafb2eb5f000927", channel: nil)
         UMConfigure.setLogEnabled(true)
         return true
 //        // 统计

@@ -15,6 +15,7 @@ class LoginViewController: UIViewController {
     var imageView = UIView()
     let iconView = UIImageView()
     let loginButton = UIButton()
+    let skipButton = UIButton()
     
     
     override func viewDidLoad() {
@@ -28,6 +29,7 @@ class LoginViewController: UIViewController {
         
         imageView.addSubview(iconView)
         imageView.addSubview(loginButton)
+        imageView.addSubview(skipButton)
         
         imageView.snp.makeConstraints { (make) in
             make.top.equalTo(0)
@@ -55,6 +57,30 @@ class LoginViewController: UIViewController {
         loginButton.addTarget(self, action: #selector(wxLoginBtnAction), for: .touchUpInside)
         loginButton.setTitle("微信授权登录", for: .normal)
         loginButton.titleLabel?.font = UIFont.boldSystemFont(ofSize: 18)
+        
+        
+        let str = NSMutableAttributedString(string: "跳过登录>>")
+        
+        let strRange = NSRange.init(location: 0, length: str.length)
+        
+        //此处必须转为NSNumber格式传给value，不然会报错
+        
+        let number = NSNumber(integerLiteral: NSUnderlineStyle.single.rawValue)
+        
+        str.addAttributes([NSAttributedString.Key.underlineStyle: number,NSAttributedString.Key.foregroundColor: UIColor.init(red: 255/255, green: 193/255, blue: 7/255, alpha: 1),NSAttributedString.Key.font: UIFont.systemFont(ofSize: 18)], range: strRange)
+        
+        skipButton.setAttributedTitle(str, for: UIControl.State.normal)
+        
+        skipButton.snp.makeConstraints { (make) in
+            make.centerY.equalTo((UIScreen.main.bounds.maxY*2)/3+20)
+            make.centerX.equalToSuperview()
+            make.width.equalTo(SCREENSIZE.width/2)
+            make.height.equalTo(55)
+        }
+        skipButton.backgroundColor = UIColor.clear
+        skipButton.addTarget(self, action: #selector(skipBtnAction), for: .touchUpInside)
+        
+        skipButton.titleLabel?.font = UIFont.boldSystemFont(ofSize: 16)
     }
     
     @objc func wxLoginBtnAction() {
@@ -73,5 +99,13 @@ class LoginViewController: UIViewController {
                 UIApplication.shared.openURL(URL.init(string: "http://weixin.qq.com/r/qUQVDfDEVK0rrbRu9xG7")!)
             }
         }
+    }
+    
+    @objc func skipBtnAction() {
+        print("okkk")
+        UserDefaults.standard.set("default", forKey: "visitor")
+        self.reloadInputViews()
+//        let homeViewController = HomeViewController()
+//        self.navigationController?.pushViewController(homeViewController, animated: true)
     }
 }
