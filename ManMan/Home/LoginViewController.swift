@@ -19,7 +19,6 @@ class LoginViewController: UIViewController {
     
     
     override func viewDidLoad() {
-        
         self.view.backgroundColor = UIColor.init(red: 245/255, green: 245/255, blue: 245/255, alpha: 1)
         self.setImageView()
     }
@@ -60,11 +59,7 @@ class LoginViewController: UIViewController {
         
         
         let str = NSMutableAttributedString(string: "跳过登录>>")
-        
         let strRange = NSRange.init(location: 0, length: str.length)
-        
-        //此处必须转为NSNumber格式传给value，不然会报错
-        
         let number = NSNumber(integerLiteral: NSUnderlineStyle.single.rawValue)
         
         str.addAttributes([NSAttributedString.Key.underlineStyle: number,NSAttributedString.Key.foregroundColor: UIColor.init(red: 255/255, green: 193/255, blue: 7/255, alpha: 1),NSAttributedString.Key.font: UIFont.systemFont(ofSize: 18)], range: strRange)
@@ -105,7 +100,7 @@ class LoginViewController: UIViewController {
         print("okkk")
         UserDefaults.standard.set("default", forKey: "visitor")
         self.reloadInputViews()
-//        let homeViewController = HomeViewController()
-//        self.navigationController?.pushViewController(homeViewController, animated: true)
+        let homeViewController = HomeViewController()
+        self.navigationController?.pushViewController(homeViewController, animated: true)
     }
 }

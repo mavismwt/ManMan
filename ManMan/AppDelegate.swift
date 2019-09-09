@@ -28,12 +28,13 @@ class AppDelegate: UIResponder, UIApplicationDelegate,WXApiDelegate {
         let testViewController = TestViewController()
         let token = UserDefaults.standard.value(forKey: "token")
         let isVisitor = UserDefaults.standard.value(forKey: "visitor")
-        window?.rootViewController = tabbarController
-//        if token != nil && isVisitor != nil {
-//            window?.rootViewController = tabbarController
-//        }else {
-//            window?.rootViewController = loginViewController
-//        }
+        //window?.rootViewController = tabbarController
+        print(isVisitor)
+        if token != nil || isVisitor != nil{
+            window?.rootViewController = tabbarController
+        } else {
+            window?.rootViewController = loginViewController
+        }
         WXApi.registerApp("wx7ef876fe1742f5df")
         UMConfigure.initWithAppkey("5cea787b0cafb2eb5f000927", channel: nil)
         UMConfigure.setLogEnabled(true)

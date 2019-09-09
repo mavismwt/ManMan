@@ -140,18 +140,23 @@ class HomeViewController: UIViewController, UITableViewDelegate, UITableViewData
             }
             UserDefaults.standard.set(nil, forKey: "isVolumnOn")
         }
-        if let token = UserDefaults.standard.value(forKey: "token") {
-            self.requestInfo(token: token as! String)
-        }
-        let date = Date()
-        if let lastUpdate = UserDefaults.standard.value(forKey: "lastUpdate") {
-            if date.isSameDay(day: lastUpdate as! Date) {
-                print("same day")
-            } else {
-                request.refreshToken()
-                UserDefaults.standard.set(date, forKey: "lastUpdate")
+        if let isVisitor = UserDefaults.standard.value(forKey: "visitor") {
+            
+        } else {
+            if let token = UserDefaults.standard.value(forKey: "token") {
+                self.requestInfo(token: token as! String)
+            }
+            let date = Date()
+            if let lastUpdate = UserDefaults.standard.value(forKey: "lastUpdate") {
+                if date.isSameDay(day: lastUpdate as! Date) {
+                    print("same day")
+                } else {
+                    request.refreshToken()
+                    UserDefaults.standard.set(date, forKey: "lastUpdate")
+                }
             }
         }
+        
         
     }
     

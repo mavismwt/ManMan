@@ -59,15 +59,16 @@ class MineViewController: UIViewController,UITableViewDelegate,UITableViewDataSo
         
         self.navigationController?.isNavigationBarHidden = true
         self.view.backgroundColor = UIColor.init(red: 238/255, green: 238/255, blue: 238/255, alpha: 1)
-        
-        if let data = UserDefaults.standard.value(forKey: "userInfo") {
-            let decoder = JSONDecoder()
-            let obj = try? decoder.decode(UserInfo.self, from: data as! Data)
-            userInfo = obj!
-            self.showUserInfo(name: userInfo.name!, imgURL: userInfo.imgURL!)
+        if let isVisitor = UserDefaults.standard.value(forKey: "visitor") {
+            self.showUserInfo(name: "点击登录", imgURL: "default")
+        } else {
+            if let data = UserDefaults.standard.value(forKey: "userInfo") {
+                let decoder = JSONDecoder()
+                let obj = try? decoder.decode(UserInfo.self, from: data as! Data)
+                userInfo = obj!
+                self.showUserInfo(name: userInfo.name!, imgURL: userInfo.imgURL!)
+            }
         }
-        
-        
     }
     
     func showUserInfo(name: String, imgURL: String) {
@@ -91,7 +92,7 @@ class MineViewController: UIViewController,UITableViewDelegate,UITableViewDataSo
             make.centerX.equalToSuperview()
             make.width.height.equalTo(72)
         }
-        if imgURL == nil {
+        if imgURL == "default" || imgURL == nil {
             profileView.image = UIImage(named: "MyProfile")
         } else {
             Alamofire.request(imgURL).responseData { response in
